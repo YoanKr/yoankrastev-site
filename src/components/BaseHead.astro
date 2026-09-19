@@ -1,6 +1,7 @@
 ---
 import { Font } from 'astro:assets';
 import { SITE } from '../consts';
+import { getPageCopy } from '../lib/pages';
 
 interface Props {
 	/** Page title. Omit on the homepage to use the site title alone. */
@@ -19,7 +20,7 @@ interface Props {
 
 const {
 	title,
-	description = SITE.description,
+	description = (await getPageCopy('site')).description,
 	type = 'website',
 	publishedTime,
 	modifiedTime,

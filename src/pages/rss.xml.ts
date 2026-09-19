@@ -2,12 +2,13 @@ import rss from '@astrojs/rss';
 import type { APIContext } from 'astro';
 import { SITE } from '../consts';
 import { essayUrl, getPublishedEssays } from '../lib/essays';
+import { getPageCopy } from '../lib/pages';
 
 export async function GET(context: APIContext) {
 	const essays = await getPublishedEssays();
 	return rss({
 		title: SITE.title,
-		description: SITE.description,
+		description: (await getPageCopy('site')).description,
 		site: context.site!,
 		items: essays.map((essay) => ({
 			title: essay.data.title,

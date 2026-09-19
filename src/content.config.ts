@@ -18,4 +18,14 @@ const essays = defineCollection({
 	}),
 });
 
-export const collections = { essays };
+// The wording of every page, one markdown file per page (home.md, about.md, ...).
+// Each `## Heading` names a piece of text; src/lib/pages.ts looks them up by name.
+const pages = defineCollection({
+	loader: glob({ base: './src/content/pages', pattern: '*.md' }),
+	schema: z.object({
+		// Search results and LinkedIn/Instagram link previews.
+		description: z.string(),
+	}),
+});
+
+export const collections = { essays, pages };

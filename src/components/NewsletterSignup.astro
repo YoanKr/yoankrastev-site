@@ -3,20 +3,25 @@
  * Newsletter signup: a pitch and one button. The button is a plain link to the beehiiv
  * signup page (beehiiv can't prefill an email from our site, so there is no email field here).
  * Used on the homepage, at the end of every essay, and on /newsletter.
+ * The button label and note come from src/content/pages/newsletter.md.
  */
 import { NEWSLETTER } from '../consts';
+import { getPageCopy } from '../lib/pages';
 
 interface Props {
 	/** Where it sits ('home', 'essay', 'newsletter'). Sent to beehiiv as utm_medium. */
 	placement: string;
-	/** Optional heading. The default slot is the short pitch shown under it. */
+	/** Optional heading, as inline HTML from a page's wording file. */
 	heading?: string;
+	/** Optional pitch under the heading, as HTML from a page's wording file. */
+	text?: string;
 	/** Lets a page adjust spacing with its own scoped class. */
 	class?: string;
 }
 
-const { placement, heading, class: className, ...rest } = Astro.props;
+const { placement, heading, text, class: className, ...rest } = Astro.props;
 const headingId = `newsletter-heading-${placement}`;
+const copy = await getPageCopy('newsletter');
 
 const href = new URL(NEWSLETTER.subscribeUrl);
 href.searchParams.set('utm_source', 'website');
@@ -31,20 +36,16 @@ href.searchParams.set('utm_medium', placement);
 >
 	<div class="layout">
 		{
-			(heading || Astro.slots.has('default')) && (
+			(heading || text) && (
 				<div class="text">
-					{heading && <h2 id={headingId}>{heading}</h2>}
-					{Astro.slots.has('default') && (
-						<div class="pitch">
-							<slot />
-						</div>
-					)}
+					{heading && <h2 id={headingId} set:html={heading} />}
+					{text && <div class="pitch" set:html={text} />}
 				</div>
 			)
 		}
 		<div class="action">
-			<a class="button" href={href}>{NEWSLETTER.buttonLabel}</a>
-			<p class="meta note">Free. Signup opens on beehiiv.</p>
+			<a class="button" href={href} set:html={copy.inline('button')} />
+			<p class="meta note" set:html={copy.inline('button-note')} />
 		</div>
 	</div>
 </section>

@@ -1,30 +1,19 @@
 ---
 import NewsletterSignup from '../components/NewsletterSignup.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPageCopy } from '../lib/pages';
+
+// Wording comes from src/content/pages/newsletter.md.
+const copy = await getPageCopy('newsletter');
 ---
 
-<BaseLayout
-	title="Newsletter"
-	description="New essays on work, ambition and career decisions, sent to your inbox. Free, no noise."
->
+<BaseLayout title={copy.text('heading')} description={copy.description}>
 	<div class="reading">
 		<header class="page-header">
-			<h1>Newsletter</h1>
+			<h1 set:html={copy.inline('heading')} />
 		</header>
 
-		<!-- TODO: confirm the cadence below matches what you actually send. -->
-		<div class="prose">
-			<p>
-				Every new essay goes to subscribers first. They are about work, ambition, discipline and the
-				career decisions that feel too big to talk about at the office, written by someone making one
-				of those decisions in real time.
-			</p>
-			<p>
-				It arrives <strong>every other Sunday</strong>: one essay, sometimes a short note on what I’m
-				reading or thinking about. No sponsored posts, no link roundups, no daily noise.
-			</p>
-			<p>It’s free, and you can unsubscribe in one click whenever you like.</p>
-		</div>
+		<div class="prose" set:html={copy.block('text')} />
 
 		<NewsletterSignup placement="newsletter" class="signup" />
 	</div>

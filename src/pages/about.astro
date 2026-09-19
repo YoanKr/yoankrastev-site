@@ -1,80 +1,36 @@
 ---
 import Photo from '../components/Photo.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPageCopy } from '../lib/pages';
 import { PHOTOS } from '../lib/photos';
 
-// Photos are set in src/lib/photos.ts (PHOTOS.about, top to bottom).
-const [first, second, third] = PHOTOS.about;
+// Wording comes from src/content/pages/about.md; photos from src/lib/photos.ts.
+const copy = await getPageCopy('about');
+const rows = PHOTOS.about.map((photo, i) => ({ photo, html: copy.block(`row-${i + 1}`) }));
 const photoSizes = '(min-width: 48em) 40vw, 100vw';
 ---
 
-<BaseLayout
-	title="About"
-	description="Yoan Krastev is a former risk consultant writing essays on work, ambition and leaving stable paths."
->
+<BaseLayout title={copy.text('heading')} description={copy.description}>
 	<header class="page-header">
-		<h1>About</h1>
+		<h1 set:html={copy.inline('heading')} />
 	</header>
 
 	<!--
-		TODO: replace the placeholder copy below with your own.
-		Three rows alternate photo and text (photo left, right, left), then a closing paragraph spans the page.
-		On phones every row stacks: photo, then text.
+		Rows alternate photo and text: photo left, right, left on laptops (every other row is flipped).
+		On phones every row stacks: photo, then text. The closing paragraph spans the page.
 	-->
 	<div class="rows">
-		<section class="row">
-			<Photo photo={first} sizes={photoSizes} />
-			<div class="prose">
-				<p>
-					Placeholder, row one. Who you are in a few sentences, and what you write about. Something
-					like: I spent the last several years as a risk consultant, advising banks on what could go
-					wrong, and I’m now leaving finance to write full time.
-				</p>
-				<p>
-					A second short paragraph can go here if you need it. Keep each row to roughly the height of
-					its photo so the page stays balanced.
-				</p>
-			</div>
-		</section>
-
-		<section class="row flip">
-			<Photo photo={second} sizes={photoSizes} />
-			<div class="prose">
-				<p>
-					Placeholder, row two. Why you write, and who it’s for. The reader you have in mind is
-					probably someone a few years into a good corporate career, doing well by every external
-					measure, and quietly asking whether this is the life they meant to build.
-				</p>
-				<p>
-					This is a good place for the moment or the reasoning behind leaving: what you saw, what you
-					weighed, what finally tipped it.
-				</p>
-			</div>
-		</section>
-
-		<section class="row">
-			<Photo photo={third} sizes={photoSizes} />
-			<div class="prose">
-				<p>
-					Placeholder, row three. What you’re doing now and what’s next: the writing, the newsletter,
-					the book these essays are slowly becoming.
-				</p>
-				<p>
-					Anything that makes you more than a job title belongs here too: where you live, what you read,
-					what you do when you’re not working.
-				</p>
-			</div>
-		</section>
+		{
+			rows.map(({ photo, html }, i) => (
+				<section class:list={['row', { flip: i % 2 === 1 }]}>
+					<Photo photo={photo} sizes={photoSizes} />
+					<div class="prose" set:html={html} />
+				</section>
+			))
+		}
 	</div>
 
-	<div class="closing prose">
-		<p>
-			Placeholder, closing paragraph. What readers can expect, and where to go next: start with the <a
-				href="/articles/">articles</a
-			>, or get new essays by <a href="/newsletter/">email</a>. You can also find me on LinkedIn and
-			Instagram, linked below.
-		</p>
-	</div>
+	<div class="closing prose" set:html={copy.block('closing')} />
 </BaseLayout>
 
 <style>

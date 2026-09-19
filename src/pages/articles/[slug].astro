@@ -4,6 +4,7 @@ import FormattedDate from '../../components/FormattedDate.astro';
 import NewsletterSignup from '../../components/NewsletterSignup.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { type Essay, getPublishedEssays, readingTime } from '../../lib/essays';
+import { getPageCopy } from '../../lib/pages';
 
 export async function getStaticPaths() {
 	const essays = await getPublishedEssays();
@@ -21,6 +22,8 @@ const { essay } = Astro.props;
 const { title, description, pubDate, updatedDate, tags, draft } = essay.data;
 const { Content } = await render(essay);
 const minutes = readingTime(essay.body);
+// The signup box wording comes from src/content/pages/articles.md.
+const copy = await getPageCopy('articles');
 ---
 
 <BaseLayout
@@ -58,9 +61,11 @@ const minutes = readingTime(essay.body);
 			</div>
 		</article>
 
-		<NewsletterSignup placement="essay" heading="Get the next essay">
-			<p>If this one was useful, the next will be too. New essays go to subscribers first.</p>
-		</NewsletterSignup>
+		<NewsletterSignup
+			placement="essay"
+			heading={copy.inline('signup-heading')}
+			text={copy.block('signup-text')}
+		/>
 	</div>
 </BaseLayout>
 
