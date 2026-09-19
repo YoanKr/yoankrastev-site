@@ -1,52 +1,136 @@
 ---
-// Import the global.css file here so that it is included on
-// all pages through the use of the <BaseHead /> component.
-import '../styles/global.css';
-import type { ImageMetadata } from 'astro';
-import FallbackImage from '../assets/blog-placeholder-1.jpg';
-import { SITE_TITLE } from '../consts';
 import { Font } from 'astro:assets';
+import { SITE } from '../consts';
 
 interface Props {
-	title: string;
-	description: string;
-	image?: ImageMetadata;
+	/** Page title. Omit on the homepage to use the site title alone. */
+	title?: string;
+	description?: string;
+	/** 'article' for essays, 'website' for everything else. */
+	type?: 'website' | 'article';
+	publishedTime?: Date;
+	modifiedTime?: Date;
+	tags?: string[];
+	/** Absolute or root-relative path to a 1200×630 image. */
+	image?: string;
+	imageAlt?: string;
+	noindex?: boolean;
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const {
+	title,
+	description = SITE.description,
+	type = 'website',
+	publishedTime,
+	modifiedTime,
+	tags = [],
+	image = SITE.ogImage,
+	imageAlt = SITE.ogImageAlt,
+	noindex = false,
+} = Astro.props;
 
-const { title, description, image = FallbackImage } = Astro.props;
+const documentTitle = title ? `${title} · ${SITE.name}` : SITE.title;
+const socialTitle = title ?? SITE.title;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const imageURL = new URL(image, Astro.site);
+
+// Structured data so search engines understand essays as articles by one author.
+const jsonLd =
+	type === 'article'
+		? {
+				'@context': 'https://schema.org',
+				'@type': 'BlogPosting',
+				headline: socialTitle,
+				description,
+				url: canonicalURL.href,
+				image: imageURL.href,
+				datePublished: publishedTime?.toISOString(),
+				dateModified: (modifiedTime ?? publishedTime)?.toISOString(),
+				author: { '@type': 'Person', name: SITE.name, url: Astro.site?.href },
+			}
+		: {
+				'@context': 'https://schema.org',
+				'@type': 'WebSite',
+				name: SITE.title,
+				url: Astro.site?.href,
+				author: { '@type': 'Person', name: SITE.name },
+			};
 ---
 
-<!-- Global Metadata -->
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="icon" href="/favicon.ico" />
-<link rel="sitemap" href="/sitemap-index.xml" />
-<link
-	rel="alternate"
-	type="application/rss+xml"
-	title={SITE_TITLE}
-	href={new URL('rss.xml', Astro.site)}
-/>
-<meta name="generator" content={Astro.generator} />
-
-<Font cssVariable="--font-atkinson" preload />
-
-<!-- Canonical URL -->
-<link rel="canonical" href={canonicalURL} />
-
-<!-- Primary Meta Tags -->
-<title>{title}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!--
+  Theme: the site's only JavaScript. Runs before first paint so there is no flash.
+  Uses the reader's saved choice from the switch, otherwise their system setting,
+  and handles clicks on the switch in Header.astro.
+-->
+<script is:inline>
+	(() => {
+		const root = document.documentElement;
+		const media = matchMedia('(prefers-color-scheme: dark)');
+		const saved = () => {
+			try {
+				return localStorage.getItem('theme');
+			} catch {
+				return null;
+			}
+		};
+		const syncSwitch = () =>
+			document
+				.querySelectorAll('[data-theme-toggle]')
+				.forEach((el) => el.setAttribute('aria-checked', String(root.dataset.theme === 'dark')));
+		const apply = (theme) => {
+			root.dataset.theme = theme;
+			syncSwitch();
+		};
+		apply(saved() || (media.matches ? 'dark' : 'light'));
+		document.addEventListener('DOMContentLoaded', syncSwitch);
+		media.addEventListener('change', (e) => saved() || apply(e.matches ? 'dark' : 'light'));
+		document.addEventListener('click', (e) => {
+			if (!e.target.closest('[data-theme-toggle]')) return;
+			const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+			apply(next);
+			try {
+				localStorage.setItem('theme', next);
+			} catch {}
+		});
+	})();
+</script>
+<title>{documentTitle}</title>
 <meta name="description" content={description} />
+<link rel="canonical" href={canonicalURL} />
+{noindex && <meta name="robots" content="noindex" />}
+<meta name="author" content={SITE.name} />
 
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content="website" />
-<meta property="og:url" content={Astro.url} />
-<meta property="og:title" content={title} />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="sitemap" href="/sitemap-index.xml" />
+<link rel="alternate" type="application/rss+xml" title={SITE.title} href={new URL('rss.xml', Astro.site)} />
+
+<Font cssVariable="--font-source-serif" preload={[{ style: 'normal' }]} />
+<Font cssVariable="--font-inter" preload />
+
+<!-- Open Graph (LinkedIn, Facebook, Instagram DMs, iMessage, Slack) -->
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:locale" content={SITE.locale} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={socialTitle} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image.src, Astro.url)} />
+<meta property="og:image" content={imageURL} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={imageAlt} />
+{publishedTime && <meta property="article:published_time" content={publishedTime.toISOString()} />}
+{modifiedTime && <meta property="article:modified_time" content={modifiedTime.toISOString()} />}
+{type === 'article' && <meta property="article:author" content={SITE.name} />}
+{tags.map((tag) => <meta property="article:tag" content={tag} />)}
 
-<!-- Twitter -->
+<!-- X / Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={socialTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageURL} />
+<meta name="twitter:image:alt" content={imageAlt} />
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

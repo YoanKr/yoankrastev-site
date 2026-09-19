@@ -1,0 +1,40 @@
+---
+import { Image } from 'astro:assets';
+import type { Photo } from '../lib/photos';
+
+interface Props {
+	photo: Photo;
+	/** The `sizes` attribute: how wide the photo displays at each breakpoint. */
+	sizes: string;
+	class?: string;
+}
+
+const { photo, sizes, class: className } = Astro.props;
+---
+
+{
+	photo.src ? (
+		<Image
+			class:list={['photo', className]}
+			src={photo.src}
+			alt={photo.alt}
+			widths={[320, 480, 720, 960, 1200]}
+			sizes={sizes}
+		/>
+	) : (
+		<div class:list={['photo', 'placeholder', className]} role="img" aria-label={photo.alt} />
+	)
+}
+
+<style>
+	.photo {
+		display: block;
+		width: 100%;
+		aspect-ratio: 4 / 5;
+		object-fit: cover;
+	}
+
+	.placeholder {
+		background: var(--color-placeholder);
+	}
+</style>

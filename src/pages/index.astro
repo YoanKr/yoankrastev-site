@@ -1,49 +1,109 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import EssayList from '../components/EssayList.astro';
+import NewsletterSignup from '../components/NewsletterSignup.astro';
+import Photo from '../components/Photo.astro';
+import { SITE } from '../consts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPublishedEssays } from '../lib/essays';
+import { PHOTOS } from '../lib/photos';
+
+const recent = (await getPublishedEssays()).slice(0, 4);
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
+<BaseLayout>
+	<h1 class="sr-only">{SITE.name}</h1>
+
+	<p class="lede">
+		Essays on work, ambition and the career decisions people rarely say out loud. I spent years as a
+		risk consultant. Now I’m leaving finance to write full time.
+	</p>
+
+	<section class="section" aria-labelledby="recent-heading">
+		<div class="section-head">
+			<h2 id="recent-heading" class="meta label">Recent articles</h2>
+			<a class="meta" href="/articles/">All articles</a>
+		</div>
+		<EssayList essays={recent} headingLevel={3} layout="grid" />
+	</section>
+
+	<!-- TODO: placeholder bio. Replace with your own two or three sentences. -->
+	<section class="section about" aria-labelledby="about-heading">
+		<Photo photo={PHOTOS.home} sizes="(min-width: 48em) 14rem, 9rem" class="about-photo" />
+		<div class="about-text">
+			<h2 id="about-heading">About me</h2>
 			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
+				I’m Yoan. I spent my career so far as a risk consultant, paid to ask what could go wrong. Now
+				I’m asking that question about my own path, and writing about work, ambition and leaving the
+				stable route for people who are quietly asking the same thing.
 			</p>
-			<p>
-				This template comes with a few integrations already configured in your{' '}
-				<code>astro.config.mjs</code> file. You can customize your setup with{' '}
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to{' '}
-				<a href="https://docs.astro.build/">read the docs</a>{' '}
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out{' '}
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>{' '}
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
-</html>
+			<p class="more"><a href="/about/">More about me</a></p>
+		</div>
+	</section>
+
+	<NewsletterSignup placement="home" heading="Subscribe to the newsletter">
+		<p>Biweekly, straight to your inbox. Join the waitlist now.</p>
+	</NewsletterSignup>
+</BaseLayout>
+
+<style>
+	.lede {
+		max-width: 24em;
+		font-size: var(--text-lede);
+		line-height: 1.4;
+		letter-spacing: -0.005em;
+		text-wrap: pretty;
+	}
+
+	.section {
+		margin-top: var(--space-section);
+	}
+
+	.section-head {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-bottom: 1.75rem;
+	}
+
+	.label {
+		font-weight: 500;
+	}
+
+	.section-head a {
+		color: var(--color-accent);
+	}
+
+	.about {
+		display: grid;
+		gap: 1.5rem;
+	}
+
+	.about :global(.about-photo) {
+		width: 9rem;
+	}
+
+	.about-text {
+		max-width: var(--measure);
+	}
+
+	.about-text p {
+		margin-top: 0.75rem;
+	}
+
+	.about-text .more {
+		margin-top: 1rem;
+	}
+
+	@media (min-width: 48em) {
+		.about {
+			grid-template-columns: 14rem minmax(0, var(--measure));
+			align-items: center;
+			gap: 3rem;
+		}
+
+		.about :global(.about-photo) {
+			width: 100%;
+		}
+	}
+</style>

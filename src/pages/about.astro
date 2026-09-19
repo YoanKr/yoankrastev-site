@@ -1,63 +1,132 @@
 ---
-import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
-import Layout from '../layouts/BlogPost.astro';
+import Photo from '../components/Photo.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { PHOTOS } from '../lib/photos';
+
+// Photos are set in src/lib/photos.ts (PHOTOS.about, top to bottom).
+const [first, second, third] = PHOTOS.about;
+const photoSizes = '(min-width: 48em) 40vw, 100vw';
 ---
 
-<Layout
-	title="About Me"
-	description="Lorem ipsum dolor sit amet"
-	pubDate={new Date('August 08 2021')}
-	heroImage={AboutHeroImage}
+<BaseLayout
+	title="About"
+	description="Yoan Krastev is a former risk consultant writing essays on work, ambition and leaving stable paths."
 >
-	<p>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-		labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo
-		viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam
-		adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus
-		et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus
-		vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque
-		sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
-	</p>
+	<header class="page-header">
+		<h1>About</h1>
+	</header>
 
-	<p>
-		Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum quisque non
-		tellus. Habitasse platea dictumst quisque sagittis purus sit amet. Tellus molestie nunc non
-		blandit massa. Cursus vitae congue mauris rhoncus. Accumsan tortor posuere ac ut. Fringilla urna
-		porttitor rhoncus dolor. Elit ullamcorper dignissim cras tincidunt lobortis. In cursus turpis
-		massa tincidunt dui ut ornare lectus. Integer feugiat scelerisque varius morbi enim nunc.
-		Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui vivamus arcu felis
-		bibendum. Dignissim suspendisse in est ante in nibh mauris. Sed tempus urna et pharetra pharetra
-		massa massa ultricies mi.
-	</p>
+	<!--
+		TODO: replace the placeholder copy below with your own.
+		Three rows alternate photo and text (photo left, right, left), then a closing paragraph spans the page.
+		On phones every row stacks: photo, then text.
+	-->
+	<div class="rows">
+		<section class="row">
+			<Photo photo={first} sizes={photoSizes} />
+			<div class="prose">
+				<p>
+					Placeholder, row one. Who you are in a few sentences, and what you write about. Something
+					like: I spent the last several years as a risk consultant, advising banks on what could go
+					wrong, and I’m now leaving finance to write full time.
+				</p>
+				<p>
+					A second short paragraph can go here if you need it. Keep each row to roughly the height of
+					its photo so the page stays balanced.
+				</p>
+			</div>
+		</section>
 
-	<p>
-		Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam sit amet nisl
-		suscipit. Lacus viverra vitae congue eu consequat ac felis donec. Egestas integer eget aliquet
-		nibh praesent tristique magna sit amet. Eget magna fermentum iaculis eu non diam. In vitae
-		turpis massa sed elementum. Tristique et egestas quis ipsum suspendisse ultrices. Eget lorem
-		dolor sed viverra ipsum. Vel turpis nunc eget lorem dolor sed viverra. Posuere ac ut consequat
-		semper viverra nam. Laoreet suspendisse interdum consectetur libero id faucibus. Diam phasellus
-		vestibulum lorem sed risus ultricies tristique. Rhoncus dolor purus non enim praesent elementum
-		facilisis. Ultrices tincidunt arcu non sodales neque. Tempus egestas sed sed risus pretium quam
-		vulputate. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Fringilla
-		urna porttitor rhoncus dolor purus non. Amet dictum sit amet justo donec enim.
-	</p>
+		<section class="row flip">
+			<Photo photo={second} sizes={photoSizes} />
+			<div class="prose">
+				<p>
+					Placeholder, row two. Why you write, and who it’s for. The reader you have in mind is
+					probably someone a few years into a good corporate career, doing well by every external
+					measure, and quietly asking whether this is the life they meant to build.
+				</p>
+				<p>
+					This is a good place for the moment or the reasoning behind leaving: what you saw, what you
+					weighed, what finally tipped it.
+				</p>
+			</div>
+		</section>
 
-	<p>
-		Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut consequat semper
-		viverra. Tellus mauris a diam maecenas sed enim ut sem viverra. Venenatis urna cursus eget nunc
-		scelerisque viverra mauris in. Arcu ac tortor dignissim convallis aenean et tortor at. Curabitur
-		gravida arcu ac tortor dignissim convallis aenean et tortor. Egestas tellus rutrum tellus
-		pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet. Ut enim
-		blandit volutpat maecenas volutpat blandit aliquam etiam. Id donec ultrices tincidunt arcu. Id
-		cursus metus aliquam eleifend mi.
-	</p>
+		<section class="row">
+			<Photo photo={third} sizes={photoSizes} />
+			<div class="prose">
+				<p>
+					Placeholder, row three. What you’re doing now and what’s next: the writing, the newsletter,
+					the book these essays are slowly becoming.
+				</p>
+				<p>
+					Anything that makes you more than a job title belongs here too: where you live, what you read,
+					what you do when you’re not working.
+				</p>
+			</div>
+		</section>
+	</div>
 
-	<p>
-		Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus imperdiet. Id porta
-		nibh venenatis cras sed felis eget velit. Ipsum a arcu cursus vitae. Facilisis magna etiam
-		tempor orci eu lobortis elementum. Tincidunt dui ut ornare lectus sit. Quisque non tellus orci
-		ac. Blandit libero volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar
-		proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
-	</p>
-</Layout>
+	<div class="closing prose">
+		<p>
+			Placeholder, closing paragraph. What readers can expect, and where to go next: start with the <a
+				href="/articles/">articles</a
+			>, or get new essays by <a href="/newsletter/">email</a>. You can also find me on LinkedIn and
+			Instagram, linked below.
+		</p>
+	</div>
+</BaseLayout>
+
+<style>
+	.rows {
+		display: grid;
+		gap: 3.5rem;
+	}
+
+	.row {
+		display: grid;
+		gap: 1.5rem;
+	}
+
+	.row .prose {
+		max-width: var(--measure);
+	}
+
+	@media (min-width: 48em) {
+		.rows {
+			gap: 6rem;
+		}
+
+		.row {
+			grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+			align-items: center;
+			gap: 4rem;
+		}
+
+		/* Flipped rows put the photo on the right. */
+		.row.flip {
+			grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+		}
+
+		.row.flip > :global(.photo) {
+			order: 2;
+		}
+
+		.row.flip .prose {
+			justify-self: end;
+		}
+	}
+
+	.closing {
+		max-width: 36em;
+		margin-top: 5rem;
+		font-size: var(--text-closing);
+		line-height: 1.55;
+	}
+
+	@media (min-width: 48em) {
+		.closing {
+			margin-top: 7rem;
+		}
+	}
+</style>

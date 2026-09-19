@@ -1,0 +1,79 @@
+/*
+  Design tokens: the only place colours, font families and font sizes are defined.
+  Change the palette by editing the values below; every page and component reads them.
+
+  Light and dark palettes: the first :root block is light, the [data-theme='dark'] block
+  at the bottom is dark. The theme script in BaseHead.astro picks one on page load
+  (the reader's saved choice from the toggle, otherwise their system setting).
+*/
+
+:root {
+	color-scheme: light;
+
+	/* Palette (light) */
+	--color-bg: #faf8f4; /* off-white page background */
+	--color-text: #1c1b19; /* near-black body text */
+	--color-text-muted: #6b665d; /* dates, metadata, footer */
+	--color-accent: #8b2e22; /* links and hover states only */
+	--color-selection: #ecdcd4; /* text selection highlight */
+	--color-placeholder: #ebe6dd; /* empty photo frames */
+
+	/* Font families (--font-source-serif and --font-inter are generated from astro.config.mjs) */
+	--font-serif: var(--font-source-serif), Georgia, 'Times New Roman', serif;
+	--font-sans: var(--font-inter), system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+	/* Font sizes (phones; larger screens override some of these below) */
+	--text-body: 1.125rem; /* 18px on phones, 19px from tablet up */
+	--text-lede: 1.375rem; /* homepage positioning statement */
+	--text-closing: 1.25rem; /* full-width closing paragraph on /about */
+	--text-list-title: 1.3125rem; /* essay titles in lists */
+	--text-h1: 2rem;
+	--text-h2: 1.375rem;
+	--text-h3: 1.1875rem;
+	--text-nav: 0.9375rem; /* nav links, footer, theme toggle */
+	--text-meta: 0.875rem; /* dates, reading time, labels */
+	--text-button: 1rem; /* newsletter button */
+	--text-small: 0.875em; /* footnotes, captions, inline code (relative to surrounding text) */
+
+	/* Line heights and layout widths */
+	--leading-body: 1.65;
+	--leading-tight: 1.25;
+	--measure: 33em; /* ~65-70 characters per line of body text */
+	--page-width: 70rem; /* header, footer, homepage, /articles and /about on laptops */
+	--gutter: 1.25rem; /* space between content and screen edge */
+	--space-section: 4.5rem; /* vertical space between homepage sections */
+}
+
+@media (min-width: 48em) {
+	:root {
+		--text-body: 1.1875rem;
+		--text-lede: 1.75rem;
+		--text-closing: 1.4375rem;
+		--text-list-title: 1.4375rem;
+		--text-h1: 2.5rem;
+		--text-h2: 1.5rem;
+		--text-h3: 1.25rem;
+		--gutter: 2.5rem;
+		--space-section: 6.5rem;
+	}
+}
+
+@media (min-width: 64em) {
+	:root {
+		--text-lede: 2.125rem;
+		--text-h1: 2.75rem;
+	}
+}
+
+:root[data-theme='dark'] {
+	color-scheme: dark;
+
+	/* Palette (dark) */
+	--color-bg: #171614;
+	--color-text: #e9e5dd;
+	--color-text-muted: #9d978c;
+	--color-accent: #e3907c;
+	--color-selection: #4a2c25;
+	--color-placeholder: #2a2825;
+}

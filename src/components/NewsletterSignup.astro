@@ -1,0 +1,110 @@
+---
+/**
+ * Newsletter signup: a pitch and one button. The button is a plain link to the beehiiv
+ * signup page (beehiiv can't prefill an email from our site, so there is no email field here).
+ * Used on the homepage, at the end of every essay, and on /newsletter.
+ */
+import { NEWSLETTER } from '../consts';
+
+interface Props {
+	/** Where it sits ('home', 'essay', 'newsletter'). Sent to beehiiv as utm_medium. */
+	placement: string;
+	/** Optional heading. The default slot is the short pitch shown under it. */
+	heading?: string;
+	/** Lets a page adjust spacing with its own scoped class. */
+	class?: string;
+}
+
+const { placement, heading, class: className, ...rest } = Astro.props;
+const headingId = `newsletter-heading-${placement}`;
+
+const href = new URL(NEWSLETTER.subscribeUrl);
+href.searchParams.set('utm_source', 'website');
+href.searchParams.set('utm_medium', placement);
+---
+
+<section
+	class:list={['newsletter', className]}
+	aria-labelledby={heading ? headingId : undefined}
+	aria-label={heading ? undefined : 'Newsletter'}
+	{...rest}
+>
+	<div class="layout">
+		{
+			(heading || Astro.slots.has('default')) && (
+				<div class="text">
+					{heading && <h2 id={headingId}>{heading}</h2>}
+					{Astro.slots.has('default') && (
+						<div class="pitch">
+							<slot />
+						</div>
+					)}
+				</div>
+			)
+		}
+		<div class="action">
+			<a class="button" href={href}>{NEWSLETTER.buttonLabel}</a>
+			<p class="meta note">Free. Signup opens on beehiiv.</p>
+		</div>
+	</div>
+</section>
+
+<style>
+	.newsletter {
+		margin-top: var(--space-section);
+		container-type: inline-size;
+	}
+
+	.layout {
+		display: grid;
+		gap: 1.5rem;
+	}
+
+	/* Side by side when the space allows it (homepage on laptops); stacked in the essay column. */
+	@container (min-width: 46rem) {
+		.layout {
+			grid-template-columns: minmax(0, var(--measure)) auto;
+			justify-content: space-between;
+			align-items: end;
+			column-gap: 4rem;
+		}
+	}
+
+	.pitch {
+		margin-top: 0.5rem;
+	}
+
+	.pitch :global(p + p) {
+		margin-top: 1em;
+	}
+
+	.button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 3rem;
+		padding: 0.75rem 1.75rem;
+		border-radius: 2px;
+		background: var(--color-text);
+		color: var(--color-bg);
+		font-family: var(--font-sans);
+		font-size: var(--text-button);
+		font-weight: 600;
+		line-height: 1.2;
+		text-decoration: none;
+	}
+
+	.button:hover {
+		background: var(--color-accent);
+	}
+
+	@media (min-width: 30em) {
+		.button {
+			display: inline-flex;
+		}
+	}
+
+	.note {
+		margin-top: 0.625rem;
+	}
+</style>

@@ -1,0 +1,108 @@
+---
+import { type Essay, essayUrl } from '../lib/essays';
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+	essays: Essay[];
+	/** Heading level for each essay title, so the page outline stays correct. */
+	headingLevel?: 2 | 3;
+	/**
+	 * 'grid'  (homepage): auto-fit columns, 1 on phones, 2 on laptops.
+	 * 'index' (/articles): one per row, date in its own column on wider screens.
+	 */
+	layout?: 'grid' | 'index';
+}
+
+const { essays, headingLevel = 2, layout = 'index' } = Astro.props;
+const Heading = `h${headingLevel}` as 'h2' | 'h3';
+---
+
+<ul class:list={['essay-list', layout]}>
+	{
+		essays.map((essay) => (
+			<li>
+				<Heading class="title">
+					<a href={essayUrl(essay)}>{essay.data.title}</a>
+				</Heading>
+				<p class="meta">
+					<FormattedDate date={essay.data.pubDate} />
+					{essay.data.draft && <span class="draft"> · Draft (hidden in production)</span>}
+				</p>
+				<p class="excerpt">{essay.data.description}</p>
+			</li>
+		))
+	}
+</ul>
+
+<style>
+	.essay-list {
+		display: grid;
+		gap: 2.25rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.grid {
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+		gap: 2.5rem 4rem;
+	}
+
+	.title {
+		font-size: var(--text-list-title);
+	}
+
+	.title a {
+		color: var(--color-text);
+		text-decoration: none;
+	}
+
+	.title a:hover {
+		color: var(--color-accent);
+	}
+
+	.meta {
+		margin-top: 0.25rem;
+	}
+
+	.excerpt {
+		max-width: var(--measure);
+		margin-top: 0.375rem;
+	}
+
+	.draft {
+		color: var(--color-accent);
+	}
+
+	@media (min-width: 48em) {
+		.index {
+			gap: 2.75rem;
+		}
+
+		.index li {
+			display: grid;
+			grid-template-columns: 11rem minmax(0, var(--measure));
+			grid-template-areas:
+				'date title'
+				'date excerpt';
+			align-items: start;
+			column-gap: 2rem;
+		}
+
+		.index .title {
+			grid-area: title;
+		}
+
+		.index .meta {
+			grid-area: date;
+			align-self: start;
+			margin-top: 0;
+			/* Line the date up with the first line of the title. */
+			padding-top: 0.3em;
+		}
+
+		.index .excerpt {
+			grid-area: excerpt;
+		}
+	}
+</style>

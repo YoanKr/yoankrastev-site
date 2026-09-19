@@ -1,0 +1,71 @@
+---
+import { render } from 'astro:content';
+import FormattedDate from '../../components/FormattedDate.astro';
+import NewsletterSignup from '../../components/NewsletterSignup.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { type Essay, getPublishedEssays, readingTime } from '../../lib/essays';
+
+export async function getStaticPaths() {
+	const essays = await getPublishedEssays();
+	return essays.map((essay) => ({
+		params: { slug: essay.id },
+		props: { essay },
+	}));
+}
+
+interface Props {
+	essay: Essay;
+}
+
+const { essay } = Astro.props;
+const { title, description, pubDate, updatedDate, tags, draft } = essay.data;
+const { Content } = await render(essay);
+const minutes = readingTime(essay.body);
+---
+
+<BaseLayout
+	title={title}
+	description={description}
+	type="article"
+	publishedTime={pubDate}
+	modifiedTime={updatedDate}
+	tags={tags}
+	noindex={draft}
+>
+	<div class="reading">
+		<article>
+			<header class="page-header">
+				<h1>{title}</h1>
+				<p class="meta">
+					<FormattedDate date={pubDate} />
+					<span aria-hidden="true">&ensp;·&ensp;</span>
+					<span>{minutes} min read</span>
+					{
+						updatedDate && (
+							<>
+								<span aria-hidden="true">&ensp;·&ensp;</span>
+								<span>
+									Updated <FormattedDate date={updatedDate} />
+								</span>
+							</>
+						)
+					}
+					{draft && <span class="draft">&ensp;·&ensp;Draft (hidden in production)</span>}
+				</p>
+			</header>
+			<div class="prose">
+				<Content />
+			</div>
+		</article>
+
+		<NewsletterSignup placement="essay" heading="Get the next essay">
+			<p>If this one was useful, the next will be too. New essays go to subscribers first.</p>
+		</NewsletterSignup>
+	</div>
+</BaseLayout>
+
+<style>
+	.draft {
+		color: var(--color-accent);
+	}
+</style>

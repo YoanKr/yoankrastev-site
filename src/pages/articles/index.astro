@@ -1,0 +1,25 @@
+---
+import EssayList from '../../components/EssayList.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPublishedEssays } from '../../lib/essays';
+
+const essays = await getPublishedEssays();
+---
+
+<BaseLayout
+	title="Articles"
+	description="Every article by Yoan Krastev on work, ambition, discipline and career decisions, newest first."
+>
+	<header class="page-header">
+		<h1>Articles</h1>
+		<p class="intro">All pieces in one place</p>
+	</header>
+	<EssayList essays={essays} headingLevel={2} layout="index" />
+</BaseLayout>
+
+<style>
+	.intro {
+		margin-top: 0.5rem;
+		color: var(--color-text-muted);
+	}
+</style>
