@@ -9,6 +9,15 @@ The essays will eventually become a book, so the archive has to age well: no tre
 
 **Naming:** the section is called **Articles** (nav label, `/articles/` URLs). In code, and in some page copy, individual pieces are still called essays (`src/content/essays/`, `getPublishedEssays()`). The top-left header link reads **Home**, not the site name.
 
+**Repository:** `YoanKr/yoankrastev-site` on GitHub, work happens on `main`. Not hosted anywhere yet.
+
+**More documentation:**
+
+- [docs/decisions.md](docs/decisions.md) — why the site is built this way. Read before changing anything structural: layout widths, the theme switch, the newsletter signup, naming or URLs.
+- [docs/roadmap.md](docs/roadmap.md) — what is still placeholder, and upgrades worth doing.
+- [docs/deployment.md](docs/deployment.md) — hosting, going live, the domain checklist.
+- [docs/images.md](docs/images.md) — the social preview image and icons, and how to regenerate them.
+
 ## Development
 
 When starting the dev server, use background mode:
@@ -18,12 +27,23 @@ astro dev --background
 ```
 
 Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
-Run `npx astro build` before finishing any change; it must build cleanly. Check changes at phone width (375px) and laptop width (1440px), in both light and dark themes.
+A saved markdown edit shows up in the browser in a second or two. If a change to a component's styles seems not to apply, restart the dev server before investigating; its CSS occasionally goes stale.
+
+### Before finishing a change
+
+1. `npx astro build` — must complete with no errors.
+2. `find dist -name '*.js' | wc -l` — must be `0`. The theme script is inline; anything else means client-side JavaScript crept in.
+3. `grep -rl "<slug of a draft>" dist | wc -l` — must be `0` when a draft exists. Drafts must not reach the build.
+4. Look at the pages you touched at 375px and 1440px, in both light and dark themes.
+5. For a refactor that should not change the visible site, build the previous commit into a scratch directory (`git worktree add`), strip the HTML tags from both builds and diff the text. That is how the move of page wording into markdown was verified as visually identical.
 
 ## File structure
 
 ```
 astro.config.mjs            Site URL, sitemap integration, self-hosted font registration
+docs/                       decisions.md, roadmap.md, deployment.md, images.md (see above)
+scripts/
+  make-images.mjs           Regenerates the social preview image and icons from the tokens
 public/
   og-default.png            Default social preview image (1200×630), used on every page
   favicon.svg               Monogram favicon (adapts to dark mode)
@@ -128,7 +148,7 @@ Everything visual comes from the custom properties in `src/styles/tokens.css`:
 
 Do not hard-code colours, font families or font sizes in components or `global.css`. Component `<style>` blocks reference tokens only.
 
-Exceptions: `public/favicon.svg`, `public/apple-touch-icon.png` and `public/og-default.png` are static images with the palette baked in. If the palette changes, regenerate or replace them. The preview image must be exactly 1200×630.
+Exceptions: `public/favicon.svg`, `public/apple-touch-icon.png` and `public/og-default.png` are static images with the palette baked in. After a palette change, regenerate them with `node scripts/make-images.mjs` (see [docs/images.md](docs/images.md) for the one-off install it needs). The preview image must be exactly 1200×630.
 
 ### Light and dark theme
 
@@ -177,6 +197,8 @@ Reading-first. Whitespace does the structural work.
 
 ## Before launch (open placeholders)
 
+The full list, with what is in progress, is in [docs/roadmap.md](docs/roadmap.md). In short:
+
 - `astro.config.mjs` / `public/robots.txt`: confirm the production domain.
 - `src/content/pages/home.md`: the short "About text" bio is placeholder copy.
 - `src/content/pages/about.md`: replace the placeholder copy in Row 1–3 and Closing.
@@ -185,7 +207,20 @@ Reading-first. Whitespace does the structural work.
 - `src/content/essays/`: delete the placeholder essays and the sample draft.
 - beehiiv dashboard: give the publication a logo and name. Readers land on that page to subscribe.
 
-## Documentation
+## Pitfalls in this codebase
+
+Things that have already cost time here:
+
+- **A line break before an inline link eats the space.** Astro's compiler drops the whitespace, so `the\n<a ...>articles</a>` renders as "thearticles". Keep the opening tag on the same line as the word before it, or break inside the tag (`<a\n href=...>`). This shipped once before it was caught.
+- **A page's scoped styles don't reach a child component's root element.** `.newsletter { margin-top: … }` in a page has no effect on `<NewsletterSignup>`'s own `<section class="newsletter">`. Pass a class to the component, which forwards it with `class:list` plus `{...rest}`, or style it inside the component.
+- **`set:html` content is not scoped either.** Markdown rendered into a page arrives without the component's scoping attribute, so scoped rules must use `:global(...)`, for example `.lede :global(p + p)`. Global classes from `global.css` (`.prose`, `.meta`) apply normally, which is why rendered copy usually sits in a `.prose` wrapper.
+- **Media queries and source order.** Scoped styles are emitted in file order and a plain class selector has the same weight as one inside a media query. A `@media (min-width: 40em)` override must come *after* the base rule in the file, or it loses.
+- **The signup box uses a container query, not a media query.** It lays out side by side when its own container is wide enough, so it works in both the wide homepage frame and the narrow article column. Don't convert it to `@media`.
+- **Section names in page wording files are slugs of the headings.** `## Signup heading` is read as `'signup-heading'`. Renaming a heading in a markdown file breaks the page that reads it, and the build says so.
+- **Internal links end with a slash** (`/articles/`, `/about/`), matching the canonical URLs and the sitemap.
+- **Fonts and images are the only binary assets.** Don't add an image to `public/` that could live in `src/assets/` and be optimised by Astro.
+
+## Astro documentation
 
 Full documentation: https://docs.astro.build
 
