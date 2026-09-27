@@ -28,7 +28,7 @@ About me
 
 ## About text
 
-I’m Yoan. I spent my career so far as a risk consultant, paid to ask what could go wrong. Now I’m asking that question about my own path, and writing about work, ambition and leaving the stable route for people who are quietly asking the same thing.
+My name is Yoan. After 5 years of studying, analysing and consulting on risk, I decided to take one. I quit a well-paying finance job and put thousands of miles between myself and the life I was supposed to want. I don't know if this is going to work. But I'd rather find out now than spend my life wondering 'what if.'
 
 ## About link
 

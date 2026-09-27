@@ -21,9 +21,9 @@ About
 
 ## Row 1
 
-Placeholder, row one. Who you are in a few sentences, and what you write about. Something like: I spent the last several years as a risk consultant, advising banks on what could go wrong, and I’m now leaving finance to write full time.
+My name is Yoan – an ex risk consultant turned risk taker. I quit the finance job to build a life around what I actually want to be doing, not what I was told to want. Writing is part of that: about things most people feel but rarely say, about the standards we're taught to chase without ever asking if they're worth it.
 
-A second short paragraph can go here if you need it. Keep each row to roughly the height of its photo so the page stays balanced.
+It might look stupid from the outside. But once I realised my current life, as good as it is, wasn't going to give me freedom of time, not soon enough, anyway, the decision stopped feeling like a choice.
 
 ## Row 2
 

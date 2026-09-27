@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# untouched camera originals (kept out of git: they carry EXIF/GPS metadata)
+photo-originals/
