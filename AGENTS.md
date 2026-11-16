@@ -159,7 +159,7 @@ Exceptions: `public/favicon.svg`, `public/apple-touch-icon.png` and `public/og-d
 
 ## Newsletter
 
-The signup is `src/components/NewsletterSignup.astro`: a heading, a short pitch and one **"Join the waitlist"** button. Each page passes its own heading and pitch from its wording file (`home.md`, `articles.md`). The button label and the note under it come from `newsletter.md` and are shared by every placement. It is not beehiiv's embed script.
+The signup is `src/components/NewsletterSignup.astro`: a heading, a short pitch and one **"Subscribe"** button. Each page passes its own heading and pitch from its wording file (`home.md`, `articles.md`, `about.md`). The newsletter is called **Risk Appetite**, which is the heading on the homepage block and the `<h1>` of `/newsletter`. The button label and the note under it come from `newsletter.md` and are shared by every placement. It is not beehiiv's embed script.
 
 - The button is a plain link to `https://yoankrastev.beehiiv.com/subscribe` (set in `src/consts.ts`), where readers enter their email and subscribe on beehiiv. The link adds `utm_source=website` and `utm_medium=<placement>` (`home`, `essay`, `about`, `newsletter`) so beehiiv can attribute signups to where they came from.
 - **Why there's no email field:** beehiiv ignores an `?email=` parameter (checked September 2026). `/subscribe` redirects to the publication homepage with a signup modal and an empty field. An email field on our site would make readers type their address twice, so it was removed.
@@ -203,7 +203,7 @@ The full list, with what is in progress, is in [docs/roadmap.md](docs/roadmap.md
 - `src/content/pages/home.md`: the short "About text" bio is placeholder copy.
 - `src/content/pages/about.md`: replace the placeholder copy in Row 1–3 and Closing.
 - `src/lib/photos.ts`: add the homepage photo and the three About photos.
-- `src/content/pages/newsletter.md`: confirm the cadence ("every other Sunday" is a placeholder).
+- `src/content/pages/newsletter.md`: the note under the button says the first issue goes out in December 2026. Revisit once it has.
 - `src/content/essays/`: delete the placeholder essays and the sample draft.
 - beehiiv dashboard: give the publication a logo and name. Readers land on that page to subscribe.
 

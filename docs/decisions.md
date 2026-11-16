@@ -107,7 +107,7 @@ rather than changing the header back.
 ## Newsletter
 
 **Our own button linking to beehiiv. No email field on the site.** Decided 2026-09-19,
-label changed to "Join the waitlist" 2026-09-27.
+label changed to "Join the waitlist" 2026-09-27, then to "Subscribe" 2026-11-16.
 
 beehiiv's own embed is a script that renders beehiiv's form with beehiiv's styling, which cannot
 be restyled to match the site, so it was never used.
@@ -123,6 +123,11 @@ Every signup link carries `utm_source=website` and `utm_medium=<placement>` (`ho
 *Known consequence:* readers finish signing up on beehiiv's page, so that page's branding is part
 of the funnel. The note under the button says so ("Free. Signup opens on beehiiv.") to avoid a
 surprise.
+
+The newsletter is named **Risk Appetite** (2026-11-16). It had not launched when the site was
+built, so the button briefly read "Join the waitlist"; it now reads "Subscribe", with a note under
+it saying the first issue goes out in December 2026. That note is a dated claim and needs removing
+once the newsletter is running.
 
 *Possible upgrade, not done:* a server-side integration would let the email field come back and
 keep readers on the site. See [roadmap.md](roadmap.md).

@@ -12,7 +12,7 @@ description: Essays on work, ambition, discipline and career decisions, for peop
 
 ## Statement
 
-Essays on work, ambition and the career decisions people rarely say out loud. I spent years as a risk consultant. Now I’m leaving finance to write full time.
+Essays on building a life that feels as good as it looks on paper.
 
 ## Recent heading
 
@@ -36,8 +36,8 @@ More about me
 
 ## Signup heading
 
-Subscribe to the newsletter
+Risk Appetite
 
 ## Signup text
 
-Biweekly, straight to your inbox. Join the waitlist now.
+A new essay every other week, plus notes on what I’m trying, what’s working and what isn’t. Free.

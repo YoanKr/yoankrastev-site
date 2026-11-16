@@ -11,6 +11,7 @@ const copy = await getPageCopy('newsletter');
 	<div class="reading">
 		<header class="page-header">
 			<h1 set:html={copy.inline('heading')} />
+			<div class="intro" set:html={copy.block('intro')} />
 		</header>
 
 		<div class="prose" set:html={copy.block('text')} />
@@ -20,6 +21,11 @@ const copy = await getPageCopy('newsletter');
 </BaseLayout>
 
 <style>
+	.intro {
+		margin-top: 0.5rem;
+		color: var(--color-text-muted);
+	}
+
 	.signup {
 		margin-top: 2.5rem;
 	}
