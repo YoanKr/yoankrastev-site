@@ -12,14 +12,24 @@ const essays = await getPublishedEssays();
 <BaseLayout title={copy.text('heading')} description={copy.description}>
 	<header class="page-header">
 		<h1 set:html={copy.inline('heading')} />
-		<div class="intro" set:html={copy.block('intro')} />
+		{essays.length > 0 && <div class="intro" set:html={copy.block('intro')} />}
 	</header>
-	<EssayList essays={essays} headingLevel={2} layout="index" />
+	{
+		essays.length > 0 ? (
+			<EssayList essays={essays} headingLevel={2} layout="index" />
+		) : (
+			<div class="empty prose" set:html={copy.block('empty-state')} />
+		)
+	}
 </BaseLayout>
 
 <style>
 	.intro {
 		margin-top: 0.5rem;
 		color: var(--color-text-muted);
+	}
+
+	.empty {
+		max-width: var(--measure);
 	}
 </style>

@@ -58,7 +58,7 @@ src/
   content/pages/            ALL PAGE WORDING, one markdown file per page (see Editing page wording)
     site.md                 Menu labels, 404 page, site-wide description (also RSS)
     home.md                 Homepage statement, section labels, About teaser, signup text
-    articles.md             /articles heading + intro, signup text at the end of every article
+    articles.md             /articles heading + intro, empty-state line, signup text under every article
     about.md                About heading, the three row texts, closing signup heading + pitch
     newsletter.md           /newsletter text, plus the signup button label and note used everywhere
   lib/
@@ -133,7 +133,7 @@ Images in essays: put the file in `src/assets/essays/` and reference it relative
 
 Every page and feed must list essays through `getPublishedEssays()` in `src/lib/essays.ts`, never `getCollection('essays')` directly. That function is what keeps drafts out of production.
 
-The three essays in `src/content/essays/` (and the `what-i-got-wrong-about-burnout.md` draft) are placeholders written to show the layout with realistic text. Delete them before launch.
+**There are no articles yet.** The placeholder ones were deleted on 2026-11-16. While the collection is empty, the homepage and `/articles` show the `## Empty state` line from `articles.md` instead of a list, and `/articles` hides its intro. Both revert automatically as soon as the first real article is published, so don't remove that handling.
 
 ## Adding photos
 

@@ -2,7 +2,7 @@
 
 Status: **live at <https://yoankrastev.com>** since before 2026-11-16, deployed automatically from
 `main` by a Cloudflare Worker. The homepage bio and the whole About page carry Yoan's own copy;
-the three articles are still Claude-written placeholders and are publicly readable right now.
+the placeholder articles have been deleted, so the site has no articles yet.
 Last reviewed 2026-11-16.
 
 ## Open items
@@ -10,7 +10,7 @@ Last reviewed 2026-11-16.
 | Item | Where | Notes |
 |---|---|---|
 | Photos | `src/lib/photos.ts` + `src/assets/about/` | In place, but Yoan is still testing; the homepage and About row 1 currently share one headshot. |
-| Placeholder articles | `src/content/essays/` | Three articles and one draft, written by Claude, in Yoan's voice. **They are live now**, so delete them as soon as real writing replaces them. |
+| First real article | `src/content/essays/` | Empty since the placeholders were deleted on 2026-11-16. The homepage and `/articles` show an empty-state line until the first one is published. |
 | www duplicate | Cloudflare dashboard | `www.yoankrastev.com` serves the site instead of redirecting to the apex domain. The canonical tag points search engines at the apex, so this is tidiness, not a bug. |
 | beehiiv publication page | beehiiv dashboard | Still default branding ("Yoan's Newsletter", default logo). Readers land there to subscribe, so it is part of the funnel. |
 | "First issue goes out in December" | `src/content/pages/newsletter.md`, `## Button note` | A dated claim, shown under the button on every page. Remove or change it once Risk Appetite is running. While there, check the signup text in `home.md`, `articles.md` and `about.md` still reads right for a live newsletter. |
