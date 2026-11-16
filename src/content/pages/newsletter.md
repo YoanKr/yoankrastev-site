@@ -6,11 +6,13 @@
 # they tell the site where each piece of text goes and are never shown on the page.
 # Markdown works as usual: **bold**, *italic*, [link text](/articles/), a blank line starts a new paragraph.
 #
-# TODO: confirm the cadence ("every other Sunday") matches what you actually send.
+# The newsletter hasn't started yet, which is why the button says "Join the waitlist".
+# When the first issue goes out, revisit this page, the button label below, and the
+# signup text in home.md, articles.md and about.md.
 #
 # description: the summary shown in Google results and in link previews for the Newsletter page.
 # Keep it on one line. If it contains a colon, wrap the whole thing in "double quotes".
-description: New essays on work, ambition and career decisions, sent to your inbox. Free, no noise.
+description: New essays on work, ambition and career decisions, sent to your inbox every other week. Free, starting soon.
 ---
 
 ## Heading
@@ -21,9 +23,9 @@ Newsletter
 
 Every new essay goes to subscribers first. They are about work, ambition, discipline and the career decisions that feel too big to talk about at the office, written by someone making one of those decisions in real time.
 
-It arrives **every other Sunday**: one essay, sometimes a short note on what I’m reading or thinking about. No sponsored posts, no link roundups, no daily noise.
+It arrives **every other week**: one essay, sometimes a short note on what I’m trying, what’s working and what isn’t. No sponsored posts, no link roundups, no daily noise.
 
-It’s free, and you can unsubscribe in one click whenever you like.
+The first issue goes out soon. Join the waitlist now and it will land in your inbox as soon as it does. It’s free, and you can unsubscribe in one click whenever you like.
 
 ## Button
 

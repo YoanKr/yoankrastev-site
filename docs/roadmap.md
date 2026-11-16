@@ -9,12 +9,11 @@ Last reviewed 2026-11-16.
 | Item | Where | Notes |
 |---|---|---|
 | Photos | `src/lib/photos.ts` + `src/assets/about/` | In place, but Yoan is still testing; the homepage and About row 1 currently share one headshot. |
-| Newsletter cadence | `src/content/pages/newsletter.md` | "every other Sunday" was invented; confirm or change. |
 | Placeholder articles | `src/content/essays/` | Three articles and one draft, written by Claude, in Yoan's voice. Delete before launch. |
 | Domain | `astro.config.mjs`, `public/robots.txt` | Currently `https://yoankrastev.com`. Confirm before going live. |
 | Hosting | — | Not set up. See [deployment.md](deployment.md). |
 | beehiiv publication page | beehiiv dashboard | Still default branding ("Yoan's Newsletter", default logo). Readers land there to subscribe, so it is part of the funnel. |
-| Waitlist wording | `src/content/pages/*.md` | The button says "Join the waitlist". When the newsletter actually launches, this and the newsletter page copy need revisiting. |
+| Waitlist wording | `src/content/pages/*.md` | The newsletter starts a few weeks after the site, so the button says "Join the waitlist" and the pages say "every other week… starting soon". When the first issue goes out, revisit the button label in `newsletter.md` and the signup text in `home.md`, `articles.md` and `about.md`. |
 
 ## Possible upgrades, in rough order of value
 

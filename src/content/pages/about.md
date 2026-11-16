@@ -34,9 +34,9 @@ When success became the default, satisfaction left the equation. I was doing eve
 
 ## Row 3
 
-Now, after a month of travel, I’ve settled in Bangkok, about 7,500 km from everything and everyone I know. No job, no friends here yet, and no plan set in stone. Though I like being alone, but it gets heavy at times: no more lunches with colleagues, calls home squeezed into whatever hours the time difference allows and no one to say good morning or good night to.
+Now, after a month of travel, I’ve settled in Bangkok, about 7,500 km from everything and everyone I know. No job, no friends here yet, and no plan set in stone. Though I like being alone, it does get heavy at times: no more lunches with colleagues, calls home squeezed into whatever hours the time difference allows and no one to say good morning or good night to.
 
-Now, spend my days on things I always wanted to try but never had time for: writing these essays, building a newsletter, maybe even a book one day. I want to see if I can build something from zero, without the clear next step and the manual that a corporate career comes with. Alongside that, I’m training for a marathon next month and meeting people on similar less defined paths. For the first time in a while, I have no idea if this is going to work. Follow along if you want to see what happens.
+I spend my days on things I always wanted to try but never had time for: writing these essays, building a newsletter, maybe even a book one day. I want to see if I can build something from zero, without the clear next step and the manual that a corporate career comes with. Alongside that, I’m training for a marathon next month and meeting people on similar, less defined paths. For the first time in a while, I have no idea if this is going to work. Follow along if you want to see what happens.
 
 ## Signup heading
 
