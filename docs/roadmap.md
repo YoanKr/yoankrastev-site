@@ -12,8 +12,36 @@ Last reviewed 2026-11-16.
 | Photos | `src/lib/photos.ts` + `src/assets/about/` | In place, but Yoan is still testing; the homepage and About row 1 currently share one headshot. |
 | First real article | `src/content/essays/` | Empty since the placeholders were deleted on 2026-11-16. The homepage and `/articles` show an empty-state line until the first one is published. |
 | www duplicate | Cloudflare dashboard | `www.yoankrastev.com` serves the site instead of redirecting to the apex domain. The canonical tag points search engines at the apex, so this is tidiness, not a bug. |
-| beehiiv email settings | beehiiv dashboard | Name, logo and share thumbnail are set (checked 2026-11-16). Still empty: the email footer's postal address (required by anti-spam law in every email) and the after-signup redirect, which could send new subscribers back to the site. |
+| beehiiv email settings | beehiiv dashboard | Two settings to fix before the first issue. See the checklist under *beehiiv: before the first issue* below. |
 | "First issue goes out in December" | `src/content/pages/newsletter.md`, `## Button note` | A dated claim, shown under the button on every page. Remove or change it once Risk Appetite is running. While there, check the signup text in `home.md`, `articles.md` and `about.md` still reads right for a live newsletter. |
+
+## beehiiv: before the first issue
+
+Checked 2026-11-16 through the beehiiv MCP (read-only on the free plan, so these are changed by
+hand in the beehiiv dashboard). Publication: **Risk Appetite**, `yoankrastev.beehiiv.com`, the one
+`src/consts.ts` links to. Name, description, logo, share thumbnail and the sending domain
+`mail.yoankrastev.com` are already set and live.
+
+- [ ] **Postal address in the email footer.** Empty. beehiiv's help article "How to update the
+  address and copyright text in your email footer" calls it legally required: it appears in every
+  email (US anti-spam law; EU rules expect the sender to be identifiable). It is public to every
+  subscriber, so prefer one of these over a home address, in this order:
+  1. a Bulgarian virtual office / mail-handling address (search "виртуален офис София") that allows
+     public use and scans or forwards post; it does not change when Yoan moves;
+  2. a Bulgarian Posts PO box, if someone can collect the post;
+  3. a family address marked "c/o", only if they accept it being published.
+
+  Avoid a US virtual mailbox. If a sole trader or company is registered later, use its address.
+- [ ] **After-signup redirect.** New subscribers currently get beehiiv's default "Recommendations
+  Flow" (a modal on the beehiiv page suggesting other newsletters). Edit that signup flow in the
+  dashboard and add or replace its step with an external URL back to the site, e.g.
+  `https://yoankrastev.com/articles/`. Not yet confirmed whether the free plan allows editing
+  signup flows; if not, leaving the default is harmless.
+- [ ] *Optional:* copyright text in the email footer (e.g. "© 2026 Yoan Krastev"). Same help
+  article as the address.
+- Keep in mind: if double opt-in is ever turned on, its separate "Opt-in Redirect Url" can conflict
+  with a signup flow, so set the redirect in only one place.
+- Time zone stays London (issues are scheduled on EU time), by choice.
 
 ## Possible upgrades, in rough order of value
 
@@ -22,6 +50,11 @@ step instead of two. The form would post to an Astro API route, which calls the 
 (`POST /v2/publications/{publicationId}/subscriptions`) with an API key from an environment
 variable, then redirects to an on-site thank-you page. Needs an SSR adapter for that one route
 and a host that runs server code. Worth doing if signups look low relative to traffic.
+
+**Photo treatment (from the 2026-11-16 UX review, not built).** Put photos with a near-white
+studio background on a `--color-placeholder` mat so they aren't the brightest thing in dark mode,
+dim photos slightly in dark mode, give all photos one colour grade before export, and add short
+sans captions (wording in the page's markdown file). Faded or feathered edges were rejected.
 
 **Per-article preview images.** Each article would get its own card with its title drawn on the
 site's background, instead of every link sharing one image. Noticeably better on LinkedIn.
