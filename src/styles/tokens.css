@@ -26,7 +26,6 @@
 	/* Font sizes (phones; larger screens override some of these below) */
 	--text-body: 1.125rem; /* 18px on phones, 19px from tablet up */
 	--text-lede: 1.375rem; /* homepage positioning statement */
-	--text-closing: 1.25rem; /* full-width closing paragraph on /about */
 	--text-list-title: 1.3125rem; /* essay titles in lists */
 	--text-h1: 2rem;
 	--text-h2: 1.375rem;
@@ -49,7 +48,6 @@
 	:root {
 		--text-body: 1.1875rem;
 		--text-lede: 1.75rem;
-		--text-closing: 1.4375rem;
 		--text-list-title: 1.4375rem;
 		--text-h1: 2.5rem;
 		--text-h2: 1.5rem;

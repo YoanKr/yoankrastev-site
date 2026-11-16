@@ -57,7 +57,7 @@ src/
     site.md                 Menu labels, 404 page, site-wide description (also RSS)
     home.md                 Homepage statement, section labels, About teaser, signup text
     articles.md             /articles heading + intro, signup text at the end of every article
-    about.md                About heading, the three row texts, closing paragraph
+    about.md                About heading, the three row texts, closing signup heading + pitch
     newsletter.md           /newsletter text, plus the signup button label and note used everywhere
   lib/
     essays.ts               getPublishedEssays() (drafts filter + sort), essayUrl(), readingTime()
@@ -76,7 +76,7 @@ src/
     index.astro             Positioning statement, 4 latest essays, About teaser, signup
     articles/index.astro    Full archive, newest first ("All pieces in one place")
     articles/[slug].astro   Single article: title, date, reading time, body, signup
-    about.astro             Three alternating photo/text rows + a closing paragraph
+    about.astro             Three alternating photo/text rows + the newsletter signup
     newsletter.astro        What the newsletter is, cadence, signup
     404.astro
     rss.xml.ts              RSS feed at /rss.xml
@@ -161,9 +161,9 @@ Exceptions: `public/favicon.svg`, `public/apple-touch-icon.png` and `public/og-d
 
 The signup is `src/components/NewsletterSignup.astro`: a heading, a short pitch and one **"Join the waitlist"** button. Each page passes its own heading and pitch from its wording file (`home.md`, `articles.md`). The button label and the note under it come from `newsletter.md` and are shared by every placement. It is not beehiiv's embed script.
 
-- The button is a plain link to `https://yoankrastev.beehiiv.com/subscribe` (set in `src/consts.ts`), where readers enter their email and subscribe on beehiiv. The link adds `utm_source=website` and `utm_medium=<placement>` (`home`, `essay`, `newsletter`) so beehiiv can attribute signups to where they came from.
+- The button is a plain link to `https://yoankrastev.beehiiv.com/subscribe` (set in `src/consts.ts`), where readers enter their email and subscribe on beehiiv. The link adds `utm_source=website` and `utm_medium=<placement>` (`home`, `essay`, `about`, `newsletter`) so beehiiv can attribute signups to where they came from.
 - **Why there's no email field:** beehiiv ignores an `?email=` parameter (checked September 2026). `/subscribe` redirects to the publication homepage with a signup modal and an empty field. An email field on our site would make readers type their address twice, so it was removed.
-- It appears in exactly three places: the homepage, the end of every essay, and `/newsletter`. Reuse the component; never paste beehiiv's embed code or load its scripts.
+- It appears in exactly four places: the homepage, the end of every essay, `/about` and `/newsletter`. Reuse the component; never paste beehiiv's embed code or load its scripts.
 - Its layout adapts to its container (a container query): heading and button sit side by side where there's room (the homepage on laptops) and stack in the essay column and on phones.
 - **Possible later upgrade:** a server-side integration. An email field on our site would post to an Astro API endpoint (e.g. `src/pages/api/subscribe.ts`, needing an SSR adapter for the host), which calls the beehiiv API (`POST /v2/publications/{publicationId}/subscriptions`) with an API key stored in an environment variable, then redirects to an on-site thank-you page. That keeps readers on the site and makes signup a single step. The pitch and styling would stay; only the action area changes.
 
@@ -184,7 +184,7 @@ Reading-first. Whitespace does the structural work.
 - **Reading column (`.reading`, `--measure`):** essays, `/newsletter` and the 404 page are a centred column. Leave it narrow on laptops; long lines are harder to read.
 - **Homepage:** 2–3 line positioning statement, then the 4 latest essays in an auto-fit grid (1 column on phones, 2 on laptops), then an About teaser (one photo and a link to `/about`), then the signup.
 - **`/articles`:** one article per row. On wider screens the date sits in its own column to the left.
-- **`/about`:** three rows alternating photo and text (photo left, right, left), then a closing paragraph across the page. It uses a larger size and a capped width so its lines stay readable. On phones each row stacks photo-then-text.
+- **`/about`:** three rows alternating photo and text (photo left, right, left), then the newsletter signup across the page. On phones each row stacks photo-then-text.
 
 ## Technical constraints
 

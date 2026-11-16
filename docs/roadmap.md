@@ -1,15 +1,14 @@
 # Open items and possible upgrades
 
-Status: the site is built and complete. It is not live, and some content is still placeholder.
-Last reviewed 2026-09-27.
+Status: the site is built and complete. It is not live. The homepage bio and the whole About page
+now carry Yoan's own copy; the articles are still placeholder.
+Last reviewed 2026-11-16.
 
 ## Before launch
 
 | Item | Where | Notes |
 |---|---|---|
-| About page copy | `src/content/pages/about.md` | Row 1–3 and Closing are placeholders. **In progress by Yoan.** |
-| Photos | `src/lib/photos.ts` + `src/assets/about/` | One homepage photo, three About photos. Empty frames show until then. **In progress by Yoan.** |
-| Homepage bio | `src/content/pages/home.md`, `## About text` | Placeholder written by Claude. |
+| Photos | `src/lib/photos.ts` + `src/assets/about/` | In place, but Yoan is still testing; the homepage and About row 1 currently share one headshot. |
 | Newsletter cadence | `src/content/pages/newsletter.md` | "every other Sunday" was invented; confirm or change. |
 | Placeholder articles | `src/content/essays/` | Three articles and one draft, written by Claude, in Yoan's voice. Delete before launch. |
 | Domain | `astro.config.mjs`, `public/robots.txt` | Currently `https://yoankrastev.com`. Confirm before going live. |

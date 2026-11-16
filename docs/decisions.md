@@ -118,7 +118,7 @@ publication homepage and opens a signup modal with an empty field, so readers wo
 their address twice. The field was removed and only the button kept.
 
 Every signup link carries `utm_source=website` and `utm_medium=<placement>` (`home`, `essay`,
-`newsletter`), so beehiiv attributes subscribers to the place they came from.
+`about`, `newsletter`), so beehiiv attributes subscribers to the place they came from.
 
 *Known consequence:* readers finish signing up on beehiiv's page, so that page's branding is part
 of the funnel. The note under the button says so ("Free. Signup opens on beehiiv.") to avoid a

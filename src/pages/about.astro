@@ -1,4 +1,5 @@
 ---
+import NewsletterSignup from '../components/NewsletterSignup.astro';
 import Photo from '../components/Photo.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getPageCopy } from '../lib/pages';
@@ -17,7 +18,7 @@ const photoSizes = '(min-width: 48em) 40vw, 100vw';
 
 	<!--
 		Rows alternate photo and text: photo left, right, left on laptops (every other row is flipped).
-		On phones every row stacks: photo, then text. The closing paragraph spans the page.
+		On phones every row stacks: photo, then text. The newsletter signup closes the page.
 	-->
 	<div class="rows">
 		{
@@ -30,7 +31,11 @@ const photoSizes = '(min-width: 48em) 40vw, 100vw';
 		}
 	</div>
 
-	<div class="closing prose" set:html={copy.block('closing')} />
+	<NewsletterSignup
+		placement="about"
+		heading={copy.inline('signup-heading')}
+		text={copy.block('signup-text')}
+	/>
 </BaseLayout>
 
 <style>
@@ -73,16 +78,4 @@ const photoSizes = '(min-width: 48em) 40vw, 100vw';
 		}
 	}
 
-	.closing {
-		max-width: 36em;
-		margin-top: 5rem;
-		font-size: var(--text-closing);
-		line-height: 1.55;
-	}
-
-	@media (min-width: 48em) {
-		.closing {
-			margin-top: 7rem;
-		}
-	}
 </style>
