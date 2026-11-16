@@ -22,8 +22,8 @@ All pieces in one place
 
 ## Signup heading
 
-Get the next essay
+Risk Appetite
 
 ## Signup text
 
-If this one was useful, the next will be too. New essays go to subscribers first.
+If this one was useful, the next will be too. Subscribers get every new essay before it appears on the site. Free, every other week.

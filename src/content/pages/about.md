@@ -40,8 +40,8 @@ I spend my days on things I always wanted to try but never had time for: writing
 
 ## Signup heading
 
-Subscribe to the newsletter
+Risk Appetite
 
 ## Signup text
 
-The newsletter is free and goes out every other week. Each issue includes a new essay before it appears on the site, along with shorter notes on what I’m trying, what’s working and what isn’t.
+A new essay every other week, in your inbox before it appears on the site, plus shorter notes on what I’m trying, what’s working and what isn’t. Free.
