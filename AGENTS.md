@@ -212,7 +212,7 @@ The full list, with what is in progress, is in [docs/roadmap.md](docs/roadmap.md
 - `src/lib/photos.ts`: add the homepage photo and the three About photos.
 - `src/content/pages/newsletter.md`: the note under the button says the first issue goes out in December 2026. Revisit once it has.
 - `src/content/essays/`: delete the placeholder essays and the sample draft.
-- beehiiv dashboard: upload the Risk Appetite logo and set the publication name. Readers land on that page to subscribe.
+- beehiiv dashboard: add a postal address to the email footer before the first issue (name, logo and thumbnail are already set).
 
 ## Pitfalls in this codebase
 

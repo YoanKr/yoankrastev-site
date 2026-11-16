@@ -12,7 +12,7 @@ Last reviewed 2026-11-16.
 | Photos | `src/lib/photos.ts` + `src/assets/about/` | In place, but Yoan is still testing; the homepage and About row 1 currently share one headshot. |
 | First real article | `src/content/essays/` | Empty since the placeholders were deleted on 2026-11-16. The homepage and `/articles` show an empty-state line until the first one is published. |
 | www duplicate | Cloudflare dashboard | `www.yoankrastev.com` serves the site instead of redirecting to the apex domain. The canonical tag points search engines at the apex, so this is tidiness, not a bug. |
-| beehiiv publication page | beehiiv dashboard | Still default branding ("Yoan's Newsletter", default logo). The Risk Appetite logo now exists (used on the site since 2026-11-16); upload it there and rename the publication. Readers land there to subscribe, so it is part of the funnel. |
+| beehiiv email settings | beehiiv dashboard | Name, logo and share thumbnail are set (checked 2026-11-16). Still empty: the email footer's postal address (required by anti-spam law in every email) and the after-signup redirect, which could send new subscribers back to the site. |
 | "First issue goes out in December" | `src/content/pages/newsletter.md`, `## Button note` | A dated claim, shown under the button on every page. Remove or change it once Risk Appetite is running. While there, check the signup text in `home.md`, `articles.md` and `about.md` still reads right for a live newsletter. |
 
 ## Possible upgrades, in rough order of value
