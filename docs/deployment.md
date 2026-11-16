@@ -1,6 +1,14 @@
 # Deployment
 
-The site is not hosted yet. This is what to do when it is time.
+**The site is live at <https://yoankrastev.com>.** It is served by a Cloudflare Worker named
+`yoankrastev-site`, connected to the GitHub repository: pushing to `main` triggers a build and the
+new version is live roughly a minute later. There is no deploy button to press and no staging step.
+
+**So a push is a publish.** Anything merged to `main` is public within a minute, including a
+half-finished page. To keep something unpublished, leave it as a `draft: true` article (drafts are
+excluded from production builds) or keep it on a branch until it is ready.
+
+The rest of this file covers how that is set up, what to check, and what would change it.
 
 ## What the build produces
 
@@ -14,14 +22,26 @@ npm run preview   # serves dist/ locally, to check the built site
 - Current size: roughly 340 KB total, of which about 150 KB is fonts.
 - `dist/404.html` is the not-found page. Every host below serves it automatically.
 
-## Choosing a host
+## The current setup
+
+- **Host:** Cloudflare Workers, project `yoankrastev-site` (created 2026-09-18), serving the static
+  build. The Cloudflare MCP tools in Claude Code can list it (`workers_list`), but they do not
+  expose DNS, custom domains or build settings; those live in the Cloudflare dashboard.
+- **Domain:** `yoankrastev.com`, registered and managed in the same Cloudflare account. HTTPS is
+  automatic. `www.yoankrastev.com` currently serves the site too rather than redirecting to the
+  apex; the canonical tag on every page points at the apex, so search engines are not confused.
+- **Caching:** HTML is revalidated on every request, while hashed assets under `/_astro/` are sent
+  with a one-year immutable cache. That is what you want: a deploy is visible immediately, and
+  fonts and CSS are never re-downloaded needlessly.
+
+## If the host ever changes
 
 Any static host works. All three below deploy on every push to `main`, give free HTTPS, and
 support a custom domain.
 
 | Host | Notes |
 |---|---|
-| **Cloudflare Pages** (recommended) | Fastest global network, generous free tier, no build-minute anxiety. Server-side visitor stats without any script on the page. |
+| **Cloudflare** (current) | Fastest global network, generous free tier. Visitor numbers come from the dashboard, with no script on the page. |
 | **Netlify** | The simplest dashboard of the three. Equally fine. |
 | **Vercel** | Fine too. Its strengths are for server-rendered apps this site doesn't need. |
 
@@ -34,29 +54,31 @@ Settings for all three:
 
 GitHub Pages also works but needs a workflow file and handles custom domains less smoothly.
 
-## Going live, in order
+If the domain ever changes, it must be updated in two places, or canonical URLs, Open Graph tags,
+the RSS feed and the sitemap will all point at the wrong host:
 
-1. **Buy the domain** (assumed to be `yoankrastev.com`).
-2. **Set the domain in two places** and commit:
-   - `site:` in `astro.config.mjs`
-   - the `Sitemap:` line in `public/robots.txt`
+- `site:` in `astro.config.mjs`
+- the `Sitemap:` line in `public/robots.txt`
 
-   These feed canonical URLs, Open Graph tags, the RSS feed and the sitemap. If they are wrong,
-   LinkedIn previews and search results point at the wrong place.
-3. **Connect the repository** (`YoanKr/yoankrastev-site`) to the host, with the settings above.
-4. **Point DNS at the host** following its instructions, and wait for the certificate.
-5. **Check the live site:** the homepage, one article, `/rss.xml`, `/sitemap-index.xml`, and a
-   made-up URL to see the 404 page.
-6. **Check a link preview** by pasting an article URL into LinkedIn's Post Inspector
+## Still to do
+
+1. **Check a link preview** by pasting an article URL into LinkedIn's Post Inspector
    (<https://www.linkedin.com/post-inspector/>). It should show the title, the description and the
-   preview image. LinkedIn caches aggressively, so check before sharing widely.
-7. **Submit the sitemap** in Google Search Console: `https://yoankrastev.com/sitemap-index.xml`.
+   preview image. LinkedIn caches aggressively, so do this before sharing widely.
+2. **Submit the sitemap** in Google Search Console: `https://yoankrastev.com/sitemap-index.xml`.
+3. **Decide about `www`.** It currently serves the site rather than redirecting to the apex domain.
+   A redirect rule in the Cloudflare dashboard would make it tidy.
+4. **Replace the placeholder articles**, which are live and publicly readable today.
 
-## Before each deploy
+After any change, check the live site itself: the homepage, one article, `/rss.xml`,
+`/sitemap-index.xml`, and a made-up URL to see the 404 page.
+
+## Before each push, because each push publishes
 
 - `npm run build` finishes without errors.
 - No unfinished drafts are published: anything with `draft: true` must be absent from `dist/`.
-- The open placeholders in [roadmap.md](roadmap.md) are dealt with, or deliberately left.
+- The open items in [roadmap.md](roadmap.md) are dealt with, or deliberately left.
+- After the push, confirm the change is actually live (roughly a minute later), not just built.
 
 ## If the newsletter moves server-side
 
@@ -69,5 +91,6 @@ The static setup would change (see [decisions.md](decisions.md)):
 
 ## Recovery
 
-The repository is the site. If a deploy goes wrong, redeploy the previous commit from the host's
-dashboard, or `git revert` and push. `dist/` is generated and is not committed.
+The repository is the site. If a bad version goes out, `git revert` the commit and push: the fix is
+live about a minute later. The Cloudflare dashboard can also roll back to a previous deployment,
+which is faster if the repository itself is in a mess. `dist/` is generated and is not committed.

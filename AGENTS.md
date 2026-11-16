@@ -9,7 +9,9 @@ The essays will eventually become a book, so the archive has to age well: no tre
 
 **Naming:** the section is called **Articles** (nav label, `/articles/` URLs). In code, and in some page copy, individual pieces are still called essays (`src/content/essays/`, `getPublishedEssays()`). The top-left header link reads **Home**, not the site name.
 
-**Repository:** `YoanKr/yoankrastev-site` on GitHub, work happens on `main`. Not hosted anywhere yet.
+**Repository:** `YoanKr/yoankrastev-site` on GitHub, work happens on `main`.
+
+**Live:** <https://yoankrastev.com>, served by the Cloudflare Worker `yoankrastev-site`, which rebuilds and deploys automatically about a minute after every push to `main`. **A push is a publish** — check the build before pushing.
 
 **More documentation:**
 
