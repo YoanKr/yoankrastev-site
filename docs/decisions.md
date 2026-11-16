@@ -75,12 +75,29 @@ An inline script in `BaseHead.astro` sets `data-theme` on `<html>` before the fi
 the reader's saved choice, otherwise their system setting. Without JavaScript, readers get the
 light theme and the switch is hidden.
 
-The switch is a small pill drawn in CSS with a dot that slides across and becomes a crescent.
-An earlier version was a text link reading "Dark"/"Light", which looked like another menu item
-and was confusing. Keep it visually distinct from the text links.
+The switch is a small pill drawn in CSS. Since 2026-11-16 its knob shows a sun in light mode and a
+moon in dark mode, with the other icon faint in the track, because the earlier dot-and-crescent
+knob was not obvious enough. An earlier version was a text link reading "Dark"/"Light", which
+looked like another menu item and was confusing. Keep it visually distinct from the text links.
+
+*Alternative rejected:* a Theme → Light/Dark dropdown. Two taps instead of one, needs scripting to
+open and close, and reads as a menu item, the original problem.
 
 *Alternative rejected:* the CSS `light-dark()` function would keep each colour pair on one line,
 but it needs Safari 17.5+ and would break the palette on older iPhones.
+
+## Header and footer bands
+
+**The header and footer sit on full-width bands in `--color-surface`.** Decided 2026-11-16.
+
+With header and footer on the page background, short pages had no visible top or bottom and the
+footer seemed to float. The bands are one step off the background, with no border or shadow, and
+the header is not sticky (it would take reading space on phones). This is the only exception to
+"space, not rules, separates things". Muted text on the bands keeps 4.9:1 (light) and 5.7:1 (dark).
+
+*Rejected at the same review:* faded or feathered photo edges (dates quickly, conflicts with no
+gradients) and decorative shapes in the side margins on laptops (phones have no margins, extra
+colours would compete with the accent, and margin art dates fastest).
 
 ## Section naming and URLs
 
@@ -101,8 +118,8 @@ If a slug must change, keep the old URL working with a redirect.
 
 The known trade-off: on an article opened from LinkedIn, the author's name no longer appears at
 the top of the page. It is still in the browser tab title, the link preview and the footer.
-If credibility on article pages becomes a concern, the fix is a byline under the article title
-rather than changing the header back.
+The fix chosen (2026-11-16) is a byline rather than changing the header back: every article's
+meta line starts with "By Yoan Krastev", and the homepage statement has a one-line byline.
 
 ## Newsletter
 
@@ -128,6 +145,12 @@ The newsletter is named **Risk Appetite** (2026-11-16). It had not launched when
 built, so the button briefly read "Join the waitlist"; it now reads "Subscribe", with a note under
 it saying the first issue goes out in December 2026. That note is a dated claim and needs removing
 once the newsletter is running.
+
+**The Risk Appetite mark** (2026-11-16) sits beside the newsletter's name in every signup box and
+in the `/newsletter` heading. It is an inline SVG traced from Yoan's logo file, so it follows the
+theme; its salmon tail has its own token (`--color-mark-tail`) and is not a use of the link
+accent. `/newsletter` link previews use Yoan's 1200×630 Risk Appetite card (`og-newsletter.png`).
+At the same time the button moved directly under the pitch on every screen size.
 
 *Possible upgrade, not done:* a server-side integration would let the email field come back and
 keep readers on the site. See [roadmap.md](roadmap.md).

@@ -12,7 +12,7 @@ Last reviewed 2026-11-16.
 | Photos | `src/lib/photos.ts` + `src/assets/about/` | In place, but Yoan is still testing; the homepage and About row 1 currently share one headshot. |
 | First real article | `src/content/essays/` | Empty since the placeholders were deleted on 2026-11-16. The homepage and `/articles` show an empty-state line until the first one is published. |
 | www duplicate | Cloudflare dashboard | `www.yoankrastev.com` serves the site instead of redirecting to the apex domain. The canonical tag points search engines at the apex, so this is tidiness, not a bug. |
-| beehiiv publication page | beehiiv dashboard | Still default branding ("Yoan's Newsletter", default logo). Readers land there to subscribe, so it is part of the funnel. |
+| beehiiv publication page | beehiiv dashboard | Still default branding ("Yoan's Newsletter", default logo). The Risk Appetite logo now exists (used on the site since 2026-11-16); upload it there and rename the publication. Readers land there to subscribe, so it is part of the funnel. |
 | "First issue goes out in December" | `src/content/pages/newsletter.md`, `## Button note` | A dated claim, shown under the button on every page. Remove or change it once Risk Appetite is running. While there, check the signup text in `home.md`, `articles.md` and `about.md` still reads right for a live newsletter. |
 
 ## Possible upgrades, in rough order of value
@@ -30,10 +30,6 @@ Usually done with `satori` at build time. See [images.md](images.md).
 **Browser-based editing.** A git-based CMS (Pages CMS, Keystatic) gives a web form for the
 markdown files, so wording and new articles can be edited and published from a phone. Only worth
 it once the site is hosted and the editing habit is real.
-
-**A byline on article pages.** Since the header says "Home" rather than the name, an article
-opened from LinkedIn does not show who wrote it above the fold. A small "Yoan Krastev" line under
-the title would fix that without touching the header.
 
 **Tag pages.** The frontmatter already accepts `tags`, and they reach the meta tags and RSS, but
 nothing lists articles by tag. Worth it once there are enough articles for a theme to emerge.

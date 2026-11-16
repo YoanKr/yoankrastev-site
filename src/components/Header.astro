@@ -29,18 +29,31 @@ const isCurrent = (href: string) => path.startsWith(href);
 		</nav>
 		<!--
 			Light/dark switch. Clicks and aria-checked are handled by the theme script in BaseHead.astro.
-			The knob is a dot in light mode and a crescent in dark mode, drawn in CSS below.
+			The knob shows the current theme (a sun in light, a moon in dark); the track shows the
+			other icon faintly, so the switch says what a tap will do. Icons are inline SVG.
 		-->
 		<button class="theme-switch" type="button" role="switch" aria-checked="false" title="Dark mode" data-theme-toggle>
 			<span class="sr-only">Dark mode</span>
-			<span class="track" aria-hidden="true"><span class="knob"></span></span>
+			<span class="track" aria-hidden="true">
+				<svg class="icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="3" /><path d="M8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M3.05 3.05l1.06 1.06M11.89 11.89l1.06 1.06M3.05 12.95l1.06-1.06M11.89 4.11l1.06-1.06" /></svg>
+				<svg class="icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M13.5 10.2A6 6 0 0 1 5.8 2.5a6 6 0 1 0 7.7 7.7z" /></svg>
+				<span class="knob">
+					<span class="knob-sun"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="3" /><path d="M8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M3.05 3.05l1.06 1.06M11.89 11.89l1.06 1.06M3.05 12.95l1.06-1.06M11.89 4.11l1.06-1.06" /></svg></span>
+					<span class="knob-moon"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M13.5 10.2A6 6 0 0 1 5.8 2.5a6 6 0 1 0 7.7 7.7z" /></svg></span>
+				</span>
+			</span>
 		</button>
 	</div>
 </header>
 
 <style>
+	/*
+	  A full-width band one step off the page background (--color-surface), so every page
+	  has a visible top. No border, no shadow, not sticky.
+	*/
 	.site-header {
-		padding-block: 1.25rem 0;
+		padding-block: 0.375rem;
+		background: var(--color-surface);
 		font-family: var(--font-sans);
 		font-size: var(--text-nav);
 	}
@@ -50,7 +63,7 @@ const isCurrent = (href: string) => path.startsWith(href);
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
-		gap: 0.5rem 1rem;
+		column-gap: 1rem;
 	}
 
 	nav {
@@ -59,11 +72,11 @@ const isCurrent = (href: string) => path.startsWith(href);
 
 	@media (min-width: 40em) {
 		.site-header {
-			padding-block: 2rem 0;
+			padding-block: 0.875rem;
 		}
 
 		.wrap {
-			gap: 0.5rem 1.75rem;
+			column-gap: 1.75rem;
 		}
 
 		.home {
@@ -89,7 +102,11 @@ const isCurrent = (href: string) => path.startsWith(href);
 		}
 	}
 
+	/* Every link is at least 44px tall, so it is easy to hit with a thumb. */
 	a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 2.75rem;
 		color: var(--color-text-muted);
 		text-decoration: none;
 	}
@@ -99,8 +116,12 @@ const isCurrent = (href: string) => path.startsWith(href);
 		font-weight: 600;
 	}
 
+	/* Current page: darker, with an underline in the text colour (never the accent, which means "link"). */
 	nav a[aria-current='page'] {
 		color: var(--color-text);
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+		text-underline-offset: 0.45em;
 	}
 
 	a:hover {
@@ -111,8 +132,10 @@ const isCurrent = (href: string) => path.startsWith(href);
 
 	.theme-switch {
 		display: inline-flex;
+		align-items: center;
+		min-height: 2.75rem;
 		margin: 0 0 0 auto; /* stays right-aligned if it wraps on very narrow phones */
-		padding: 0.25rem 0;
+		padding: 0 0.125rem;
 		border: 0;
 		background: none;
 		color: var(--color-text);
@@ -127,47 +150,69 @@ const isCurrent = (href: string) => path.startsWith(href);
 
 	.track {
 		position: relative;
-		display: block;
-		width: 2.5rem;
-		height: 1.375rem;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 3rem;
+		height: 1.625rem;
+		padding-inline: 0.3125rem;
 		border: 1.5px solid var(--color-text-muted);
 		border-radius: 1rem;
+		color: var(--color-text-muted);
+	}
+
+	.icon {
+		display: block;
+		width: 0.75rem;
+		height: 0.75rem;
+		fill: currentColor;
+		stroke: currentColor;
+		stroke-width: 1.5;
+		stroke-linecap: round;
+	}
+
+	.icon path:only-child {
+		stroke: none;
 	}
 
 	.knob {
 		position: absolute;
 		top: 50%;
-		left: 0.1875rem;
-		width: 0.875rem;
-		height: 0.875rem;
+		left: 0.125rem;
+		display: grid;
+		place-items: center;
+		width: 1.25rem;
+		height: 1.25rem;
 		border-radius: 50%;
-		background: currentColor;
+		background: var(--color-text);
+		color: var(--color-bg);
 		transform: translateY(-50%);
 		transition: transform 0.15s ease;
 	}
 
-	/* Dark: knob slides right and becomes a crescent (a background-coloured circle bites into it). */
+	.knob-moon {
+		display: none;
+	}
+
+	/* Dark: the knob slides right and shows the moon. */
 	:global([data-theme='dark']) .knob {
-		transform: translate(1.125rem, -50%);
+		transform: translate(1.375rem, -50%);
 	}
 
-	:global([data-theme='dark']) .knob::after {
-		content: '';
-		position: absolute;
-		top: -0.1875rem;
-		right: -0.1875rem;
-		width: 0.75rem;
-		height: 0.75rem;
-		border-radius: 50%;
-		background: var(--color-bg);
+	:global([data-theme='dark']) .knob-sun {
+		display: none;
 	}
 
-	.theme-switch:hover {
-		color: var(--color-accent);
+	:global([data-theme='dark']) .knob-moon {
+		display: block;
 	}
 
 	.theme-switch:hover .track {
 		border-color: var(--color-accent);
+	}
+
+	.theme-switch:hover .knob {
+		background: var(--color-accent);
 	}
 
 	@media (prefers-reduced-motion: reduce) {

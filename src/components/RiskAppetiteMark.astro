@@ -1,0 +1,34 @@
+---
+/**
+ * The Risk Appetite mark: a bell curve with its right tail filled in.
+ * Traced from Yoan's logo file (800×800 PNG) so it stays sharp at any size and follows the theme:
+ * the curve is drawn in the text colour, the tail in --color-mark-tail.
+ * Purely decorative next to the newsletter's name, so it is hidden from screen readers.
+ */
+interface Props {
+	class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<svg class:list={['mark', className]} viewBox="86 193 628 425" aria-hidden="true" focusable="false">
+	<path class="tail" d="M484 591.5L484 363.5L490 379.4L496 395.2L502 410.7L508 425.8L514 440.4L520 454.4L526 467.7L532 480.3L538 492.1L544 503L550 513.2L556 522.5L562 531.1L568 538.8L574 545.8L580 552L586 557.6L592 562.5L598 566.9L604 570.6L610 573.9L616 576.8L622 579.2L628 581.3L634 583.1L640 584.6L646 585.9L652 586.9L658 587.8L664 588.5L670 589.1L676 589.6L682 590L687 591.5Z" />
+	<g fill="none" stroke="currentColor" stroke-width="44" stroke-linecap="round" stroke-linejoin="round">
+		<path d="M113 590.3L119 589.9L125 589.5L131 589L137 588.4L143 587.7L149 586.8L155 585.7L161 584.4L167 582.8L173 581L179 578.9L185 576.3L191 573.4L197 570.1L203 566.2L209 561.7L215 556.7L221 551L227 544.7L233 537.6L239 529.7L245 521L251 511.6L257 501.3L263 490.1L269 478.2L275 465.5L281 452.1L287 438L293 423.3L299 408.1L305 392.6L311 376.8L317 360.9L323 345L329 329.4L335 314.2L341 299.5L347 285.6L353 272.7L359 260.8L365 250.2L371 241L377 233.4L383 227.4L389 223.1L395 220.6L401 220L407 221.3L413 224.3L419 229.2L425 235.7L431 243.9L437 253.6L443 264.6L449 276.9L455 290.2L461 304.3L467 319.2L473 334.6L479 350.3L485 366.2L491 382.1L497 397.8L503 413.2L509 428.2L515 442.7L521 456.6L527 469.8L533 482.3L539 493.9L545 504.8L551 514.8L557 524L563 532.4L569 540L575 546.9L581 553L587 558.5L593 563.3L599 567.5L605 571.2L611 574.4L617 577.2L623 579.6L629 581.6L635 583.4L641 584.8L647 586.1L653 587.1L659 587.9L665 588.6L671 589.2L677 589.7L683 590L687 590.3" />
+		<path d="M113 591.5H687" />
+	</g>
+</svg>
+
+<style>
+	.mark {
+		display: block;
+		width: auto;
+		height: 1em;
+		overflow: visible;
+	}
+
+	.tail {
+		fill: var(--color-mark-tail);
+	}
+</style>

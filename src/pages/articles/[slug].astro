@@ -3,22 +3,25 @@ import { render } from 'astro:content';
 import FormattedDate from '../../components/FormattedDate.astro';
 import NewsletterSignup from '../../components/NewsletterSignup.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { type Essay, getPublishedEssays, readingTime } from '../../lib/essays';
+import { type Essay, essayUrl, getPublishedEssays, readingTime } from '../../lib/essays';
 import { getPageCopy } from '../../lib/pages';
 
 export async function getStaticPaths() {
 	const essays = await getPublishedEssays();
-	return essays.map((essay) => ({
+	// "Read next" (newest first): the next older article, or the next newer one for the oldest.
+	// With a single article there is nothing to suggest, and the block is left out.
+	return essays.map((essay, i) => ({
 		params: { slug: essay.id },
-		props: { essay },
+		props: { essay, next: essays[i + 1] ?? (i > 0 ? essays[i - 1] : undefined) },
 	}));
 }
 
 interface Props {
 	essay: Essay;
+	next?: Essay;
 }
 
-const { essay } = Astro.props;
+const { essay, next } = Astro.props;
 const { title, description, pubDate, updatedDate, tags, draft } = essay.data;
 const { Content } = await render(essay);
 const minutes = readingTime(essay.body);
@@ -40,6 +43,8 @@ const copy = await getPageCopy('articles');
 			<header class="page-header">
 				<h1>{title}</h1>
 				<p class="meta">
+					<span set:html={copy.inline('byline')} />
+					<span aria-hidden="true">&ensp;·&ensp;</span>
 					<FormattedDate date={pubDate} />
 					<span aria-hidden="true">&ensp;·&ensp;</span>
 					<span>{minutes} min read</span>
@@ -61,6 +66,18 @@ const copy = await getPageCopy('articles');
 			</div>
 		</article>
 
+		{
+			next && (
+				<aside class="read-next" aria-labelledby="read-next-heading">
+					<h2 id="read-next-heading" class="meta label" set:html={copy.inline('read-next-heading')} />
+					<p class="next-title">
+						<a href={essayUrl(next)}>{next.data.title}</a>
+					</p>
+					<p class="next-excerpt">{next.data.description}</p>
+				</aside>
+			)
+		}
+
 		<NewsletterSignup
 			placement="essay"
 			heading={copy.inline('signup-heading')}
@@ -70,7 +87,42 @@ const copy = await getPageCopy('articles');
 </BaseLayout>
 
 <style>
+	/* Keep "1 min read" and each date in one piece when the line wraps on phones. */
+	.page-header .meta > :global(*) {
+		white-space: nowrap;
+	}
+
 	.draft {
 		color: var(--color-accent);
+	}
+
+	.read-next {
+		margin-top: var(--space-section);
+	}
+
+	.label {
+		font-weight: 500;
+	}
+
+	.next-title {
+		margin-top: 0.75rem;
+		font-size: var(--text-list-title);
+		font-weight: 600;
+		line-height: var(--leading-tight);
+		letter-spacing: -0.01em;
+		text-wrap: balance;
+	}
+
+	.next-title a {
+		color: var(--color-text);
+		text-decoration: none;
+	}
+
+	.next-title a:hover {
+		color: var(--color-accent);
+	}
+
+	.next-excerpt {
+		margin-top: 0.375rem;
 	}
 </style>

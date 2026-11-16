@@ -17,6 +17,8 @@
 	--color-accent: #8b2e22; /* links and hover states only */
 	--color-selection: #ecdcd4; /* text selection highlight */
 	--color-placeholder: #ebe6dd; /* empty photo frames */
+	--color-surface: #f1ede5; /* header and footer bands only */
+	--color-mark-tail: #e3907c; /* the filled tail of the Risk Appetite mark, nothing else */
 
 	/* Font families (--font-source-serif and --font-inter are generated from astro.config.mjs) */
 	--font-serif: var(--font-source-serif), Georgia, 'Times New Roman', serif;
@@ -74,4 +76,6 @@
 	--color-accent: #e3907c;
 	--color-selection: #4a2c25;
 	--color-placeholder: #2a2825;
+	--color-surface: #211f1c;
+	--color-mark-tail: #e3907c;
 }

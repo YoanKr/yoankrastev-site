@@ -26,6 +26,14 @@ All pieces in one place
 
 The first essays are on their way. [Subscribe to Risk Appetite](/newsletter/) and you’ll get each one before it appears here.
 
+## Byline
+
+By Yoan Krastev
+
+## Read next heading
+
+Read next
+
 ## Signup heading
 
 Risk Appetite

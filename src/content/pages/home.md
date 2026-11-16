@@ -14,6 +14,10 @@ description: Essays on work, ambition, discipline and career decisions, for peop
 
 Essays on building a life that feels as good as it looks on paper.
 
+## Byline
+
+By Yoan Krastev, a former risk consultant now writing full time.
+
 ## Recent heading
 
 Recent articles

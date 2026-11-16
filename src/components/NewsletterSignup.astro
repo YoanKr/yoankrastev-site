@@ -1,12 +1,13 @@
 ---
 /**
- * Newsletter signup: a pitch and one button. The button is a plain link to the beehiiv
+ * Newsletter signup: the Risk Appetite mark and name, a pitch and one button. The button is a plain link to the beehiiv
  * signup page (beehiiv can't prefill an email from our site, so there is no email field here).
  * Used on the homepage, at the end of every essay, and on /newsletter.
  * The button label and note come from src/content/pages/newsletter.md.
  */
 import { NEWSLETTER } from '../consts';
 import { getPageCopy } from '../lib/pages';
+import RiskAppetiteMark from './RiskAppetiteMark.astro';
 
 interface Props {
 	/** Where it sits ('home', 'essay', 'newsletter'). Sent to beehiiv as utm_medium. */
@@ -34,49 +35,64 @@ href.searchParams.set('utm_medium', placement);
 	aria-label={heading ? undefined : 'Newsletter'}
 	{...rest}
 >
-	<div class="layout">
-		{
-			(heading || text) && (
-				<div class="text">
-					{heading && <h2 id={headingId} set:html={heading} />}
-					{text && <div class="pitch" set:html={text} />}
-				</div>
-			)
-		}
-		<div class="action">
-			<a class="button" href={href} set:html={copy.inline('button')} />
-			<p class="meta note" set:html={copy.inline('button-note')} />
-		</div>
+	{
+		(heading || text) && (
+			<div class="text">
+				{heading && (
+					<h2 id={headingId} class="heading">
+						<RiskAppetiteMark class="mark" />
+						<span set:html={heading} />
+					</h2>
+				)}
+				{text && <div class="pitch" set:html={text} />}
+			</div>
+		)
+	}
+	<div class="action">
+		<a class="button" href={href} set:html={copy.inline('button')} />
+		<p class="meta note" set:html={copy.inline('button-note')} />
 	</div>
 </section>
 
 <style>
+	/*
+	  One column everywhere: mark and name, pitch, then the button directly under the pitch,
+	  so the eye never has to jump across the page to find it.
+	*/
 	.newsletter {
+		max-width: var(--measure);
 		margin-top: var(--space-section);
 		container-type: inline-size;
 	}
 
-	.layout {
-		display: grid;
-		gap: 1.5rem;
+	.heading {
+		display: flex;
+		align-items: center;
+		gap: 0.6em;
 	}
 
-	/* Side by side when the space allows it (homepage on laptops); stacked in the essay column. */
-	@container (min-width: 46rem) {
-		.layout {
-			grid-template-columns: minmax(0, var(--measure)) auto;
-			justify-content: space-between;
-			align-items: end;
-			column-gap: 4rem;
+	.heading :global(.mark) {
+		flex: none;
+		height: 1.25em;
+	}
+
+	/* Where the box has room (the homepage, /about, articles on tablets and up), a larger mark. */
+	@container (min-width: 30rem) {
+		.heading :global(.mark) {
+			height: 1.6em;
 		}
 	}
 
 	.pitch {
-		margin-top: 0.5rem;
+		margin-top: 0.75rem;
 	}
 
 	.pitch :global(p + p) {
 		margin-top: 1em;
+	}
+
+	.text + .action {
+		margin-top: 1.5rem;
 	}
 
 	.button {

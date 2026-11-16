@@ -19,6 +19,7 @@ const recent = (await getPublishedEssays()).slice(0, 4);
 	<h1 class="sr-only">{SITE.name}</h1>
 
 	<div class="lede" set:html={copy.block('statement')} />
+	<p class="meta byline" set:html={copy.inline('byline')} />
 
 	<section class="section" aria-labelledby="recent-heading">
 		<div class="section-head">
@@ -61,6 +62,10 @@ const recent = (await getPublishedEssays()).slice(0, 4);
 
 	.lede :global(p + p) {
 		margin-top: 0.75em;
+	}
+
+	.byline {
+		margin-top: 1rem;
 	}
 
 	.section {

@@ -1,5 +1,6 @@
 ---
 import NewsletterSignup from '../components/NewsletterSignup.astro';
+import RiskAppetiteMark from '../components/RiskAppetiteMark.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getPageCopy } from '../lib/pages';
 
@@ -7,10 +8,19 @@ import { getPageCopy } from '../lib/pages';
 const copy = await getPageCopy('newsletter');
 ---
 
-<BaseLayout title={copy.text('heading')} description={copy.description}>
+<!-- Link previews of this page use the Risk Appetite card (logo and name) instead of the site default. -->
+<BaseLayout
+	title={copy.text('heading')}
+	description={copy.description}
+	image="/og-newsletter.png"
+	imageAlt={copy.text('heading')}
+>
 	<div class="reading">
 		<header class="page-header">
-			<h1 set:html={copy.inline('heading')} />
+			<h1 class="lockup">
+				<RiskAppetiteMark class="mark" />
+				<span set:html={copy.inline('heading')} />
+			</h1>
 			<div class="intro" set:html={copy.block('intro')} />
 		</header>
 
@@ -21,6 +31,18 @@ const copy = await getPageCopy('newsletter');
 </BaseLayout>
 
 <style>
+	/* The newsletter's logo and name, as on the beehiiv page and the link-preview card. */
+	.lockup {
+		display: flex;
+		align-items: center;
+		gap: 0.5em;
+	}
+
+	.lockup :global(.mark) {
+		flex: none;
+		height: 1.1em;
+	}
+
 	.intro {
 		margin-top: 0.5rem;
 		color: var(--color-text-muted);

@@ -47,7 +47,8 @@ docs/                       decisions.md, roadmap.md, deployment.md, images.md (
 scripts/
   make-images.mjs           Regenerates the social preview image and icons from the tokens
 public/
-  og-default.png            Default social preview image (1200×630), used on every page
+  og-default.png            Default social preview image (1200×630), used on every page but /newsletter
+  og-newsletter.png         Risk Appetite preview image (1200×630, logo and name), used on /newsletter
   favicon.svg               Monogram favicon (adapts to dark mode)
   apple-touch-icon.png      Home-screen icon
   robots.txt                Points crawlers at the sitemap
@@ -71,7 +72,8 @@ src/
     Header.astro            Home link, nav (Articles, About, Newsletter), light/dark switch
     Footer.astro            Text links: LinkedIn, Instagram, GitHub, Email, RSS
     EssayList.astro         Title / date / excerpt list: layout="grid" (homepage) or "index" (/articles)
-    NewsletterSignup.astro  Pitch + button linking to beehiiv (see Newsletter below)
+    NewsletterSignup.astro  Mark + heading, pitch, button linking to beehiiv (see Newsletter below)
+    RiskAppetiteMark.astro  The newsletter's logo (bell curve, filled right tail) as inline SVG
     Photo.astro             A photo slot: optimised image, or an empty 4:5 frame until one is added
     FormattedDate.astro     "12 July 2026" style dates
   pages/
@@ -143,7 +145,7 @@ Photo slots are defined in `src/lib/photos.ts`: `PHOTOS.home` (homepage About te
 
 Everything visual comes from the custom properties in `src/styles/tokens.css`:
 
-- **Colours:** `--color-bg`, `--color-text`, `--color-text-muted`, `--color-accent` (links and hover states only), `--color-selection`, `--color-placeholder` (empty photo frames). The first `:root` block is the light palette. The `:root[data-theme='dark']` block at the bottom is the dark palette. When you change a light colour, change its dark counterpart too, and keep body text at a contrast ratio of at least 7:1 and the accent at 4.5:1 or more against the background.
+- **Colours:** `--color-bg`, `--color-text`, `--color-text-muted`, `--color-accent` (links and hover states only), `--color-selection`, `--color-placeholder` (empty photo frames), `--color-surface` (the header and footer bands only), `--color-mark-tail` (the filled tail of the Risk Appetite mark, nothing else). The first `:root` block is the light palette. The `:root[data-theme='dark']` block at the bottom is the dark palette. When you change a light colour, change its dark counterpart too, and keep body text at a contrast ratio of at least 7:1 and the accent at 4.5:1 or more against the background.
 - **Font sizes:** `--text-*`. Phone sizes are in the first block. Larger screens override some of them in the `min-width: 48em` and `min-width: 64em` blocks.
 - **Widths:** `--measure` (`33em`) caps reading text at about 65–70 characters per line. `--page-width` (`70rem`) is the frame for the header, footer and layout pages. `--gutter` is the space to the screen edge. `--space-section` is the gap between homepage sections.
 - **Font families:** `--font-serif`, `--font-sans`, `--font-mono`. To swap a typeface, add its woff2 files to `src/assets/fonts/`, register them in `astro.config.mjs` under `fonts` (local provider), and point the token at the new `cssVariable`. Only use fonts whose licence allows self-hosting (OFL is ideal), and keep the licence file next to the font.
@@ -156,7 +158,7 @@ Exceptions: `public/favicon.svg`, `public/apple-touch-icon.png` and `public/og-d
 
 - An inline script at the top of `BaseHead.astro` sets `data-theme="light"` or `"dark"` on `<html>` before first paint.
 - The theme is the reader's saved choice from the header switch (stored in `localStorage` as `theme`), otherwise their system setting. It follows system changes live until the reader uses the switch.
-- The switch is a small pill drawn in CSS, deliberately unlike the text nav links. The knob is a dot in light mode and a crescent in dark mode. It is a `role="switch"` button named "Dark mode", and the theme script keeps its `aria-checked` in sync.
+- The switch is a small pill drawn in CSS, deliberately unlike the text nav links. The knob shows the current theme (a sun in light mode, a moon in dark mode) and the track shows the other icon faintly. The icons are inline SVG. The button is at least 44px tall for thumbs. It is a `role="switch"` button named "Dark mode", and the theme script keeps its `aria-checked` in sync.
 - Without JavaScript, readers get the light theme and the switch is hidden.
 
 ## Newsletter
@@ -166,7 +168,8 @@ The signup is `src/components/NewsletterSignup.astro`: a heading, a short pitch 
 - The button is a plain link to `https://yoankrastev.beehiiv.com/subscribe` (set in `src/consts.ts`), where readers enter their email and subscribe on beehiiv. The link adds `utm_source=website` and `utm_medium=<placement>` (`home`, `essay`, `about`, `newsletter`) so beehiiv can attribute signups to where they came from.
 - **Why there's no email field:** beehiiv ignores an `?email=` parameter (checked September 2026). `/subscribe` redirects to the publication homepage with a signup modal and an empty field. An email field on our site would make readers type their address twice, so it was removed.
 - It appears in exactly four places: the homepage, the end of every essay, `/about` and `/newsletter`. Reuse the component; never paste beehiiv's embed code or load its scripts.
-- Its layout adapts to its container (a container query): heading and button sit side by side where there's room (the homepage on laptops) and stack in the essay column and on phones.
+- One column everywhere, capped at `--measure`: the Risk Appetite mark beside the heading, the pitch, then the button directly under the pitch (decided 2026-11-16; the button used to sit at the far right on laptops, away from its text). A container query makes the mark larger where the box has room. The mark only appears when a heading is passed; `/newsletter` shows it in its `<h1>` instead.
+- **The mark** is `RiskAppetiteMark.astro`, traced from Yoan's 800×800 logo PNG: the curve and baseline use the text colour, the tail `--color-mark-tail`. Use the component; don't add the PNG.
 - **Possible later upgrade:** a server-side integration. An email field on our site would post to an Astro API endpoint (e.g. `src/pages/api/subscribe.ts`, needing an SSR adapter for the host), which calls the beehiiv API (`POST /v2/publications/{publicationId}/subscriptions`) with an API key stored in an environment variable, then redirects to an on-site thank-you page. That keeps readers on the site and makes signup a single step. The pitch and styling would stay; only the action area changes.
 
 ## Design constraints
@@ -176,9 +179,11 @@ Reading-first. Whitespace does the structural work.
 - One serif for body text (Source Serif 4), 18px on phones and 19px from tablets up, line height 1.65, text capped at about 65–70 characters per line.
 - Sans-serif (Inter) only for nav, metadata (dates, reading time, labels), footer and the button.
 - Near-black on off-white by default, plus a dark theme driven by the same tokens.
-- A single accent colour, used sparingly: links and hover states only. Not for headings, backgrounds, buttons at rest or decoration.
-- No cards, no shadows, no gradients, no section dividers or rules, no hero images, no feature grids. Separate things with space.
-- Header: "Home" on the left; Articles, About, Newsletter and the light/dark switch on the right. Keep the switch visually distinct from the text links. Footer: LinkedIn, Instagram, GitHub, Email, RSS as text links. No icon sets.
+- A single accent colour, used sparingly: links and hover states only. Not for headings, backgrounds, buttons at rest or decoration. (The salmon tail of the Risk Appetite mark is part of the logo, with its own token, not a use of the accent.)
+- No cards, no shadows, no gradients, no section dividers or rules, no hero images, no feature grids. Separate things with space. The one exception is the header and footer, which sit on full-width `--color-surface` bands (no border, not sticky) so every page has a visible top and bottom.
+- Header: "Home" on the left; Articles, About, Newsletter and the light/dark switch on the right. Keep the switch visually distinct from the text links. The current page's nav link is underlined in the text colour (never the accent). Every header link is at least 44px tall.
+- Bylines: the homepage statement has a byline (`## Byline` in `home.md`), and every article's meta line starts with one (`## Byline` in `articles.md`).
+- Articles end with a "Read next" link (the next older article, or the next newer one for the oldest), then the signup. With a single article it is left out. Footer: LinkedIn, Instagram, GitHub, Email, RSS as text links. No icon sets.
 
 ### Layout and widths
 
@@ -207,7 +212,7 @@ The full list, with what is in progress, is in [docs/roadmap.md](docs/roadmap.md
 - `src/lib/photos.ts`: add the homepage photo and the three About photos.
 - `src/content/pages/newsletter.md`: the note under the button says the first issue goes out in December 2026. Revisit once it has.
 - `src/content/essays/`: delete the placeholder essays and the sample draft.
-- beehiiv dashboard: give the publication a logo and name. Readers land on that page to subscribe.
+- beehiiv dashboard: upload the Risk Appetite logo and set the publication name. Readers land on that page to subscribe.
 
 ## Pitfalls in this codebase
 
@@ -217,7 +222,7 @@ Things that have already cost time here:
 - **A page's scoped styles don't reach a child component's root element.** `.newsletter { margin-top: … }` in a page has no effect on `<NewsletterSignup>`'s own `<section class="newsletter">`. Pass a class to the component, which forwards it with `class:list` plus `{...rest}`, or style it inside the component.
 - **`set:html` content is not scoped either.** Markdown rendered into a page arrives without the component's scoping attribute, so scoped rules must use `:global(...)`, for example `.lede :global(p + p)`. Global classes from `global.css` (`.prose`, `.meta`) apply normally, which is why rendered copy usually sits in a `.prose` wrapper.
 - **Media queries and source order.** Scoped styles are emitted in file order and a plain class selector has the same weight as one inside a media query. A `@media (min-width: 40em)` override must come *after* the base rule in the file, or it loses.
-- **The signup box uses a container query, not a media query.** It lays out side by side when its own container is wide enough, so it works in both the wide homepage frame and the narrow article column. Don't convert it to `@media`.
+- **The signup box uses a container query, not a media query.** It sizes the mark from its own container's width, so it works in both the wide homepage frame and the narrow article column. Don't convert it to `@media`.
 - **Section names in page wording files are slugs of the headings.** `## Signup heading` is read as `'signup-heading'`. Renaming a heading in a markdown file breaks the page that reads it, and the build says so.
 - **Internal links end with a slash** (`/articles/`, `/about/`), matching the canonical URLs and the sitemap.
 - **Fonts and images are the only binary assets.** Don't add an image to `public/` that could live in `src/assets/` and be optimised by Astro.
