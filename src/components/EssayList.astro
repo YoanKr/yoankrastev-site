@@ -1,5 +1,5 @@
 ---
-import { type Essay, essayUrl } from '../lib/essays';
+import { type Essay, essayUrl, readingTime } from '../lib/essays';
 import FormattedDate from './FormattedDate.astro';
 
 interface Props {
@@ -7,8 +7,10 @@ interface Props {
 	/** Heading level for each essay title, so the page outline stays correct. */
 	headingLevel?: 2 | 3;
 	/**
-	 * 'grid'  (homepage): auto-fit columns, 1 on phones, 2 on laptops.
-	 * 'index' (/articles): one per row, date in its own column on wider screens.
+	 * 'grid'  (homepage): compact cards in auto-fit columns, 1 on phones, 2 on laptops.
+	 * 'index' (/articles): one long card per row, with date, reading time and tags in their own
+	 *         column on wider screens.
+	 * Both are panels (soft-edged boxes) and the whole card is the link.
 	 */
 	layout?: 'grid' | 'index';
 }
@@ -20,14 +22,30 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
 <ul class:list={['essay-list', layout]}>
 	{
 		essays.map((essay) => (
-			<li class:list={[{ panel: layout === 'grid' }]}>
+			<li class="panel">
 				<Heading class="title">
 					<a href={essayUrl(essay)}>{essay.data.title}</a>
 				</Heading>
-				<p class="meta">
+				<div class="meta">
 					<FormattedDate date={essay.data.pubDate} />
+					{layout === 'index' && (
+						<>
+							<span class="sep" aria-hidden="true">
+								&ensp;·&ensp;
+							</span>
+							<span>{readingTime(essay.body)} min read</span>
+							{essay.data.tags && essay.data.tags.length > 0 && (
+								<>
+									<span class="sep" aria-hidden="true">
+										&ensp;·&ensp;
+									</span>
+									<span class="tags">{essay.data.tags.join(', ')}</span>
+								</>
+							)}
+						</>
+					)}
 					{essay.data.draft && <span class="draft"> · Draft (hidden in production)</span>}
-				</p>
+				</div>
 				<p class="excerpt">{essay.data.description}</p>
 			</li>
 		))
@@ -37,45 +55,32 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
 <style>
 	.essay-list {
 		display: grid;
-		gap: 2.25rem;
+		gap: 1rem;
 		margin: 0;
 		padding: 0;
 		list-style: none;
 	}
 
-	/* Cards sit closer together than plain list items: the box edges already separate them. */
-	.grid {
-		grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
-		gap: 1rem;
-	}
-
 	@media (min-width: 48em) {
-		.grid {
+		.essay-list {
 			gap: 1.5rem;
 		}
 	}
 
-	.title {
-		font-size: var(--text-list-title);
+	.grid {
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
 	}
 
 	/*
-	  Homepage cards: the whole box is the link (the title's ::after covers it), so it is easy to
-	  tap on a phone. Hovering anywhere on the card colours the title.
+	  The whole card is the link (the title's ::after covers it), so it is easy to tap on a phone.
+	  Hovering anywhere on the card colours the title.
 	*/
-	.grid li {
+	li {
 		position: relative;
 	}
 
-	.grid .title a::after {
-		content: '';
-		position: absolute;
-		inset: 0;
-		border-radius: inherit;
-	}
-
-	.grid li:hover .title a {
-		color: var(--color-accent);
+	.title {
+		font-size: var(--text-list-title);
 	}
 
 	.title a {
@@ -83,12 +88,23 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
 		text-decoration: none;
 	}
 
-	.title a:hover {
+	.title a::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+	}
+
+	li:hover .title a {
 		color: var(--color-accent);
 	}
 
 	.meta {
 		margin-top: 0.25rem;
+	}
+
+	.meta > :global(*) {
+		white-space: nowrap;
 	}
 
 	.excerpt {
@@ -100,19 +116,16 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
 		color: var(--color-accent);
 	}
 
+	/* /articles on wider screens: date, reading time and tags stacked in a column left of the title. */
 	@media (min-width: 48em) {
-		.index {
-			gap: 2.75rem;
-		}
-
 		.index li {
 			display: grid;
-			grid-template-columns: 11rem minmax(0, var(--measure));
+			grid-template-columns: 10rem minmax(0, 1fr);
 			grid-template-areas:
-				'date title'
-				'date excerpt';
+				'meta title'
+				'meta excerpt';
 			align-items: start;
-			column-gap: 2rem;
+			column-gap: 2.5rem;
 		}
 
 		.index .title {
@@ -120,11 +133,20 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
 		}
 
 		.index .meta {
-			grid-area: date;
-			align-self: start;
+			display: flex;
+			flex-direction: column;
+			grid-area: meta;
 			margin-top: 0;
 			/* Line the date up with the first line of the title. */
 			padding-top: 0.3em;
+		}
+
+		.index .sep {
+			display: none;
+		}
+
+		.index .tags {
+			white-space: normal;
 		}
 
 		.index .excerpt {

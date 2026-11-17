@@ -181,7 +181,7 @@ Reading-first. Whitespace does the structural work.
 - Near-black on off-white by default, plus a dark theme driven by the same tokens.
 - A single accent colour, used sparingly: links and hover states only. Not for headings, backgrounds, buttons at rest or decoration. (The salmon tail of the Risk Appetite mark is part of the logo, with its own token, not a use of the accent.)
 - No shadows, no gradients, no section dividers or rules, no hero images, no feature grids. Separate things with space.
-- Two exceptions, both in `--color-surface`: the header and footer sit on full-width bands (no border, not sticky), and a few self-contained blocks are **panels** (the global `.panel` class: soft rounded corners `--radius-panel`, padding `--space-panel`, no border, no shadow). Panels are the homepage article cards (the whole card is the link), the homepage About teaser, the newsletter signup when it has a heading, and "Read next". Never put running article text, /about rows or the `/articles` archive list in a panel. Photos have `--radius-photo` corners.
+- Two exceptions, both in `--color-surface`: the header and footer sit on full-width bands (no border, not sticky), and a few self-contained blocks are **panels** (the global `.panel` class: soft rounded corners `--radius-panel`, padding `--space-panel`, no border, no shadow). Panels are: article cards on the homepage (compact) and on `/articles` (one long card per row, with date, reading time and tags in a left column on wider screens); in both the whole card is the link. Also the homepage About teaser, the text of each `/about` row (the photo stays outside), the newsletter signup when it has a heading, the pitch-plus-button block on `/newsletter`, and "Read next". Never put the running text of an article in a panel. Photos have `--radius-photo` corners.
 - Header: "Home" on the left; Articles, About, Newsletter and the light/dark switch on the right. Keep the switch visually distinct from the text links. The current page's nav link is underlined in the text colour (never the accent). Every header link is at least 44px tall.
 - Bylines: the homepage statement has a byline (`## Byline` in `home.md`), and every article's meta line starts with one (`## Byline` in `articles.md`).
 - Articles end with a "Read next" link (the next older article, or the next newer one for the oldest), then the signup. With a single article it is left out. Footer: LinkedIn, Instagram, GitHub, Email, RSS as text links. No icon sets.
@@ -191,8 +191,8 @@ Reading-first. Whitespace does the structural work.
 - **Page frame (`.wrap`, `--page-width`):** the header, the footer, and the layout pages (homepage, `/articles`, `/about`) use the full frame, so laptops don't show a lonely narrow column.
 - **Reading column (`.reading`, `--measure`):** essays, `/newsletter` and the 404 page are a centred column. Leave it narrow on laptops; long lines are harder to read.
 - **Homepage:** 2–3 line positioning statement, then the 4 latest essays in an auto-fit grid (1 column on phones, 2 on laptops), then an About teaser (one photo and a link to `/about`), then the signup.
-- **`/articles`:** one article per row. On wider screens the date sits in its own column to the left.
-- **`/about`:** three rows alternating photo and text (photo left, right, left), then the newsletter signup across the page. On phones each row stacks photo-then-text.
+- **`/articles`:** one long card per row. On wider screens the date, reading time and tags sit in their own column on the left of the card.
+- **`/about`:** three rows alternating photo and text panel (photo left, right, left), then the newsletter signup across the page. On phones each row stacks photo-then-text.
 
 ## Technical constraints
 

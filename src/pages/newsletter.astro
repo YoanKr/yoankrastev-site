@@ -24,9 +24,11 @@ const copy = await getPageCopy('newsletter');
 			<div class="intro" set:html={copy.block('intro')} />
 		</header>
 
-		<div class="prose" set:html={copy.block('text')} />
-
-		<NewsletterSignup placement="newsletter" class="signup" />
+		<!-- The pitch and the button share one panel, so the prompt and the action read as one block. -->
+		<div class="pitch panel">
+			<div class="prose" set:html={copy.block('text')} />
+			<NewsletterSignup placement="newsletter" class="signup" />
+		</div>
 	</div>
 </BaseLayout>
 

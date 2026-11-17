@@ -107,11 +107,13 @@ the bands were added; this revises the original "no cards" rule.
 The site felt too static: every section was text on the same background. Yoan pointed to
 aliabdaal.com, which puts content in rounded boxes on soft tinted backgrounds. The restrained
 version used here: a panel is `--color-surface` (the band colour) with `--radius-panel` corners and
-generous padding, and no border, shadow or hover animation. Only blocks a reader acts on or scans
-get one: the homepage article cards (the whole card is the link, a bigger tap target on phones),
-the homepage About teaser, the newsletter signup and "Read next". Article text, the /about rows
-and the /articles archive stay unboxed, because long reading should not feel like a dashboard.
-Photos got slightly rounded corners to match.
+generous padding, and no border, shadow or hover animation. Panels hold: the article cards (compact on
+the homepage; one long card per row on /articles with date, reading time and tags in a left
+column; the whole card is the link, a bigger tap target on phones), the homepage About teaser, the
+text of each /about row (added 2026-11-17 at Yoan's request), the newsletter signup, the /newsletter
+pitch together with its button, and "Read next". The running text of an article stays unboxed,
+because long reading should not feel like a dashboard. Photos got slightly rounded corners to
+match.
 
 *Would change it:* if the boxes start to look dated, removing the `.panel` class (and the radius
 tokens) brings back the plain layout without touching the content.

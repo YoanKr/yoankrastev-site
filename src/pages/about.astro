@@ -25,7 +25,7 @@ const photoSizes = '(min-width: 48em) 40vw, 100vw';
 			rows.map(({ photo, html }, i) => (
 				<section class:list={['row', { flip: i % 2 === 1 }]}>
 					<Photo photo={photo} sizes={photoSizes} />
-					<div class="prose" set:html={html} />
+					<div class="prose panel" set:html={html} />
 				</section>
 			))
 		}
@@ -75,6 +75,11 @@ const photoSizes = '(min-width: 48em) 40vw, 100vw';
 
 		.row.flip .prose {
 			justify-self: end;
+		}
+
+		/* The text sits in a panel; let it fill its column so it lines up with the photo's edge. */
+		.row .prose {
+			max-width: none;
 		}
 	}
 
