@@ -108,12 +108,15 @@ The site felt too static: every section was text on the same background. Yoan po
 aliabdaal.com, which puts content in rounded boxes on soft tinted backgrounds. The restrained
 version used here: a panel is `--color-surface` (the band colour) with `--radius-panel` corners and
 generous padding, and no border, shadow or hover animation. Panels hold: the article cards (compact on
-the homepage; one long card per row on /articles with date, reading time and tags in a left
-column; the whole card is the link, a bigger tap target on phones), the homepage About teaser, the
-text of each /about row (added 2026-11-17 at Yoan's request), the newsletter signup, the /newsletter
-pitch together with its button, and "Read next". The running text of an article stays unboxed,
-because long reading should not feel like a dashboard. Photos got slightly rounded corners to
-match.
+the homepage, two across on laptops; one long card per row on /articles with date, reading time
+and tags in a left column; the whole card is the link, a bigger tap target on phones), the
+newsletter signup on the homepage and under articles, the subscribe button on /newsletter, and
+"Read next". Photos got slightly rounded corners to match.
+
+Boxing more than that was tried the same day and reversed at Yoan's request because it was too
+many boxes: the homepage About teaser, the /about row texts and signup, and the /newsletter pitch
+are plain again. The running text of an article was never boxed, because long reading should not
+feel like a dashboard.
 
 *Would change it:* if the boxes start to look dated, removing the `.panel` class (and the radius
 tokens) brings back the plain layout without touching the content.

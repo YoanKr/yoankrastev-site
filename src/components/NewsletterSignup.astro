@@ -17,10 +17,12 @@ interface Props {
 	/** Optional pitch under the heading, as HTML from a page's wording file. */
 	text?: string;
 	/** Lets a page adjust spacing with its own scoped class. */
+	/** Draw it as a panel (soft-edged box). Boxed on the homepage, under articles and on /newsletter; plain on /about. */
+	boxed?: boolean;
 	class?: string;
 }
 
-const { placement, heading, text, class: className, ...rest } = Astro.props;
+const { placement, heading, text, boxed = true, class: className, ...rest } = Astro.props;
 const headingId = `newsletter-heading-${placement}`;
 const copy = await getPageCopy('newsletter');
 
@@ -30,7 +32,7 @@ href.searchParams.set('utm_medium', placement);
 ---
 
 <section
-	class:list={['newsletter', { panel: heading }, className]}
+	class:list={['newsletter', { panel: boxed }, className]}
 	aria-labelledby={heading ? headingId : undefined}
 	aria-label={heading ? undefined : 'Newsletter'}
 	{...rest}
@@ -66,8 +68,8 @@ href.searchParams.set('utm_medium', placement);
 	}
 
 	/*
-	  With a heading it is a panel (a soft-edged box) across the full width of its column; the text
-	  inside stays capped at the reading measure. /newsletter passes no heading and stays plain.
+	  Boxed, it is a panel across the full width of its column; the text inside stays capped at the
+	  reading measure. /about passes boxed={false} and stays plain.
 	*/
 	.newsletter.panel {
 		max-width: none;

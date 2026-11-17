@@ -35,7 +35,7 @@ const recent = (await getPublishedEssays()).slice(0, 4);
 		}
 	</section>
 
-	<section class="section about panel" aria-labelledby="about-heading">
+	<section class="section about" aria-labelledby="about-heading">
 		<Photo photo={PHOTOS.home} sizes="(min-width: 48em) 14rem, 9rem" class="about-photo" />
 		<div class="about-text">
 			<h2 id="about-heading" set:html={copy.inline('about-heading')} />
