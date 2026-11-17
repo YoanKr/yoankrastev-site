@@ -26,8 +26,8 @@ const copy = await getPageCopy('newsletter');
 
 		<div class="prose" set:html={copy.block('text')} />
 
-		<!-- Only the subscribe widget (button and note) sits in a panel. -->
-		<NewsletterSignup placement="newsletter" class="signup" />
+		<!-- Just the button and its note, no box. -->
+		<NewsletterSignup placement="newsletter" class="signup" boxed={false} />
 	</div>
 </BaseLayout>
 

@@ -108,14 +108,15 @@ The site felt too static: every section was text on the same background. Yoan po
 aliabdaal.com, which puts content in rounded boxes on soft tinted backgrounds. The restrained
 version used here: a panel is `--color-surface` (the band colour) with `--radius-panel` corners and
 generous padding, and no border, shadow or hover animation. Panels hold: the article cards (compact on
-the homepage, two across on laptops; one long card per row on /articles with date, reading time
-and tags in a left column; the whole card is the link, a bigger tap target on phones), the
-newsletter signup on the homepage and under articles, the subscribe button on /newsletter, and
-"Read next". Photos got slightly rounded corners to match.
+the homepage, the latest three in one row on laptops; one long card per row on /articles with
+date, reading time and tags in a left column; the whole card is the link, a bigger tap target on
+phones) and the newsletter signup on the homepage, under every article and on /about. Photos got
+slightly rounded corners to match.
 
 Boxing more than that was tried the same day and reversed at Yoan's request because it was too
-many boxes: the homepage About teaser, the /about row texts and signup, and the /newsletter pitch
-are plain again. The running text of an article was never boxed, because long reading should not
+many boxes: the homepage About teaser, the /about row texts, "Read next" and everything on
+/newsletter are plain. The boxed signup puts its button on the right where the box is wide, so
+the box is not half-empty, and on one row under the text in the article column. The running text of an article was never boxed, because long reading should not
 feel like a dashboard.
 
 *Would change it:* if the boxes start to look dated, removing the `.panel` class (and the radius
@@ -172,7 +173,7 @@ once the newsletter is running.
 in the `/newsletter` heading. It is an inline SVG traced from Yoan's logo file, so it follows the
 theme; its salmon tail has its own token (`--color-mark-tail`) and is not a use of the link
 accent. `/newsletter` link previews use Yoan's 1200×630 Risk Appetite card (`og-newsletter.png`).
-At the same time the button moved directly under the pitch on every screen size.
+At the same time the button moved directly under the pitch on every screen size. (Revised 2026-11-17: inside the boxed signup, wide boxes put the button and note on the right of the text; see *Panels*.)
 
 *Possible upgrade, not done:* a server-side integration would let the email field come back and
 keep readers on the site. See [roadmap.md](roadmap.md).

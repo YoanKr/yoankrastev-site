@@ -17,7 +17,7 @@ interface Props {
 	/** Optional pitch under the heading, as HTML from a page's wording file. */
 	text?: string;
 	/** Lets a page adjust spacing with its own scoped class. */
-	/** Draw it as a panel (soft-edged box). Boxed on the homepage, under articles and on /newsletter; plain on /about. */
+	/** Draw it as a panel (soft-edged box). Boxed on the homepage, under articles and on /about; plain on /newsletter. */
 	boxed?: boolean;
 	class?: string;
 }
@@ -37,6 +37,7 @@ href.searchParams.set('utm_medium', placement);
 	aria-label={heading ? undefined : 'Newsletter'}
 	{...rest}
 >
+	<div class="layout">
 	{
 		(heading || text) && (
 			<div class="text">
@@ -54,29 +55,31 @@ href.searchParams.set('utm_medium', placement);
 		<a class="button" href={href} set:html={copy.inline('button')} />
 		<p class="meta note" set:html={copy.inline('button-note')} />
 	</div>
+	</div>
 </section>
 
 <style>
 	/*
-	  One column everywhere: mark and name, pitch, then the button directly under the pitch,
-	  so the eye never has to jump across the page to find it.
+	  Phones and narrow boxes: mark and name, pitch, then the button under the pitch.
+	  Where the box has room (container query): text on the left, button and note on the right,
+	  centred vertically, so the box is neither half-empty nor tall.
 	*/
 	.newsletter {
-		max-width: var(--measure);
 		margin-top: var(--space-section);
 		container-type: inline-size;
 	}
 
-	/*
-	  Boxed, it is a panel across the full width of its column; the text inside stays capped at the
-	  reading measure. /about passes boxed={false} and stays plain.
-	*/
+	/* Boxed: a panel across the full width of its column, a little shorter than other panels. */
 	.newsletter.panel {
-		max-width: none;
+		padding-block: calc(var(--space-panel) * 0.75);
 	}
 
-	.text,
-	.action {
+	.layout {
+		display: grid;
+		gap: 1.5rem;
+	}
+
+	.text {
 		max-width: var(--measure);
 	}
 
@@ -91,23 +94,12 @@ href.searchParams.set('utm_medium', placement);
 		height: 1.25em;
 	}
 
-	/* Where the box has room (the homepage, /about, articles on tablets and up), a larger mark. */
-	@container (min-width: 30rem) {
-		.heading :global(.mark) {
-			height: 1.6em;
-		}
-	}
-
 	.pitch {
-		margin-top: 0.75rem;
+		margin-top: 0.5rem;
 	}
 
 	.pitch :global(p + p) {
 		margin-top: 1em;
-	}
-
-	.text + .action {
-		margin-top: 1.5rem;
 	}
 
 	.button {
@@ -138,5 +130,45 @@ href.searchParams.set('utm_medium', placement);
 
 	.note {
 		margin-top: 0.625rem;
+	}
+
+	/* Medium boxes (the article column): text full width, then the button and its note on one row. */
+	@container (min-width: 30rem) {
+		.heading :global(.mark) {
+			height: 1.4em;
+		}
+
+		.action {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			gap: 0.5rem 1.25rem;
+		}
+
+		.button {
+			display: inline-flex;
+		}
+
+		.note {
+			margin-top: 0;
+		}
+	}
+
+	/* Wide boxes (homepage, /about): text on the left, button and note on the right. */
+	@container (min-width: 44rem) {
+		.layout {
+			grid-template-columns: minmax(0, 1fr) auto;
+			align-items: center;
+			column-gap: 2.5rem;
+		}
+
+		.action {
+			display: block;
+			text-align: right;
+		}
+
+		.note {
+			margin-top: 0.625rem;
+		}
 	}
 </style>

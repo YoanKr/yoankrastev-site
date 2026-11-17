@@ -68,8 +68,8 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
 	}
 
 	.grid {
-		/* 24rem minimum: one column on phones, two on laptops (three would leave the fourth card alone). */
-		grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+		/* 18rem minimum: one column on phones, two on tablets, three in a row on laptops. */
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
 	}
 
 	/*

@@ -12,7 +12,8 @@ import { PHOTOS } from '../lib/photos';
 // empty-state line, which lives with the rest of the article wording.
 const copy = await getPageCopy('home');
 const articleCopy = await getPageCopy('articles');
-const recent = (await getPublishedEssays()).slice(0, 4);
+// Three, so the latest articles fill exactly one row of cards on laptops.
+const recent = (await getPublishedEssays()).slice(0, 3);
 ---
 
 <BaseLayout description={copy.description}>

@@ -68,7 +68,7 @@ const copy = await getPageCopy('articles');
 
 		{
 			next && (
-				<aside class="read-next panel" aria-labelledby="read-next-heading">
+				<aside class="read-next" aria-labelledby="read-next-heading">
 					<h2 id="read-next-heading" class="meta label" set:html={copy.inline('read-next-heading')} />
 					<p class="next-title">
 						<a href={essayUrl(next)}>{next.data.title}</a>
@@ -97,20 +97,7 @@ const copy = await getPageCopy('articles');
 	}
 
 	.read-next {
-		position: relative;
 		margin-top: var(--space-section);
-	}
-
-	/* The whole box is the link (the title's ::after covers it). */
-	.next-title a::after {
-		content: '';
-		position: absolute;
-		inset: 0;
-		border-radius: inherit;
-	}
-
-	.read-next:hover .next-title a {
-		color: var(--color-accent);
 	}
 
 	.label {
