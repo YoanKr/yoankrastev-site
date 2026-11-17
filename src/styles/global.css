@@ -124,6 +124,17 @@ img {
 	height: auto;
 }
 
+/*
+  A panel: a soft-edged box on --color-surface (the same tone as the header and footer bands).
+  Used for the homepage article cards and About teaser, the newsletter signup and "Read next".
+  No border, no shadow. Never for running text inside an article.
+*/
+.panel {
+	padding: var(--space-panel);
+	border-radius: var(--radius-panel);
+	background: var(--color-surface);
+}
+
 /* Sans-serif metadata line: dates, reading time, small labels. */
 .meta {
 	font-family: var(--font-sans);

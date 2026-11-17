@@ -65,7 +65,7 @@ The accent (oxblood `#8b2e22`, `#e3907c` in dark) is used **only** for links and
 Not for headings, backgrounds, buttons at rest, or decoration. Used everywhere, an accent stops
 meaning anything; used only for links, it tells the reader what is clickable.
 
-There are no cards, shadows, gradients or dividing rules anywhere. Space separates things.
+There are no shadows, gradients or dividing rules anywhere. Space separates things, with two exceptions in `--color-surface`: the header and footer bands, and panels (see *Panels* below).
 
 ## Light and dark theme
 
@@ -98,6 +98,23 @@ the header is not sticky (it would take reading space on phones). This is the on
 *Rejected at the same review:* faded or feathered photo edges (dates quickly, conflicts with no
 gradients) and decorative shapes in the side margins on laptops (phones have no margins, extra
 colours would compete with the accent, and margin art dates fastest).
+
+## Panels
+
+**Self-contained blocks sit in soft-edged panels.** Decided 2026-11-17, at Yoan's request, after
+the bands were added; this revises the original "no cards" rule.
+
+The site felt too static: every section was text on the same background. Yoan pointed to
+aliabdaal.com, which puts content in rounded boxes on soft tinted backgrounds. The restrained
+version used here: a panel is `--color-surface` (the band colour) with `--radius-panel` corners and
+generous padding, and no border, shadow or hover animation. Only blocks a reader acts on or scans
+get one: the homepage article cards (the whole card is the link, a bigger tap target on phones),
+the homepage About teaser, the newsletter signup and "Read next". Article text, the /about rows
+and the /articles archive stay unboxed, because long reading should not feel like a dashboard.
+Photos got slightly rounded corners to match.
+
+*Would change it:* if the boxes start to look dated, removing the `.panel` class (and the radius
+tokens) brings back the plain layout without touching the content.
 
 ## Section naming and URLs
 

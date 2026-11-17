@@ -44,6 +44,9 @@
 	--page-width: 70rem; /* header, footer, homepage, /articles and /about on laptops */
 	--gutter: 1.25rem; /* space between content and screen edge */
 	--space-section: 4.5rem; /* vertical space between homepage sections */
+	--space-panel: 1.5rem; /* padding inside a panel (soft-edged box) */
+	--radius-panel: 1rem; /* corner radius of panels */
+	--radius-photo: 0.625rem; /* corner radius of photos */
 }
 
 @media (min-width: 48em) {
@@ -56,6 +59,7 @@
 		--text-h3: 1.25rem;
 		--gutter: 2.5rem;
 		--space-section: 6.5rem;
+		--space-panel: 2.5rem;
 	}
 }
 

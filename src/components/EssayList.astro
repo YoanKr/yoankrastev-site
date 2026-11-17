@@ -20,7 +20,7 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
 <ul class:list={['essay-list', layout]}>
 	{
 		essays.map((essay) => (
-			<li>
+			<li class:list={[{ panel: layout === 'grid' }]}>
 				<Heading class="title">
 					<a href={essayUrl(essay)}>{essay.data.title}</a>
 				</Heading>
@@ -43,13 +43,39 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
 		list-style: none;
 	}
 
+	/* Cards sit closer together than plain list items: the box edges already separate them. */
 	.grid {
 		grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
-		gap: 2.5rem 4rem;
+		gap: 1rem;
+	}
+
+	@media (min-width: 48em) {
+		.grid {
+			gap: 1.5rem;
+		}
 	}
 
 	.title {
 		font-size: var(--text-list-title);
+	}
+
+	/*
+	  Homepage cards: the whole box is the link (the title's ::after covers it), so it is easy to
+	  tap on a phone. Hovering anywhere on the card colours the title.
+	*/
+	.grid li {
+		position: relative;
+	}
+
+	.grid .title a::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+	}
+
+	.grid li:hover .title a {
+		color: var(--color-accent);
 	}
 
 	.title a {
