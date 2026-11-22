@@ -13,6 +13,7 @@ Last reviewed 2026-11-16.
 | First real article | `src/content/essays/` | Empty since the placeholders were deleted on 2026-11-16. The homepage and `/articles` show an empty-state line until the first one is published. |
 | www duplicate | Cloudflare dashboard | `www.yoankrastev.com` serves the site instead of redirecting to the apex domain. The canonical tag points search engines at the apex, so this is tidiness, not a bug. |
 | beehiiv email settings | beehiiv dashboard | Two settings to fix before the first issue. See the checklist under *beehiiv: before the first issue* below. |
+| beehiiv API key | beehiiv → Settings → Workspace → API | The server-side signup is built and merged but inert until `BEEHIIV_API_KEY` exists as a secret on the Cloudflare Worker. beehiiv needs Stripe Identity Verification on the account before it will issue a key. Until then the form falls back to the beehiiv page, exactly as before. |
 | "First issue goes out in December" | `src/content/pages/newsletter.md`, `## Button note` | A dated claim, shown under the button on every page. Remove or change it once Risk Appetite is running. While there, check the signup text in `home.md`, `articles.md` and `about.md` still reads right for a live newsletter. |
 
 ## beehiiv: before the first issue
@@ -44,17 +45,6 @@ hand in the beehiiv dashboard). Publication: **Risk Appetite**, `yoankrastev.bee
 - Time zone stays London (issues are scheduled on EU time), by choice.
 
 ## Possible upgrades, in rough order of value
-
-**Server-side newsletter signup.** Brings the email field back on the site and makes signup one
-step instead of two. The form would post to an Astro API route, which calls the beehiiv API
-(`POST /v2/publications/{publicationId}/subscriptions`) with an API key from an environment
-variable, then redirects to an on-site thank-you page. Needs an SSR adapter for that one route
-and a host that runs server code. Worth doing if signups look low relative to traffic.
-
-**Photo treatment (from the 2026-11-16 UX review, not built).** Put photos with a near-white
-studio background on a `--color-placeholder` mat so they aren't the brightest thing in dark mode,
-dim photos slightly in dark mode, give all photos one colour grade before export, and add short
-sans captions (wording in the page's markdown file). Faded or feathered edges were rejected.
 
 **Per-article preview images.** Each article would get its own card with its title drawn on the
 site's background, instead of every link sharing one image. Noticeably better on LinkedIn.

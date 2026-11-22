@@ -16,7 +16,10 @@ export const SOCIAL_LINKS = [
 ];
 
 export const NEWSLETTER = {
-	// The signup button links here; readers enter their email and subscribe on beehiiv.
+	// The beehiiv publication the signup form subscribes people to. Not a secret; the API key is
+	// (it lives in the BEEHIIV_API_KEY secret on the Cloudflare Worker, never in this repo).
+	publicationId: 'pub_b8cb18b3-4746-44b4-91b8-5ecb549ec694',
+	// Fallback for when the signup form cannot subscribe someone itself: beehiiv's own page.
 	subscribeUrl: 'https://yoankrastev.beehiiv.com/subscribe',
 };
 

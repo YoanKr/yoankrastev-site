@@ -18,6 +18,7 @@
 	--color-selection: #ecdcd4; /* text selection highlight */
 	--color-placeholder: #ebe6dd; /* empty photo frames */
 	--color-surface: #f1ede5; /* header and footer bands only */
+	--color-field-border: #cfc9be; /* outline of the newsletter email field, nothing else */
 	--color-mark-tail: #e3907c; /* the filled tail of the Risk Appetite mark, nothing else */
 
 	/* Font families (--font-source-serif and --font-inter are generated from astro.config.mjs) */
@@ -81,5 +82,6 @@
 	--color-selection: #4a2c25;
 	--color-placeholder: #2a2825;
 	--color-surface: #211f1c;
+	--color-field-border: #45413b;
 	--color-mark-tail: #e3907c;
 }

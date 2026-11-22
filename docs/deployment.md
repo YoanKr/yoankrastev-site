@@ -13,14 +13,28 @@ The rest of this file covers how that is set up, what to check, and what would c
 ## What the build produces
 
 ```sh
-npm run build     # writes dist/
-npm run preview   # serves dist/ locally, to check the built site
+npm run build     # writes dist/client and dist/server
+npm run preview   # serves the built site locally
 ```
 
-- Plain static files: HTML, CSS, fonts, images. No server, no database, no environment variables.
-- Node 22.12 or newer (`engines` in `package.json`).
-- Current size: roughly 340 KB total, of which about 150 KB is fonts.
-- `dist/404.html` is the not-found page. Every host below serves it automatically.
+Since the signup form went server-side (2026-11-22) the build has two halves:
+
+- **`dist/client`** — the whole site as static files: HTML, CSS, fonts, images. Every page is
+  pre-rendered. `dist/client/404.html` is the not-found page.
+- **`dist/server`** — the Cloudflare Worker, which exists to run one route, `/api/subscribe`.
+  The Astro adapter also writes `dist/server/wrangler.json`, the deploy configuration, with
+  `main: entry.mjs` and the assets pointing at `../client`.
+
+Node 22.12 or newer (`engines` in `package.json`).
+
+**One secret is required in production:** `BEEHIIV_API_KEY`, set on the Worker in the Cloudflare
+dashboard (Settings → Variables and Secrets → add a *Secret*, not a plain variable). It must
+never be committed. Without it the signup form falls back to the beehiiv page, so the site still
+works, it just does not subscribe anyone itself. For local work, put the same key in a `.env`
+file, which is gitignored.
+
+The adapter also declares a `SESSION` KV namespace and an `IMAGES` binding. Nothing on the site
+uses sessions; Cloudflare provisions that namespace automatically on deploy.
 
 ## The current setup
 
@@ -33,6 +47,11 @@ npm run preview   # serves dist/ locally, to check the built site
 - **Caching:** HTML is revalidated on every request, while hashed assets under `/_astro/` are sent
   with a one-year immutable cache. That is what you want: a deploy is visible immediately, and
   fonts and CSS are never re-downloaded needlessly.
+- **Deploy command:** with the adapter in place the build output moved, so the deploy needs the
+  generated config: `npx wrangler deploy -c dist/server/wrangler.json` (verified with
+  `--dry-run`: 8 modules, 41 assets from `dist/client`). If the Worker's build settings in the
+  dashboard still use a bare `npx wrangler deploy`, check a branch preview before merging
+  anything that depends on the API route.
 
 ## If the host ever changes
 
