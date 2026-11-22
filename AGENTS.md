@@ -34,7 +34,7 @@ A saved markdown edit shows up in the browser in a second or two. If a change to
 ### Before finishing a change
 
 1. `npx astro build` — must complete with no errors.
-2. `find dist -name '*.js' | wc -l` — must be `0`. The theme script is inline; anything else means client-side JavaScript crept in.
+2. `find dist/client -name '*.js' | wc -l` — must be `0`. The theme script is inline; anything else means client-side JavaScript crept in. (`dist/server` holds the Worker that runs `/api/subscribe`; that one is meant to be there.)
 3. `grep -rl "<slug of a draft>" dist | wc -l` — must be `0` when a draft exists. Drafts must not reach the build.
 4. Look at the pages you touched at 375px and 1440px, in both light and dark themes.
 5. For a refactor that should not change the visible site, build the previous commit into a scratch directory (`git worktree add`), strip the HTML tags from both builds and diff the text. That is how the move of page wording into markdown was verified as visually identical.
@@ -83,6 +83,8 @@ src/
     about.astro             Three alternating photo/text rows + the newsletter signup
     newsletter.astro        What the newsletter is, cadence, signup
     404.astro
+    newsletter/thank-you.astro  Where /api/subscribe sends a reader once beehiiv has them
+    api/subscribe.ts        THE ONLY NON-PRERENDERED ROUTE: subscribes via the beehiiv API
     rss.xml.ts              RSS feed at /rss.xml
   styles/
     tokens.css              ALL colours, font families, font sizes, widths. Edit here to restyle.
@@ -165,12 +167,16 @@ Exceptions: `public/favicon.svg`, `public/apple-touch-icon.png` and `public/og-d
 
 The signup is `src/components/NewsletterSignup.astro`: a heading, a short pitch and one **"Subscribe"** button. Each page passes its own heading and pitch from its wording file (`home.md`, `articles.md`, `about.md`). The newsletter is called **Risk Appetite**, which is the heading on the homepage block and the `<h1>` of `/newsletter`. The button label and the note under it come from `newsletter.md` and are shared by every placement. It is not beehiiv's embed script.
 
-- The button is a plain link to `https://yoankrastev.beehiiv.com/subscribe` (set in `src/consts.ts`), where readers enter their email and subscribe on beehiiv. The link adds `utm_source=website` and `utm_medium=<placement>` (`home`, `essay`, `about`, `newsletter`) so beehiiv can attribute signups to where they came from.
-- **Why there's no email field:** beehiiv ignores an `?email=` parameter (checked September 2026). `/subscribe` redirects to the publication homepage with a signup modal and an empty field. An email field on our site would make readers type their address twice, so it was removed.
+- **How it works:** the form posts to `src/pages/api/subscribe.ts`, the site's only server-rendered route. That route calls the beehiiv API with a secret key and redirects to `/newsletter/thank-you/`. It is a plain HTML form; no JavaScript is involved.
+- **The key:** `BEEHIIV_API_KEY`, a secret on the Cloudflare Worker (and a local `.env` for `astro dev`). It must never be committed. beehiiv blocks browser-side calls, so this has to happen server-side. The publication ID is not secret and sits in `src/consts.ts`.
+- **It always works, key or no key.** If the key is missing, beehiiv errors, the address looks wrong, or anything throws, the route redirects to the beehiiv signup page with the same UTM tags, which is how the site behaved before. Never replace that fallback with an error page.
+- **Spam:** a hidden "company" field is a honeypot. If it is filled, the route redirects to the thank-you page without subscribing anyone.
+- **Settings sent to beehiiv:** `reactivate_existing: true` (someone filling in the form means it), `send_welcome_email: false`, and no `double_opt_override`, so whatever the publication is set to in beehiiv governs. The link still carries `utm_source=website` and `utm_medium=<placement>` (`home`, `essay`, `about`, `newsletter`).
+- Readers used to be sent to beehiiv to type their address a second time, because beehiiv ignores an `?email=` parameter (checked September 2026). The API route removed that second step (built 2026-11-22).
 - It appears in exactly four places: the homepage, the end of every essay, `/about` and `/newsletter`. Reuse the component; never paste beehiiv's embed code or load its scripts.
 - A panel on the homepage, under every article and on `/about`; plain on `/newsletter` (`boxed={false}`), where it is just the button and note under the page text. Its layout follows its own width through **container queries** (revised 2026-11-17): in narrow boxes (phones) mark and heading, pitch, then a full-width button with the note under it; from 30rem (the article column) the text is full width and the button and note sit on one row under it; from 44rem (homepage, `/about` on laptops) the text is on the left and the button and note on the right, so the box is neither half-empty nor tall. Its vertical padding is three quarters of other panels'. The mark only appears when a heading is passed; `/newsletter` shows it in its `<h1>` instead.
 - **The mark** is `RiskAppetiteMark.astro`, traced from Yoan's 800×800 logo PNG: the curve and baseline use the text colour, the tail `--color-mark-tail`. Use the component; don't add the PNG.
-- **Possible later upgrade:** a server-side integration. An email field on our site would post to an Astro API endpoint (e.g. `src/pages/api/subscribe.ts`, needing an SSR adapter for the host), which calls the beehiiv API (`POST /v2/publications/{publicationId}/subscriptions`) with an API key stored in an environment variable, then redirects to an on-site thank-you page. That keeps readers on the site and makes signup a single step. The pitch and styling would stay; only the action area changes.
+- **Keep every other page static.** `astro.config.mjs` sets `output: 'static'` with the Cloudflare adapter, and only `api/subscribe.ts` opts out with `export const prerender = false`. Don't let pages drift into server rendering: it costs speed for no gain.
 
 ## Design constraints
 
@@ -197,7 +203,7 @@ Reading-first. Whitespace does the structural work.
 ## Technical constraints
 
 - Mobile-first. Most traffic is phones arriving from social apps.
-- Minimal JavaScript: the only script is the small inline theme script in `BaseHead.astro`. The build ships zero JS files. Don't add client-side frameworks, analytics, tracking pixels or embeds. The only third party is beehiiv, reached through a plain link.
+- Minimal JavaScript: the only script is the small inline theme script in `BaseHead.astro`. `dist/client` ships zero JS files. (`dist/server` is the Worker; it runs on Cloudflare, not in the reader's browser.) Don't add client-side frameworks, analytics, tracking pixels or embeds. The only third party is beehiiv, reached through a plain link.
 - Self-hosted fonts only: no Google Fonts or any font CDN.
 - Every page gets a title, meta description, canonical URL and Open Graph/Twitter tags through `BaseHead.astro`. Essays are `og:type=article`, with published/modified times and JSON-LD `BlogPosting`. Pass a real `description` to every new page.
 - The production URL is set in two places: `site` in `astro.config.mjs` and the `Sitemap:` line in `public/robots.txt`.

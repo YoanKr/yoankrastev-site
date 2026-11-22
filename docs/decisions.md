@@ -175,8 +175,28 @@ theme; its salmon tail has its own token (`--color-mark-tail`) and is not a use 
 accent. `/newsletter` link previews use Yoan's 1200×630 Risk Appetite card (`og-newsletter.png`).
 At the same time the button moved directly under the pitch on every screen size. (Revised 2026-11-17: inside the boxed signup, wide boxes put the button and note on the right of the text; see *Panels*.)
 
-*Possible upgrade, not done:* a server-side integration would let the email field come back and
-keep readers on the site. See [roadmap.md](roadmap.md).
+**Signup moved onto the site, server side (2026-11-22).** The email field is back, on our own
+pages. The form posts to `src/pages/api/subscribe.ts`, which calls the beehiiv API with a secret
+key and redirects to `/newsletter/thank-you/`. Readers no longer leave the site, and there is no
+second place to type an address.
+
+What made it possible: the site turned out to be hosted on Cloudflare Workers, which runs server
+code, and beehiiv's API is available on every plan. The one gate is that beehiiv requires Stripe
+Identity Verification on the account before it will issue an API key.
+
+Design rules that came with it, all deliberate:
+
+- **It degrades to the old behaviour.** No key, a beehiiv error, a rejected address, a timeout:
+  the route redirects to the beehiiv signup page with the same UTM tags. The button is never
+  broken, and the site worked this way before the key existed.
+- **One server route, everything else static.** `output: 'static'` plus the Cloudflare adapter,
+  and only the API route sets `prerender = false`.
+- **No JavaScript.** It is a plain HTML form; the browser posts it.
+- **A honeypot, not a CAPTCHA.** A hidden field catches bots. A CAPTCHA would mean third-party
+  JavaScript on every page, which this site does not do.
+- **The publication's own opt-in setting governs.** The route deliberately does not send
+  `double_opt_override`, so turning double opt-in on in beehiiv changes behaviour without a
+  code change.
 
 ## Page wording in markdown
 

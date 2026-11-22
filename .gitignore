@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # untouched camera originals (kept out of git: they carry EXIF/GPS metadata)
 photo-originals/
+
+# wrangler local state
+.wrangler/
