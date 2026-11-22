@@ -12,9 +12,7 @@ export const SITE = {
 
 export const SOCIAL_LINKS = [
 	{ label: 'LinkedIn', href: 'https://www.linkedin.com/in/yoankrastev1111/' },
-	{ label: 'Instagram', href: 'https://www.instagram.com/ionzy17/' },
-	{ label: 'GitHub', href: 'https://github.com/YoanKr' },
-	{ label: 'Email', href: 'mailto:yoan.krastev@icloud.com' },
+	{ label: 'Email', href: 'mailto:blog@yoankrastev.com' },
 ];
 
 export const NEWSLETTER = {

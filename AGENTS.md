@@ -70,7 +70,7 @@ src/
   components/
     BaseHead.astro          <title>, meta, canonical, Open Graph, Twitter, JSON-LD, fonts, theme script
     Header.astro            Home link, nav (Articles, About, Newsletter), light/dark switch
-    Footer.astro            Text links: LinkedIn, Instagram, GitHub, Email, RSS
+    Footer.astro            Text links: LinkedIn, Email, RSS
     EssayList.astro         Title / date / excerpt list: layout="grid" (homepage) or "index" (/articles)
     NewsletterSignup.astro  Mark + heading, pitch, button linking to beehiiv (see Newsletter below)
     RiskAppetiteMark.astro  The newsletter's logo (bell curve, filled right tail) as inline SVG
@@ -184,7 +184,7 @@ Reading-first. Whitespace does the structural work.
 - Two exceptions, both in `--color-surface`: the header and footer sit on full-width bands (no border, not sticky), and a few self-contained blocks are **panels** (the global `.panel` class: soft rounded corners `--radius-panel`, padding `--space-panel`, no border, no shadow). Panels are: article cards on the homepage (compact, three in a row on laptops) and on `/articles` (one long card per row, with date, reading time and tags in a left column on wider screens); in both the whole card is the link. Also the newsletter signup on the homepage, under every article and on `/about`. Not boxed (revised 2026-11-17, too many boxes): the homepage About teaser, the `/about` rows, "Read next", everything on `/newsletter` including its button (`boxed={false}`), and the running text of an article. Photos have `--radius-photo` corners.
 - Header: "Home" on the left; Articles, About, Newsletter and the light/dark switch on the right. Keep the switch visually distinct from the text links. The current page's nav link is underlined in the text colour (never the accent). Every header link is at least 44px tall.
 - Bylines: the homepage statement has a byline (`## Byline` in `home.md`), and every article's meta line starts with one (`## Byline` in `articles.md`).
-- Articles end with a "Read next" link (the next older article, or the next newer one for the oldest), then the signup. With a single article it is left out. Footer: LinkedIn, Instagram, GitHub, Email, RSS as text links. No icon sets.
+- Articles end with a "Read next" link (the next older article, or the next newer one for the oldest), then the signup. With a single article it is left out. Footer: LinkedIn, Email, RSS as text links (set in `src/consts.ts`). No icon sets.
 
 ### Layout and widths
 
