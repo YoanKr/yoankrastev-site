@@ -70,8 +70,14 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
 	}
 
 	.grid {
-		/* 18rem minimum: one column on phones, two on tablets, three in a row on laptops. */
-		grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+		/*
+		  18rem minimum: one column on phones, two on tablets, three in a row on laptops.
+		  auto-FILL, not auto-fit: the empty columns stay, so one or two articles keep their
+		  card the same size as they will be in a full row of three, with the rest of the row
+		  left empty. auto-fit would collapse the empty tracks and blow a single card up to
+		  the full width of the page.
+		*/
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
 	}
 
 	/*
