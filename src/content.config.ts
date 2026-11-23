@@ -6,16 +6,22 @@ import { z } from 'astro/zod';
 // The file name becomes the URL: my-essay.md -> /articles/my-essay/
 const essays = defineCollection({
 	loader: glob({ base: './src/content/essays', pattern: '**/*.md' }),
-	schema: z.object({
-		title: z.string(),
-		// Shown as the one-line excerpt in lists, and as the meta/social description.
-		description: z.string(),
-		pubDate: z.coerce.date(),
-		updatedDate: z.coerce.date().optional(),
-		tags: z.array(z.string()).optional(),
-		// Drafts are visible in `astro dev` but never built for production.
-		draft: z.boolean().default(false),
-	}),
+	schema: ({ image }) =>
+		z.object({
+			title: z.string(),
+			// Shown as the one-line excerpt in lists, and as the meta/social description.
+			description: z.string(),
+			pubDate: z.coerce.date(),
+			updatedDate: z.coerce.date().optional(),
+			tags: z.array(z.string()).optional(),
+			// Drafts are visible in `astro dev` but never built for production.
+			draft: z.boolean().default(false),
+			// Optional picture for this article's cards, kept in src/assets/essays/ and drawn at
+			// 1.9:1 (the same shape as a social preview). thumbnailAlt describes it; leave it out
+			// for artwork that tells a screen reader nothing, and the card hides it from them.
+			thumbnail: image().optional(),
+			thumbnailAlt: z.string().optional(),
+		}),
 });
 
 // The wording of every page, one markdown file per page (home.md, about.md, ...).

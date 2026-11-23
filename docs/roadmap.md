@@ -2,15 +2,15 @@
 
 Status: **live at <https://yoankrastev.com>** since before 2026-11-16, deployed automatically from
 `main` by a Cloudflare Worker. The homepage bio and the whole About page carry Yoan's own copy;
-the placeholder articles have been deleted, so the site has no articles yet.
-Last reviewed 2026-11-16.
+the first real article went up on 2026-11-23.
+Last reviewed 2026-11-23.
 
 ## Open items
 
 | Item | Where | Notes |
 |---|---|---|
 | Photos | `src/lib/photos.ts` + `src/assets/about/` | In place, but Yoan is still testing; the homepage and About row 1 currently share one headshot. |
-| First real article | `src/content/essays/` | Empty since the placeholders were deleted on 2026-11-16. The homepage and `/articles` show an empty-state line until the first one is published. |
+| Per-article social previews | `src/components/BaseHead.astro` | Every page still shares `og-default.png` on LinkedIn. Article thumbnails are drawn at the social-preview shape (1.9:1) already, so turning one into a per-article `og:image` only needs a PNG of it (SVG is not accepted by social platforms) and the `image` prop passed from the article page. |
 | www duplicate | Cloudflare dashboard | `www.yoankrastev.com` serves the site instead of redirecting to the apex domain. The canonical tag points search engines at the apex, so this is tidiness, not a bug. |
 | beehiiv email settings | beehiiv dashboard | Two settings to fix before the first issue. See the checklist under *beehiiv: before the first issue* below. |
 | beehiiv API key | beehiiv → Settings → Workspace → API | The server-side signup is built and merged but inert until `BEEHIIV_API_KEY` exists as a secret on the Cloudflare Worker. beehiiv needs Stripe Identity Verification on the account before it will issue a key. Until then the form falls back to the beehiiv page, exactly as before. |

@@ -118,6 +118,18 @@ a:hover {
 	outline-offset: 3px;
 }
 
+/*
+  SVG figures in an article (charts, diagrams) are line art drawn in the LIGHT palette:
+  near-black ink, the accent as a fill, transparent background. An <img> cannot be restyled
+  from the page, so in dark mode they are inverted instead: invert() turns the ink near-white
+  and the hue-rotate puts the inverted accent back to a warm red, close to the dark accent.
+  Photographs must never get this treatment, which is why it is keyed to .svg only.
+  (The selector uses *= rather than $= because `astro dev` serves these through /_image?href=…)
+*/
+:root[data-theme='dark'] .prose img[src*='.svg'] {
+	filter: invert(1) hue-rotate(180deg);
+}
+
 img {
 	display: block;
 	max-width: 100%;

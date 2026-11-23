@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import { type Essay, essayUrl, readingTime } from '../lib/essays';
 import FormattedDate from './FormattedDate.astro';
 
@@ -22,7 +23,16 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
 <ul class:list={['essay-list', layout]}>
 	{
 		essays.map((essay) => (
-			<li class="panel">
+			<li class:list={['panel', { illustrated: essay.data.thumbnail }]}>
+				{essay.data.thumbnail && (
+					<Image
+						class="thumb"
+						src={essay.data.thumbnail}
+						alt={essay.data.thumbnailAlt ?? ''}
+						widths={[320, 480, 720]}
+						sizes="(min-width: 64em) 22rem, (min-width: 48em) 45vw, 90vw"
+					/>
+				)}
 				<Heading class="title">
 					<a href={essayUrl(essay)}>{essay.data.title}</a>
 				</Heading>
@@ -80,6 +90,23 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
 		position: relative;
 	}
 
+	/*
+	  Article thumbnails are line art at 1.9:1, the same shape as a social preview, so one
+	  drawing serves both. They sit above the title on a homepage card. Transparent artwork on
+	  the panel, inverted in dark mode for the same reason as the figures inside an article.
+	*/
+	.thumb {
+		width: 100%;
+		height: auto;
+		aspect-ratio: 1.9 / 1;
+		margin-bottom: 1rem;
+		object-fit: contain;
+	}
+
+	:global([data-theme='dark']) .thumb {
+		filter: invert(1) hue-rotate(180deg);
+	}
+
 	.title {
 		font-size: var(--text-list-title);
 	}
@@ -115,6 +142,11 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
 
 	.draft {
 		color: var(--color-accent);
+	}
+
+	/* The long rows on /articles stay text-only: a wide thumbnail there would crowd the list. */
+	.index .thumb {
+		display: none;
 	}
 
 	/* /articles on wider screens: date, reading time and tags stacked in a column left of the title. */
