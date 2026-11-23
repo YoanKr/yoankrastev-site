@@ -22,21 +22,21 @@ About
 
 ## Row 1
 
-My name is Yoan – an ex risk consultant turned risk taker. I quit the finance job to build a life around what I actually want to be doing, not what I was told to want. Writing is part of that: about things most people feel but rarely say, about the standards we're taught to chase without ever asking if they're worth it.
+My name is Yoan – an ex risk consultant turned risk taker. I quit the finance job and moved across the world to spend my time doing the things I always put off and was too scared to try. Writing is part of that – about things most people feel but rarely say, about the goals we’re taught to chase without ever asking if they’re worth it.
 
-It might look stupid from the outside. But once I realised my current life, as good as it is, wasn't going to give me freedom of time, not soon enough, anyway, the decision stopped feeling like a choice.
+Leaving might look strange from the outside. But once the restlessness had laid its roots in my head, the decision stopped being a choice. I had to try, even if that went against everything I had done up until that point.
 
 ## Row 2
 
 A few months ago, I defended my MBA thesis with the highest grade. For the first time in years, I had no commitments other than work, and instead of relief, I felt restless. The satisfaction from each achievement had been short-lived, as I instantly focused on the next thing: I published an article with the Bulgarian National Bank, passed CFA Level 1, and moved straight on to the thesis. I hadn’t watched a movie in months, because two hours felt like too much to spend on something unproductive.
 
-When success became the default, satisfaction left the equation. I was doing everything I had planned, and feeling nothing. Looking back, I only went after things I was fairly sure I could achieve. I had never tasted failure. And that might be the biggest one.
+I was doing everything I had planned, and feeling nothing. When success became the default, satisfaction left the equation. Looking back, I only went after things I was fairly sure I could achieve. I had never tasted failure. And that might be the biggest one.
 
 ## Row 3
 
-Now, after a month of travel, I’ve settled in Bangkok, about 7,500 km from everything and everyone I know. No job, no friends here yet, and no plan set in stone. Though I like being alone, it does get heavy at times: no more lunches with colleagues, calls home squeezed into whatever hours the time difference allows and no one to say good morning or good night to.
+Now, after a month of travel, I’ve settled in Bangkok, about 5,000 miles from everything and everyone I know. No job, no friends here yet, and no plan set in stone. Though I like solitude, it does get heavy at times: no more lunches with colleagues and calls home squeezed into whatever hours the time difference allows.
 
-I spend my days on things I always wanted to try but never had time for: writing these essays, building a newsletter, maybe even a book one day. I want to see if I can build something from zero, without the clear next step and the manual that a corporate career comes with. Alongside that, I’m training for a marathon next month and meeting people on similar, less defined paths. For the first time in a while, I have no idea if this is going to work. Follow along if you want to see what happens.
+I spend my days on things I always wanted to try but never had time for: writing these essays, building a newsletter, maybe even a book one day. I need to see for myself if I can build something from zero, without the clear next step and the manual that a corporate career comes with. Alongside that, I’m training for a marathon in December and looking to meet other people on similar, less defined paths. For the first time in a while, I have no idea if this is going to work. Follow along if you want to see what happens.
 
 ## Signup heading
 

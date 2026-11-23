@@ -125,4 +125,18 @@ const recent = (await getPublishedEssays()).slice(0, 3);
 			width: 100%;
 		}
 	}
+
+	/*
+	  From laptop width the statement runs on one line: at --text-lede (34px) it needs about
+	  29em, and the page frame gives 70rem, so the 24em cap was the only thing wrapping it.
+	  Dropping the cap keeps the block above the first essay card one line tall instead of two.
+	  It stays capped on narrower screens, where it has to wrap anyway. If the statement is
+	  ever rewritten much longer than about 29em it will wrap again, which is the right
+	  outcome rather than a line running the full width of a wide screen.
+	*/
+	@media (min-width: 64em) {
+		.lede {
+			max-width: none;
+		}
+	}
 </style>

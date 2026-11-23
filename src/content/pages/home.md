@@ -16,15 +16,15 @@ Essays on building a life that feels as good as it looks on paper.
 
 ## Byline
 
-By Yoan Krastev, a former risk consultant now writing full time.
+By Yoan Krastev, an ex risk consultant turned risk taker
 
 ## Recent heading
 
-Recent articles
+Recent essays
 
 ## All articles link
 
-All articles
+All essays
 
 ## About heading
 
@@ -32,7 +32,7 @@ About me
 
 ## About text
 
-My name is Yoan. After 5 years of studying, analysing and consulting on risk, I decided to take one. I quit a well-paying finance job and put thousands of miles between myself and the life I was supposed to want. I don't know if this is going to work. But I'd rather find out now than spend my life wondering 'what if.'
+My name is Yoan. After 5 years of studying, analysing and consulting on risk, I decided to take one. I quit my job in finance and put thousands of miles away between myself and the life I was supposed to want. I have no idea if this is going to work. But I would rather find out now than spend my life wondering ‘what if.’
 
 ## About link
 
@@ -44,4 +44,4 @@ Risk Appetite
 
 ## Signup text
 
-A new essay every other week, plus notes on what I’m trying, what’s working and what isn’t. Free.
+A new essay every other week, plus notes on what I’m trying, what I’m thinking and suggested reads. Free.

@@ -14,6 +14,8 @@ Last reviewed 2026-11-23.
 | beehiiv email settings | beehiiv dashboard | Two settings to fix before the first issue. See the checklist under *beehiiv: before the first issue* below. |
 | beehiiv API key | beehiiv → Settings → Workspace → API | The server-side signup is built and merged but inert until `BEEHIIV_API_KEY` exists as a secret on the Cloudflare Worker. beehiiv needs Stripe Identity Verification on the account before it will issue a key. Until then the form falls back to the beehiiv page, exactly as before. |
 | Artwork for every article | `src/assets/essays/` | Thumbnails are optional, but a mixed archive (some rows with a picture, some without) looks unfinished. Either draw one per article or drop them from `/articles` again. |
+| "a marathon in December" | `src/content/pages/about.md`, `## Row 3` | A dated claim, added 2026-11-23 when December was next month. Reword it once the race has happened. |
+| `/articles/` URLs under an "Essays" name | `src/pages/articles/`, `src/lib/essays.ts` | The section was renamed to Essays on 2026-11-23 and the URLs were left alone so shared links keep working. Moving them to `/essays/` needs redirects for every old path; see *Section naming and URLs* in decisions.md. Cheapest while few links are out. |
 | "First issue goes out in January" | `src/content/pages/newsletter.md`, `## Button note` | A dated claim, shown under the button on every page. Moved from December to January on 2026-11-23. Remove or change it once Risk Appetite is running. While there, check the signup text in `home.md`, `articles.md` and `about.md` still reads right for a live newsletter. |
 
 ## beehiiv: before the first issue

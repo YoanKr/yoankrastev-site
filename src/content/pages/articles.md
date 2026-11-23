@@ -11,12 +11,12 @@
 #
 # description: the summary shown in Google results and in link previews for the /articles page.
 # Keep it on one line. If it contains a colon, wrap the whole thing in "double quotes".
-description: Every article by Yoan Krastev on work, ambition, discipline and career decisions, newest first.
+description: Every essay by Yoan Krastev on work, ambition, discipline and career decisions, newest first.
 ---
 
 ## Heading
 
-Articles
+Essays
 
 ## Intro
 

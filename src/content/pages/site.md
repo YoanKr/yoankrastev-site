@@ -17,7 +17,7 @@ Home
 
 ## Menu articles
 
-Articles
+Essays
 
 ## Menu about
 
@@ -33,4 +33,4 @@ Page not found
 
 ## Not found text
 
-That page doesn’t exist, or it has moved. Everything I’ve written is on the [Articles page](/articles/).
+That page doesn’t exist, or it has moved. Everything I’ve written is on the [Essays page](/articles/).

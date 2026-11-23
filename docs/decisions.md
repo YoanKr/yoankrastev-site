@@ -124,12 +124,26 @@ tokens) brings back the plain layout without touching the content.
 
 ## Section naming and URLs
 
-**The section is called "Articles" and lives at `/articles/`.** Settled 2026-09-27,
-after "Essays" and a short-lived "Writing".
+**The section is called "Essays". Its URLs are still `/articles/`.** The name went Essays →
+"Writing" → "Articles" (2026-09-27) → **Essays** (2026-11-23, at Yoan's request: "Articles
+sounds too journalistic").
 
-In code, and in some page copy, individual pieces are still called essays: the collection is
-`src/content/essays/`, the helper is `getPublishedEssays()`. That mismatch is deliberate and
-documented rather than churned through the codebase again.
+**The URLs did not follow that last rename, on purpose.** The first real article went live on
+2026-11-23 and its link is already out in the world. `/articles/` is worth less than a link
+that keeps working, so only the words changed: the nav label, the page heading, the homepage
+labels and the 404 line say Essays, while the paths stay `/articles/`.
+
+What that leaves looking inconsistent, and should stay that way: `src/pages/articles/`,
+`src/content/pages/articles.md`, and the section names inside it that code reads by slug
+(`## All articles link` → `copy.inline('all-articles-link')`). Renaming those changes no
+visible word and risks breaking a page for nothing.
+
+In code, individual pieces have always been essays: the collection is `src/content/essays/`,
+the helper is `getPublishedEssays()`.
+
+*Would change it:* moving to `/essays/` is a one-way door once more links are out. It needs a
+redirect from every `/articles/...` path, a re-check of the sitemap and the RSS feed, and the
+canonical URLs to move together. Worth doing only deliberately, and the sooner the cheaper.
 
 **Never rename a published article's file.** The file name is the URL, and links shared on
 LinkedIn or Instagram cannot be edited after the fact. Renaming breaks every one of them.

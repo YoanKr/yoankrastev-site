@@ -28,7 +28,7 @@ Essays on building a life that feels as good as it looks on paper.
 
 ## Text
 
-Every essay goes to subscribers before it appears on the site. I write about fulfilment, relationships, ambition, health and work, and the trade-offs between them. I’m writing from inside my own experiment: I left a stable career to find out what else there is.
+New material goes to subscribers first before it appears on the site. I write about fulfilment, relationships, ambition, health and work, and the trade-offs between them. I’m writing from inside my own experiment: I left a stable career to find out what else there is.
 
 Every other week, you’ll get a new essay plus shorter notes on what I’m thinking, doing and reading.
 

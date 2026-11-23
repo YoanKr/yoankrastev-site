@@ -7,7 +7,7 @@ The essays will eventually become a book, so the archive has to age well: no tre
 
 `CLAUDE.md` is a symlink to this file. Edit `AGENTS.md`, keep the symlink.
 
-**Naming:** the section is called **Articles** (nav label, `/articles/` URLs). In code, and in some page copy, individual pieces are still called essays (`src/content/essays/`, `getPublishedEssays()`). The top-left header link reads **Home**, not the site name.
+**Naming:** the section is called **Essays** — the nav label, the `/articles` heading, the homepage labels. The **URLs are still `/articles/`** (renamed 2026-11-23, URLs deliberately left alone so links already shared keep working). So do the things code reads by name: `src/pages/articles/`, `src/content/pages/articles.md` and its section names (`## All articles link`). In code, individual pieces have always been essays (`src/content/essays/`, `getPublishedEssays()`). The top-left header link reads **Home**, not the site name.
 
 **Repository:** `YoanKr/yoankrastev-site` on GitHub, work happens on `main`.
 
@@ -70,7 +70,7 @@ src/
   layouts/BaseLayout.astro  <html> shell: head, header, main, footer
   components/
     BaseHead.astro          <title>, meta, canonical, Open Graph, Twitter, JSON-LD, fonts, theme script
-    Header.astro            Home link, nav (Articles, About, Newsletter), light/dark switch
+    Header.astro            Home link, nav (Essays, About, Newsletter), light/dark switch
     Footer.astro            Text links: LinkedIn, Email, RSS
     EssayList.astro         Title / date / excerpt list: layout="grid" (homepage) or "index" (/articles)
     NewsletterSignup.astro  Mark + heading, pitch, button linking to beehiiv (see Newsletter below)
@@ -214,7 +214,7 @@ Reading-first. Whitespace does the structural work.
 - A single accent colour, used sparingly: links and hover states only. Not for headings, backgrounds, buttons at rest or decoration. (The salmon tail of the Risk Appetite mark is part of the logo, with its own token, not a use of the accent.)
 - No shadows, no gradients, no section dividers or rules, no hero images, no feature grids. Separate things with space.
 - Two exceptions, both in `--color-surface`: the header and footer sit on full-width bands (no border, not sticky), and a few self-contained blocks are **panels** (the global `.panel` class: soft rounded corners `--radius-panel`, padding `--space-panel`, no border, no shadow). Panels are: article cards on the homepage (compact, three in a row on laptops) and on `/articles` (one long card per row, with date, reading time and tags in a left column on wider screens); in both the whole card is the link. Also the newsletter signup on the homepage, under every article and on `/about`. Not boxed (revised 2026-11-17, too many boxes): the homepage About teaser, the `/about` rows, "Read next", everything on `/newsletter` including its button (`boxed={false}`), and the running text of an article. Photos have `--radius-photo` corners.
-- Header: "Home" on the left; Articles, About, Newsletter and the light/dark switch on the right. Keep the switch visually distinct from the text links. The current page's nav link is underlined in the text colour (never the accent). Every header link is at least 44px tall.
+- Header: "Home" on the left; Essays, About, Newsletter and the light/dark switch on the right. Keep the switch visually distinct from the text links. The current page's nav link is underlined in the text colour (never the accent). Every header link is at least 44px tall.
 - Bylines: the homepage statement has a byline (`## Byline` in `home.md`), and every article's meta line starts with one (`## Byline` in `articles.md`).
 - Articles end with a "Read next" link (the next older article, or the next newer one for the oldest), then the signup. With a single article it is left out. Footer: LinkedIn, Email, RSS as text links (set in `src/consts.ts`). No icon sets.
 
