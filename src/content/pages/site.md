@@ -4,7 +4,7 @@
 # Edit the text under each "## ..." heading. Keep the headings exactly as they are:
 # they tell the site where each piece of text goes and are never shown on the page.
 #
-# Renaming a menu item only changes its label, not its web address (/articles/ stays /articles/).
+# Renaming a menu item only changes its label, not its web address (/essays/ stays /essays/).
 #
 # description: the fallback summary for search results and link previews, also used for the RSS feed.
 # Keep it on one line. If it contains a colon, wrap the whole thing in "double quotes".
@@ -15,7 +15,7 @@ description: Essays on work, ambition, discipline and career decisions, for peop
 
 Home
 
-## Menu articles
+## Menu essays
 
 Essays
 
@@ -33,4 +33,4 @@ Page not found
 
 ## Not found text
 
-That page doesn’t exist, or it has moved. Everything I’ve written is on the [Essays page](/articles/).
+That page doesn’t exist, or it has moved. Everything I’ve written is on the [Essays page](/essays/).

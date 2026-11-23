@@ -15,7 +15,7 @@ export async function getPublishedEssays(): Promise<Essay[]> {
 }
 
 export function essayUrl(essay: Essay): string {
-	return `/articles/${essay.id}/`;
+	return `/essays/${essay.id}/`;
 }
 
 /** Whole minutes, rounded up, from the markdown source. */

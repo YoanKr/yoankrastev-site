@@ -13,10 +13,9 @@ Last reviewed 2026-11-23.
 | www duplicate | Cloudflare dashboard | `www.yoankrastev.com` serves the site instead of redirecting to the apex domain. The canonical tag points search engines at the apex, so this is tidiness, not a bug. |
 | beehiiv email settings | beehiiv dashboard | Two settings to fix before the first issue. See the checklist under *beehiiv: before the first issue* below. |
 | beehiiv API key | beehiiv → Settings → Workspace → API | The server-side signup is built and merged but inert until `BEEHIIV_API_KEY` exists as a secret on the Cloudflare Worker. beehiiv needs Stripe Identity Verification on the account before it will issue a key. Until then the form falls back to the beehiiv page, exactly as before. |
-| Artwork for every article | `src/assets/essays/` | Thumbnails are optional, but a mixed archive (some rows with a picture, some without) looks unfinished. Either draw one per article or drop them from `/articles` again. |
+| Artwork for every article | `src/assets/essays/` | Thumbnails are optional, but a mixed archive (some rows with a picture, some without) looks unfinished. Either draw one per article or drop them from `/essays` again. |
 | "a marathon in December" | `src/content/pages/about.md`, `## Row 3` | A dated claim, added 2026-11-23 when December was next month. Reword it once the race has happened. |
-| `/articles/` URLs under an "Essays" name | `src/pages/articles/`, `src/lib/essays.ts` | The section was renamed to Essays on 2026-11-23 and the URLs were left alone so shared links keep working. Moving them to `/essays/` needs redirects for every old path; see *Section naming and URLs* in decisions.md. Cheapest while few links are out. |
-| "First issue goes out in January" | `src/content/pages/newsletter.md`, `## Button note` | A dated claim, shown under the button on every page. Moved from December to January on 2026-11-23. Remove or change it once Risk Appetite is running. While there, check the signup text in `home.md`, `articles.md` and `about.md` still reads right for a live newsletter. |
+| "First issue goes out in January" | `src/content/pages/newsletter.md`, `## Button note` | A dated claim, shown under the button on every page. Moved from December to January on 2026-11-23. Remove or change it once Risk Appetite is running. While there, check the signup text in `home.md`, `essays.md` and `about.md` still reads right for a live newsletter. |
 
 ## beehiiv: before the first issue
 
@@ -38,7 +37,7 @@ hand in the beehiiv dashboard). Publication: **Risk Appetite**, `yoankrastev.bee
 - [ ] **After-signup redirect.** New subscribers currently get beehiiv's default "Recommendations
   Flow" (a modal on the beehiiv page suggesting other newsletters). Edit that signup flow in the
   dashboard and add or replace its step with an external URL back to the site, e.g.
-  `https://yoankrastev.com/articles/`. Not yet confirmed whether the free plan allows editing
+  `https://yoankrastev.com/essays/`. Not yet confirmed whether the free plan allows editing
   signup flows; if not, leaving the default is harmless.
 - [ ] *Optional:* copyright text in the email footer (e.g. "© 2026 Yoan Krastev"). Same help
   article as the address.

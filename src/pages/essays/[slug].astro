@@ -29,8 +29,8 @@ const { title, description, pubDate, updatedDate, tags, draft, thumbnail, thumbn
 const socialImage = thumbnail ? `/og/${essay.id}.png` : undefined;
 const { Content } = await render(essay);
 const minutes = readingTime(essay.body);
-// The signup box wording comes from src/content/pages/articles.md.
-const copy = await getPageCopy('articles');
+// The signup box wording comes from src/content/pages/essays.md.
+const copy = await getPageCopy('essays');
 ---
 
 <BaseLayout

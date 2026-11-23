@@ -1,0 +1,14 @@
+# Old /articles/ URLs, kept working.
+#
+# The section was renamed Articles -> Essays on 2026-11-23 and the URLs moved with it.
+# The first essay was published that same day, so links to /articles/... are already out
+# and cannot be edited after the fact. These rules make them land on the right page.
+# Never delete them.
+#
+# Cloudflare Workers parses this file and applies it to static assets before the Worker
+# runs (the Worker only serves /api/subscribe). Static rules must come before wildcards.
+# https://developers.cloudflare.com/workers/static-assets/redirects/
+
+/articles     /essays/        301
+/articles/    /essays/        301
+/articles/*   /essays/:splat  301

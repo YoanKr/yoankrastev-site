@@ -4,7 +4,7 @@
 #
 # Edit the text under each "## ..." heading. Keep the headings exactly as they are:
 # they tell the site where each piece of text goes and are never shown on the page.
-# Markdown works as usual: **bold**, *italic*, [link text](/articles/), a blank line starts a new paragraph.
+# Markdown works as usual: **bold**, *italic*, [link text](/essays/), a blank line starts a new paragraph.
 #
 # Email label is never shown on screen: screen readers read it out for the email box.
 # Thank you heading and text are the page readers land on after subscribing.
@@ -58,4 +58,4 @@ You’re on the list
 
 That’s it — no confirmation email to hunt down. The first issue of Risk Appetite goes out in January, and new essays will land in your inbox before they appear on the site.
 
-In the meantime, there’s [more about me](/about/), or you can [read what’s published so far](/articles/).
+In the meantime, there’s [more about me](/about/), or you can [read what’s published so far](/essays/).

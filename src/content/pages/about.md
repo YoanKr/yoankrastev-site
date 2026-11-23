@@ -3,7 +3,7 @@
 #
 # Edit the text under each "## ..." heading. Keep the headings exactly as they are:
 # they tell the site where each piece of text goes and are never shown on the page.
-# Markdown works as usual: **bold**, *italic*, [link text](/articles/), a blank line starts a new paragraph.
+# Markdown works as usual: **bold**, *italic*, [link text](/essays/), a blank line starts a new paragraph.
 #
 # Layout: Row 1, 2 and 3 each sit beside a photo (photo left, right, left on laptops;
 # photo above the text on phones). Keep each row to roughly the height of its photo.

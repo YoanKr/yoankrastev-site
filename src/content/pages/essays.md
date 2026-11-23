@@ -1,15 +1,15 @@
 ---
-# ARTICLES WORDING: the /articles list page, plus the signup box at the end of every article.
+# ESSAYS WORDING: the /essays list page, plus the signup box at the end of every essay.
 #
 # Edit the text under each "## ..." heading. Keep the headings exactly as they are:
 # they tell the site where each piece of text goes and are never shown on the page.
 # Markdown works as usual: **bold**, *italic*, [link text](/newsletter/), a blank line starts a new paragraph.
 #
-# The articles themselves live in src/content/essays/, one file each.
-# The Empty state section only appears while there are no published articles; once the
-# first one is live, the Articles page and the homepage list replace it automatically.
+# The essays themselves live in src/content/essays/, one file each.
+# The Empty state section only appears while there are no published essays; once the
+# first one is live, the Essays page and the homepage list replace it automatically.
 #
-# description: the summary shown in Google results and in link previews for the /articles page.
+# description: the summary shown in Google results and in link previews for the /essays page.
 # Keep it on one line. If it contains a colon, wrap the whole thing in "double quotes".
 description: Every essay by Yoan Krastev on work, ambition, discipline and career decisions, newest first.
 ---

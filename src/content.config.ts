@@ -3,7 +3,7 @@ import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
 // Each markdown file in src/content/essays/ is one essay.
-// The file name becomes the URL: my-essay.md -> /articles/my-essay/
+// The file name becomes the URL: my-essay.md -> /essays/my-essay/
 const essays = defineCollection({
 	loader: glob({ base: './src/content/essays', pattern: '**/*.md' }),
 	schema: ({ image }) =>

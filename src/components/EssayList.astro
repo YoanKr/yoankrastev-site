@@ -9,7 +9,7 @@ interface Props {
 	headingLevel?: 2 | 3;
 	/**
 	 * 'grid'  (homepage): compact cards in auto-fit columns, 1 on phones, 2 on laptops.
-	 * 'index' (/articles): one long card per row. With a thumbnail it is picture-left, newspaper
+	 * 'index' (/essays): one long card per row. With a thumbnail it is picture-left, newspaper
 	 *         style; without one, the date and reading time sit in their own left column.
 	 * Both are panels (soft-edged boxes) and the whole card is the link.
 	 */
@@ -142,13 +142,13 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
 		color: var(--color-accent);
 	}
 
-	/* On /articles a thumbnail sits left of the text, newspaper style; the row's meta line
+	/* On /essays a thumbnail sits left of the text, newspaper style; the row's meta line
 	   moves under the excerpt, because the left column is now the picture. */
 	.index .thumb {
 		margin-bottom: 0.75rem;
 	}
 
-	/* /articles on wider screens: date and reading time stacked in a column left of the title. */
+	/* /essays on wider screens: date and reading time stacked in a column left of the title. */
 	@media (min-width: 48em) {
 		.index li {
 			display: grid;

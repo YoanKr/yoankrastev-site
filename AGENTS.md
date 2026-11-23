@@ -7,7 +7,7 @@ The essays will eventually become a book, so the archive has to age well: no tre
 
 `CLAUDE.md` is a symlink to this file. Edit `AGENTS.md`, keep the symlink.
 
-**Naming:** the section is called **Essays** — the nav label, the `/articles` heading, the homepage labels. The **URLs are still `/articles/`** (renamed 2026-11-23, URLs deliberately left alone so links already shared keep working). So do the things code reads by name: `src/pages/articles/`, `src/content/pages/articles.md` and its section names (`## All articles link`). In code, individual pieces have always been essays (`src/content/essays/`, `getPublishedEssays()`). The top-left header link reads **Home**, not the site name.
+**Naming:** the section is called **Essays** everywhere — nav label, headings, `/essays/` URLs, `src/pages/essays/`, `src/content/pages/essays.md`. Renamed from "Articles" on 2026-11-23; `public/_redirects` keeps every old `/articles/...` link working and must not be deleted. The top-left header link reads **Home**, not the site name.
 
 **Repository:** `YoanKr/yoankrastev-site` on GitHub, work happens on `main`.
 
@@ -50,6 +50,7 @@ scripts/
 public/
   og-default.png            Default social preview image (1200×630), used on every page but /newsletter
   og-newsletter.png         Risk Appetite preview image (1200×630, logo and name), used on /newsletter
+  _redirects                301s from the old /articles/ URLs (see Naming above)
   favicon.svg               Monogram favicon (adapts to dark mode)
   apple-touch-icon.png      Home-screen icon
   robots.txt                Points crawlers at the sitemap
@@ -60,7 +61,7 @@ src/
   content/pages/            ALL PAGE WORDING, one markdown file per page (see Editing page wording)
     site.md                 Menu labels, 404 page, site-wide description (also RSS)
     home.md                 Homepage statement, section labels, About teaser, signup text
-    articles.md             /articles heading + intro, empty-state line, signup text under every article
+    essays.md               /essays heading + intro, empty-state line, signup text under every essay
     about.md                About heading, the three row texts, closing signup heading + pitch
     newsletter.md           /newsletter text, plus the signup button label and note used everywhere
   lib/
@@ -72,15 +73,15 @@ src/
     BaseHead.astro          <title>, meta, canonical, Open Graph, Twitter, JSON-LD, fonts, theme script
     Header.astro            Home link, nav (Essays, About, Newsletter), light/dark switch
     Footer.astro            Text links: LinkedIn, Email, RSS
-    EssayList.astro         Title / date / excerpt list: layout="grid" (homepage) or "index" (/articles)
+    EssayList.astro         Title / date / excerpt list: layout="grid" (homepage) or "index" (/essays)
     NewsletterSignup.astro  Mark + heading, pitch, button linking to beehiiv (see Newsletter below)
     RiskAppetiteMark.astro  The newsletter's logo (bell curve, filled right tail) as inline SVG
     Photo.astro             A photo slot: optimised image, or an empty 4:5 frame until one is added
     FormattedDate.astro     "12 July 2026" style dates
   pages/
     index.astro             Positioning statement, 3 latest essays, About teaser, signup
-    articles/index.astro    Full archive, newest first ("All pieces in one place")
-    articles/[slug].astro   Single article: title, date, reading time, body, signup
+    essays/index.astro      Full archive, newest first ("All pieces in one place")
+    essays/[slug].astro     Single essay: title, date, reading time, body, signup
     about.astro             Three alternating photo/text rows + the newsletter signup
     newsletter.astro        What the newsletter is, cadence, signup
     404.astro
@@ -117,7 +118,7 @@ When adding new visible text to a page: add a `## Section` to that page's markdo
 
 ## Adding an essay
 
-1. Create `src/content/essays/<slug>.md`. The file name is the URL: `the-stable-path-is-also-a-bet.md` becomes `/articles/the-stable-path-is-also-a-bet/`. Use lowercase words and hyphens, and never rename a published file, because that breaks every link shared on LinkedIn.
+1. Create `src/content/essays/<slug>.md`. The file name is the URL: `the-stable-path-is-also-a-bet.md` becomes `/essays/the-stable-path-is-also-a-bet/`. Use lowercase words and hyphens, and never rename a published file, because that breaks every link shared on LinkedIn.
 2. Start with this frontmatter:
 
    ```yaml
@@ -150,7 +151,7 @@ Put every image an article uses in `src/assets/essays/` and reference it relativ
   transparent, or they will not survive the inversion. Photographs are never inverted; the rule is
   keyed to `.svg` only.
 - **Thumbnails** are optional, one per article, drawn at **1.9:1**. They appear on the homepage
-  cards and, picture-left in the manner of a newspaper, on the `/articles` rows. The article page
+  cards and, picture-left in the manner of a newspaper, on the `/essays` rows. The article page
   itself has no hero image. Same colour rules as figures, and strip any background rectangle so
   the card shows through. Name the file after the slug: `<slug>-thumb.svg`.
 - **Social previews.** Platforms reject SVG, so every article with a thumbnail also needs a PNG at
@@ -163,7 +164,7 @@ Put every image an article uses in `src/assets/essays/` and reference it relativ
 
 Every page and feed must list essays through `getPublishedEssays()` in `src/lib/essays.ts`, never `getCollection('essays')` directly. That function is what keeps drafts out of production.
 
-While the collection is empty, the homepage and `/articles` show the `## Empty state` line from `articles.md` instead of a list, and `/articles` hides its intro. Both come back on their own if the last article is ever removed, so don't delete that handling.
+While the collection is empty, the homepage and `/essays` show the `## Empty state` line from `essays.md` instead of a list, and `/essays` hides its intro. Both come back on their own if the last article is ever removed, so don't delete that handling.
 
 ## Adding photos
 
@@ -191,7 +192,7 @@ Exceptions: `public/favicon.svg`, `public/apple-touch-icon.png` and `public/og-d
 
 ## Newsletter
 
-The signup is `src/components/NewsletterSignup.astro`: a heading, a short pitch and one **"Subscribe"** button. Each page passes its own heading and pitch from its wording file (`home.md`, `articles.md`, `about.md`). The newsletter is called **Risk Appetite**, which is the heading on the homepage block and the `<h1>` of `/newsletter`. The button label and the note under it come from `newsletter.md` and are shared by every placement. It is not beehiiv's embed script.
+The signup is `src/components/NewsletterSignup.astro`: a heading, a short pitch and one **"Subscribe"** button. Each page passes its own heading and pitch from its wording file (`home.md`, `essays.md`, `about.md`). The newsletter is called **Risk Appetite**, which is the heading on the homepage block and the `<h1>` of `/newsletter`. The button label and the note under it come from `newsletter.md` and are shared by every placement. It is not beehiiv's embed script.
 
 - **How it works:** the form posts to `src/pages/api/subscribe.ts`, the site's only server-rendered route. That route calls the beehiiv API with a secret key and redirects to `/newsletter/thank-you/`. It is a plain HTML form; no JavaScript is involved.
 - **The key:** `BEEHIIV_API_KEY`, a secret on the Cloudflare Worker (and a local `.env` for `astro dev`). It must never be committed. beehiiv blocks browser-side calls, so this has to happen server-side. The publication ID is not secret and sits in `src/consts.ts`.
@@ -213,17 +214,17 @@ Reading-first. Whitespace does the structural work.
 - Near-black on off-white by default, plus a dark theme driven by the same tokens.
 - A single accent colour, used sparingly: links and hover states only. Not for headings, backgrounds, buttons at rest or decoration. (The salmon tail of the Risk Appetite mark is part of the logo, with its own token, not a use of the accent.)
 - No shadows, no gradients, no section dividers or rules, no hero images, no feature grids. Separate things with space.
-- Two exceptions, both in `--color-surface`: the header and footer sit on full-width bands (no border, not sticky), and a few self-contained blocks are **panels** (the global `.panel` class: soft rounded corners `--radius-panel`, padding `--space-panel`, no border, no shadow). Panels are: article cards on the homepage (compact, three in a row on laptops) and on `/articles` (one long card per row, with date, reading time and tags in a left column on wider screens); in both the whole card is the link. Also the newsletter signup on the homepage, under every article and on `/about`. Not boxed (revised 2026-11-17, too many boxes): the homepage About teaser, the `/about` rows, "Read next", everything on `/newsletter` including its button (`boxed={false}`), and the running text of an article. Photos have `--radius-photo` corners.
+- Two exceptions, both in `--color-surface`: the header and footer sit on full-width bands (no border, not sticky), and a few self-contained blocks are **panels** (the global `.panel` class: soft rounded corners `--radius-panel`, padding `--space-panel`, no border, no shadow). Panels are: article cards on the homepage (compact, three in a row on laptops) and on `/essays` (one long card per row, with date, reading time and tags in a left column on wider screens); in both the whole card is the link. Also the newsletter signup on the homepage, under every article and on `/about`. Not boxed (revised 2026-11-17, too many boxes): the homepage About teaser, the `/about` rows, "Read next", everything on `/newsletter` including its button (`boxed={false}`), and the running text of an article. Photos have `--radius-photo` corners.
 - Header: "Home" on the left; Essays, About, Newsletter and the light/dark switch on the right. Keep the switch visually distinct from the text links. The current page's nav link is underlined in the text colour (never the accent). Every header link is at least 44px tall.
-- Bylines: the homepage statement has a byline (`## Byline` in `home.md`), and every article's meta line starts with one (`## Byline` in `articles.md`).
+- Bylines: the homepage statement has a byline (`## Byline` in `home.md`), and every article's meta line starts with one (`## Byline` in `essays.md`).
 - Articles end with a "Read next" link (the next older article, or the next newer one for the oldest), then the signup. With a single article it is left out. Footer: LinkedIn, Email, RSS as text links (set in `src/consts.ts`). No icon sets.
 
 ### Layout and widths
 
-- **Page frame (`.wrap`, `--page-width`):** the header, the footer, and the layout pages (homepage, `/articles`, `/about`) use the full frame, so laptops don't show a lonely narrow column.
+- **Page frame (`.wrap`, `--page-width`):** the header, the footer, and the layout pages (homepage, `/essays`, `/about`) use the full frame, so laptops don't show a lonely narrow column.
 - **Reading column (`.reading`, `--measure`):** essays, `/newsletter` and the 404 page are a centred column. Leave it narrow on laptops; long lines are harder to read.
 - **Homepage:** 2–3 line positioning statement, then the 3 latest essays as cards in an auto-fit grid (1 column on phones, 2 on tablets, 3 in one row on laptops), then an About teaser (one photo and a link to `/about`), then the signup.
-- **`/articles`:** one long card per row. On wider screens the date, reading time and tags sit in their own column on the left of the card.
+- **`/essays`:** one long card per row. On wider screens the date, reading time and tags sit in their own column on the left of the card.
 - **`/about`:** three rows alternating photo and text (photo left, right, left), then the newsletter signup, all without boxes. On phones each row stacks photo-then-text.
 
 ## Technical constraints
@@ -257,7 +258,9 @@ Things that have already cost time here:
 - **Media queries and source order.** Scoped styles are emitted in file order and a plain class selector has the same weight as one inside a media query. A `@media (min-width: 40em)` override must come *after* the base rule in the file, or it loses.
 - **The signup box uses a container query, not a media query.** It lays itself out from its own container's width (stacked, button row, or side by side), so it works in both the wide homepage frame and the narrow article column. Don't convert it to `@media`.
 - **Section names in page wording files are slugs of the headings.** `## Signup heading` is read as `'signup-heading'`. Renaming a heading in a markdown file breaks the page that reads it, and the build says so.
-- **Internal links end with a slash** (`/articles/`, `/about/`), matching the canonical URLs and the sitemap.
+- **Internal links end with a slash** (`/essays/`, `/about/`), matching the canonical URLs and the sitemap.
+- **`public/_redirects` is the only thing keeping the old `/articles/...` links alive.** It is a Cloudflare
+  Workers file, inert under `astro dev`, so a URL change can only be verified on the deployed site.
 - **Fonts and images are the only binary assets.** Don't add an image to `public/` that could live in `src/assets/` and be optimised by Astro.
 
 ## Astro documentation

@@ -31,7 +31,7 @@ measurably harder to read, and this archive is meant to become a book.
 
 The first version applied that cap to *everything*, so on a laptop the whole site was a narrow
 strip with empty space either side. Now only reading pages (articles, `/newsletter`, 404) use the
-centred column. The header, footer, homepage, `/articles` and `/about` use the full frame
+centred column. The header, footer, homepage, `/essays` and `/about` use the full frame
 (`--page-width`, 70rem) and lay content out across it.
 
 Article pages still have wide margins on a laptop. That is deliberate and matches how Substack,
@@ -108,7 +108,7 @@ The site felt too static: every section was text on the same background. Yoan po
 aliabdaal.com, which puts content in rounded boxes on soft tinted backgrounds. The restrained
 version used here: a panel is `--color-surface` (the band colour) with `--radius-panel` corners and
 generous padding, and no border, shadow or hover animation. Panels hold: the article cards (compact on
-the homepage, the latest three in one row on laptops; one long card per row on /articles with
+the homepage, the latest three in one row on laptops; one long card per row on /essays with
 date, reading time and tags in a left column; the whole card is the link, a bigger tap target on
 phones) and the newsletter signup on the homepage, under every article and on /about. Photos got
 slightly rounded corners to match.
@@ -124,26 +124,27 @@ tokens) brings back the plain layout without touching the content.
 
 ## Section naming and URLs
 
-**The section is called "Essays". Its URLs are still `/articles/`.** The name went Essays →
-"Writing" → "Articles" (2026-09-27) → **Essays** (2026-11-23, at Yoan's request: "Articles
-sounds too journalistic").
+**The section is called "Essays" and lives at `/essays/`.** The name went Essays → "Writing"
+→ "Articles" (2026-09-27) → back to **Essays** (2026-11-23, at Yoan's request: "Articles
+sounds too journalistic"). The URLs moved with it the same day.
 
-**The URLs did not follow that last rename, on purpose.** The first real article went live on
-2026-11-23 and its link is already out in the world. `/articles/` is worth less than a link
-that keeps working, so only the words changed: the nav label, the page heading, the homepage
-labels and the 404 line say Essays, while the paths stay `/articles/`.
+**The old `/articles/...` URLs still work, and must keep working.** The first real essay was
+published on 2026-11-23, hours before the rename, so its link was already out and cannot be
+edited after the fact. `public/_redirects` holds three 301s — `/articles`, `/articles/` and
+`/articles/*` — pointing at the matching `/essays/` path. Deleting that file breaks every
+link shared before the rename.
 
-What that leaves looking inconsistent, and should stay that way: `src/pages/articles/`,
-`src/content/pages/articles.md`, and the section names inside it that code reads by slug
-(`## All articles link` → `copy.inline('all-articles-link')`). Renaming those changes no
-visible word and risks breaking a page for nothing.
+Everything else moved together, which is the only way a URL change is safe: `src/pages/essays/`,
+`src/content/pages/essays.md`, the nav, the canonical tags, the sitemap and the RSS feed. In
+code, individual pieces were always essays anyway (`src/content/essays/`, `getPublishedEssays()`).
 
-In code, individual pieces have always been essays: the collection is `src/content/essays/`,
-the helper is `getPublishedEssays()`.
+**The catch when verifying:** `_redirects` is a Cloudflare Workers file. `astro dev` and
+`astro build` ignore it completely, so a redirect can only be tested against the deployed
+site. Build checks prove the new URLs exist; only curl against yoankrastev.com proves the old
+ones still land.
 
-*Would change it:* moving to `/essays/` is a one-way door once more links are out. It needs a
-redirect from every `/articles/...` path, a re-check of the sitemap and the RSS feed, and the
-canonical URLs to move together. Worth doing only deliberately, and the sooner the cheaper.
+*Would change it again:* don't, without the same redirect discipline. Each rename leaves
+another layer of 301s to carry forever.
 
 **Never rename a published article's file.** The file name is the URL, and links shared on
 LinkedIn or Instagram cannot be edited after the fact. Renaming breaks every one of them.

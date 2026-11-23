@@ -9,10 +9,10 @@ import { getPageCopy } from '../lib/pages';
 import { PHOTOS } from '../lib/photos';
 
 // All wording on this page comes from src/content/pages/home.md, except the
-// empty-state line, which lives with the rest of the article wording.
+// empty-state line, which lives with the rest of the essay wording.
 const copy = await getPageCopy('home');
-const articleCopy = await getPageCopy('articles');
-// Three, so the latest articles fill exactly one row of cards on laptops.
+const essayCopy = await getPageCopy('essays');
+// Three, so the latest essays fill exactly one row of cards on laptops.
 const recent = (await getPublishedEssays()).slice(0, 3);
 ---
 
@@ -25,13 +25,13 @@ const recent = (await getPublishedEssays()).slice(0, 3);
 	<section class="section" aria-labelledby="recent-heading">
 		<div class="section-head">
 			<h2 id="recent-heading" class="meta label" set:html={copy.inline('recent-heading')} />
-			{recent.length > 0 && <a class="meta" href="/articles/" set:html={copy.inline('all-articles-link')} />}
+			{recent.length > 0 && <a class="meta" href="/essays/" set:html={copy.inline('all-essays-link')} />}
 		</div>
 		{
 			recent.length > 0 ? (
 				<EssayList essays={recent} headingLevel={3} layout="grid" />
 			) : (
-				<div class="empty prose" set:html={articleCopy.block('empty-state')} />
+				<div class="empty prose" set:html={essayCopy.block('empty-state')} />
 			)
 		}
 	</section>

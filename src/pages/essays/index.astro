@@ -4,8 +4,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getPublishedEssays } from '../../lib/essays';
 import { getPageCopy } from '../../lib/pages';
 
-// Wording comes from src/content/pages/articles.md.
-const copy = await getPageCopy('articles');
+// Wording comes from src/content/pages/essays.md.
+const copy = await getPageCopy('essays');
 const essays = await getPublishedEssays();
 ---
 
