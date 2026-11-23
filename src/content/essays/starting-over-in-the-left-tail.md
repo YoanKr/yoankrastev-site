@@ -3,7 +3,7 @@ title: The Discomfort of Starting Over in the Left Tail
 description: I've only ever done what I was fairly sure I could do. On the discomfort of being bad at something new, and why most of us avoid it.
 pubDate: 2026-11-23
 tags: [risk, career, decisions]
-thumbnail: ../../assets/essays/left-tail-thumb.svg
+thumbnail: ../../assets/essays/starting-over-in-the-left-tail-thumb.svg
 thumbnailAlt: A bell curve with an arrow looping from a dot in the right tail back to a dot in the left tail.
 ---
 

@@ -10,10 +10,10 @@ Last reviewed 2026-11-23.
 | Item | Where | Notes |
 |---|---|---|
 | Photos | `src/lib/photos.ts` + `src/assets/about/` | In place, but Yoan is still testing; the homepage and About row 1 currently share one headshot. |
-| Per-article social previews | `src/components/BaseHead.astro` | Every page still shares `og-default.png` on LinkedIn. Article thumbnails are drawn at the social-preview shape (1.9:1) already, so turning one into a per-article `og:image` only needs a PNG of it (SVG is not accepted by social platforms) and the `image` prop passed from the article page. |
 | www duplicate | Cloudflare dashboard | `www.yoankrastev.com` serves the site instead of redirecting to the apex domain. The canonical tag points search engines at the apex, so this is tidiness, not a bug. |
 | beehiiv email settings | beehiiv dashboard | Two settings to fix before the first issue. See the checklist under *beehiiv: before the first issue* below. |
 | beehiiv API key | beehiiv → Settings → Workspace → API | The server-side signup is built and merged but inert until `BEEHIIV_API_KEY` exists as a secret on the Cloudflare Worker. beehiiv needs Stripe Identity Verification on the account before it will issue a key. Until then the form falls back to the beehiiv page, exactly as before. |
+| Artwork for every article | `src/assets/essays/` | Thumbnails are optional, but a mixed archive (some rows with a picture, some without) looks unfinished. Either draw one per article or drop them from `/articles` again. |
 | "First issue goes out in January" | `src/content/pages/newsletter.md`, `## Button note` | A dated claim, shown under the button on every page. Moved from December to January on 2026-11-23. Remove or change it once Risk Appetite is running. While there, check the signup text in `home.md`, `articles.md` and `about.md` still reads right for a live newsletter. |
 
 ## beehiiv: before the first issue

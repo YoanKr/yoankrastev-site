@@ -22,7 +22,11 @@ interface Props {
 }
 
 const { essay, next } = Astro.props;
-const { title, description, pubDate, updatedDate, tags, draft } = essay.data;
+const { title, description, pubDate, updatedDate, tags, draft, thumbnail, thumbnailAlt } = essay.data;
+// An article with a thumbnail also has a PNG of it for link previews, because social platforms
+// reject SVG. `node scripts/make-article-og.mjs` writes them; articles without one fall back to
+// the site's default preview image.
+const socialImage = thumbnail ? `/og/${essay.id}.png` : undefined;
 const { Content } = await render(essay);
 const minutes = readingTime(essay.body);
 // The signup box wording comes from src/content/pages/articles.md.
@@ -36,6 +40,8 @@ const copy = await getPageCopy('articles');
 	publishedTime={pubDate}
 	modifiedTime={updatedDate}
 	tags={tags}
+	image={socialImage}
+	imageAlt={socialImage ? thumbnailAlt : undefined}
 	noindex={draft}
 >
 	<div class="reading">
