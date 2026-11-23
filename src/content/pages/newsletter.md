@@ -9,7 +9,7 @@
 # Email label is never shown on screen: screen readers read it out for the email box.
 # Thank you heading and text are the page readers land on after subscribing.
 #
-# The newsletter is called Risk Appetite and starts in December 2026. The Button note
+# The newsletter is called Risk Appetite and starts in January 2027. The Button note
 # below names that month, so revisit it (and the signup text in home.md, articles.md
 # and about.md) once the first issue has gone out.
 #
@@ -48,7 +48,7 @@ Subscribe
 
 ## Button note
 
-First issue goes out in December.
+First issue goes out in January.
 
 ## Thank you heading
 
@@ -56,6 +56,6 @@ You’re on the list
 
 ## Thank you text
 
-That’s it — no confirmation email to hunt down. The first issue of Risk Appetite goes out in December, and new essays will land in your inbox before they appear on the site.
+That’s it — no confirmation email to hunt down. The first issue of Risk Appetite goes out in January, and new essays will land in your inbox before they appear on the site.
 
 In the meantime, there’s [more about me](/about/), or you can [read what’s published so far](/articles/).

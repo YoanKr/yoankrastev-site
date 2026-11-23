@@ -166,7 +166,8 @@ surprise.
 
 The newsletter is named **Risk Appetite** (2026-11-16). It had not launched when the site was
 built, so the button briefly read "Join the waitlist"; it now reads "Subscribe", with a note under
-it saying the first issue goes out in December 2026. That note is a dated claim and needs removing
+it saying the first issue goes out in January 2027 (moved from December on 2026-11-23). That note is a
+dated claim and needs removing
 once the newsletter is running.
 
 **The Risk Appetite mark** (2026-11-16) sits beside the newsletter's name in every signup box and
