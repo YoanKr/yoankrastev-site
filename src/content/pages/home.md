@@ -7,7 +7,7 @@
 #
 # description: the summary shown in Google results and in LinkedIn/Instagram link previews.
 # Keep it on one line. If it contains a colon, wrap the whole thing in "double quotes".
-description: Essays on work, ambition, discipline and career decisions, for people in the corporate world thinking about what comes next.
+description: Essays on building a life that feels as good as it looks on paper.
 ---
 
 ## Statement
@@ -44,4 +44,4 @@ Risk Appetite
 
 ## Signup text
 
-A new essay every other week, plus notes on what I’m trying, what I’m thinking and suggested reads. Free.
+A new essay every other week, plus shorter notes on what I’m thinking, doing and reading. Free.

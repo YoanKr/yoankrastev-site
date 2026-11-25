@@ -44,4 +44,4 @@ Risk Appetite
 
 ## Signup text
 
-A new essay every other week, in your inbox before it appears on the site, plus shorter notes on what I’m trying, what’s working and what isn’t. Free.
+A new essay every other week, in your inbox before it appears on the site, plus shorter notes on what I’m thinking, doing and reading. Free.

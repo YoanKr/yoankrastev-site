@@ -8,7 +8,7 @@
 #
 # description: the fallback summary for search results and link previews, also used for the RSS feed.
 # Keep it on one line. If it contains a colon, wrap the whole thing in "double quotes".
-description: Essays on work, ambition, discipline and career decisions, for people in the corporate world thinking about what comes next.
+description: Essays on building a life that feels as good as it looks on paper.
 ---
 
 ## Menu home
