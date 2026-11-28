@@ -18,6 +18,11 @@ import type { ImageMetadata } from 'astro';
 // See docs/links-page.md for the longer version, and for what is still a placeholder.
 
 export type MainButton = {
+	/**
+	 * Optional emoji before the label. Screen readers skip it, so the label alone has
+	 * to make sense on its own. One emoji, no more: a row of them stops being a signal.
+	 */
+	emoji?: string;
 	/** The words on the button. */
 	label: string;
 	/** Where it goes. A full https:// URL, or a path on this site like '/essays/'. */
@@ -27,11 +32,13 @@ export type MainButton = {
 	/** false hides the button without deleting it. */
 	enabled: boolean;
 	/**
-	 * Optional small print under the button. Used for the business address, because
-	 * `mailto:` links often do nothing inside the Instagram and TikTok browsers, so the
-	 * address has to be visible and selectable as well.
+	 * Marks the email button. It becomes a `mailto:` to `businessEmail` below, and the
+	 * address appears underneath only after someone taps it — because `mailto:` often
+	 * does nothing inside the Instagram and TikTok browsers, and a button that silently
+	 * does nothing is the one outcome worth engineering against. Nothing is shown until
+	 * then, so the page stays clean.
 	 */
-	showEmailFallback?: boolean;
+	isEmail?: boolean;
 };
 
 /** The small icons under the buttons. `icon` picks the drawing in links.astro. */
@@ -86,43 +93,84 @@ export const LINKS = {
 	*/
 	buttons: [
 		{
-			label: 'Get the newsletter',
-			// Risk Appetite on beehiiv. utm tags so beehiiv shows where a subscriber came from.
+			/*
+			  OFF. The newsletter is the signup box under these buttons instead, where a
+			  reader types their address without leaving the page. Switch this to true to
+			  go back to a plain button that sends them to beehiiv, and set
+			  `newsletter.enabled` to false so there are not two of them.
+			*/
+			emoji: '🗞️',
+			label: 'Newsletter',
 			href: 'https://yoankrastev.beehiiv.com/subscribe?utm_source=website&utm_medium=links',
 			style: 'primary',
-			enabled: true,
+			enabled: false,
 		},
 		{
-			label: 'Read my essays',
+			emoji: '✍️',
+			label: 'Essays',
 			href: 'https://yoankrastev.com/essays/',
 			style: 'secondary',
 			enabled: true,
 		},
 		{
-			label: 'Connect on LinkedIn',
+			emoji: '💼',
+			label: 'LinkedIn',
 			href: 'https://www.linkedin.com/in/yoankrastev1111/',
 			style: 'secondary',
 			enabled: true,
 		},
 		{
-			label: 'Business enquiries',
+			emoji: '📧',
+			label: 'Email',
 			// Built from `businessEmail` below, so the address is written in one place only.
 			href: '',
 			style: 'secondary',
 			enabled: true,
-			showEmailFallback: true,
+			isEmail: true,
 		},
 		{
 			/*
 			  OFF FOR NOW. Switch `enabled` to true once there is an actual offering to send
 			  people to, and point `href` at the page describing it. Nothing else to change.
 			*/
+			emoji: '🤝',
 			label: 'Work with me',
 			href: '',
 			style: 'secondary',
 			enabled: false,
 		},
 	] satisfies MainButton[],
+
+	/*
+	  THE NEWSLETTER SIGNUP BOX, under the buttons and above the icon row. The reader
+	  types their address here and never leaves the page: the form posts to the site's
+	  own /api/subscribe, exactly like the signup on every other page, and lands them on
+	  /newsletter/thank-you/.
+
+	  Only the heading and the pitch are here. The field label, its placeholder, the
+	  button word and the small print under it come from src/content/pages/newsletter.md,
+	  shared with the five signups on the rest of the site, so changing the wording in
+	  that one file changes all of them and this page can never contradict them. That
+	  file is also where the "First issue goes out in January" line lives.
+
+	  Set `enabled: false` to remove the box; then switch the Newsletter button above
+	  back on, or the page loses its main purpose.
+	*/
+	newsletter: {
+		enabled: true,
+		/*
+		  Where the box sits. 'below' puts it under the buttons and above the icons;
+		  'above' puts it directly under the bio, before the buttons.
+
+		  Worth knowing before changing it: with the box below the buttons, its Subscribe
+		  button lands about 790px down. That is on screen on any current phone, but below
+		  the fold on a 375x667 one (an iPhone SE), where someone has to scroll to reach
+		  the thing this page exists for. 'above' is always on screen.
+		*/
+		position: 'below' as 'above' | 'below',
+		heading: 'Risk Appetite',
+		pitch: 'A new essay every other week, plus shorter notes on what I’m thinking, doing and reading.',
+	},
 
 	/*
 	  THE SMALL ICON ROW under the buttons. Deliberately small: most visitors arrive FROM

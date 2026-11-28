@@ -26,9 +26,21 @@ deployed site, never locally.
 
 ## How to change things
 
-**A link, a label, or the order.** Open `src/lib/links.ts` and edit the `buttons` list. Each
-button is one block. Move a block up or down to reorder. Set `enabled: false` to hide one without
-deleting it — that is how "Work with me" is parked, ready for when there is something to sell.
+**A link, a label, an emoji, or the order.** Open `src/lib/links.ts` and edit the `buttons` list.
+Each button is one block, with its `emoji` and `label` next to its `href`. Move a block up or
+down to reorder. Set `enabled: false` to hide one without deleting it — that is how "Work with
+me" is parked, ready for when there is something to sell, and how the old plain Newsletter button
+is kept in case the signup box is ever dropped.
+
+An emoji is decorative: screen readers skip it, so the label has to carry the meaning on its own
+("Essays", not "✍️" alone). One per button.
+
+**The newsletter box.** `newsletter` in `links.ts` holds its `heading`, its `pitch`, and
+`position` — `'below'` puts it under the buttons, `'above'` puts it directly under the bio. The
+field label, its placeholder, the word on the button and the small print beneath come from
+[`src/content/pages/newsletter.md`](../src/content/pages/newsletter.md) instead, shared with the
+four signups on the rest of the site, so one edit changes all five and this page can never
+contradict them. That is also where "First issue goes out in January" lives.
 
 **The bio.** `profile.bio` is three strings, one per line. They should match the Instagram, TikTok
 and YouTube bios word for word, so someone who taps through recognises the same person.
@@ -51,8 +63,9 @@ saying so, rather than rendering a blank gap nobody notices.
 
 **Any other word on the page.** There are no others in the markup. The name, bio, every button
 label, the meta title and description, the footer line and even the small Copy button's three
-states (`ui.copy`, `ui.copied`, `ui.copyHint`) are all in `links.ts`. `links.astro` holds no copy
-at all, which is the one thing to preserve when changing this page.
+states (`ui.copy`, `ui.copied`, `ui.copyHint`) are all in `links.ts`, and the four shared signup
+strings are in `newsletter.md`. `links.astro` holds no copy at all, which is the one thing to
+preserve when changing this page.
 
 **The "Latest" card.** `latest` in `links.ts`, off by default. Set `enabled: true` and fill in the
 title and href to feature the newest essay or video above the buttons.
@@ -70,14 +83,29 @@ title and href to feature the newest essay or video above the buttons.
   which is the entire page-weight budget on its own. This page is almost all buttons and labels,
   which the site already sets in Inter, so it loads Inter alone. The whole page is **60 KB**.
   Adding the serif back for the name would cost another ~47 KB.
-- **The primary button is filled in the text colour, not the accent.** The spec asked for an
-  accent-filled button; the site's own rule is that the accent is for links and hover states only,
-  and the existing Subscribe button is filled near-black. Matching that makes this read as the
-  same site. The accent is still the hover colour.
-- **`mailto:` is not trusted.** It often does nothing in the Instagram and TikTok browsers, so the
-  address is also on the page as selectable text, with a Copy button. That button is **shipped
-  hidden** and only revealed by script once the Clipboard API is confirmed, so nobody is ever
-  shown a button that cannot work.
+- **The newsletter is a form on the page, not a button to beehiiv** (changed 2026-11-28). The
+  reader types an address and stays here. It is a plain HTML form with no JavaScript, posting to
+  the site's own `/api/subscribe` with `placement="links"`, which is the same route the four
+  signups on the rest of the site use. **This only beats the old button once `BEEHIIV_API_KEY`
+  is set on the Cloudflare Worker.** Without the key that route falls back to the beehiiv signup
+  page, and beehiiv ignores a prefilled address, so the reader types it a second time — one step
+  worse than the button it replaced. The key is blocked on beehiiv's Stripe Identity
+  Verification; see [roadmap.md](roadmap.md). One-tap check on the live page: submitting lands
+  you on `/newsletter/thank-you/` if the key is set, and on beehiiv if it is not.
+- **The Subscribe button is filled in the text colour, not the accent.** The spec asked for an
+  accent-filled primary; the site's own rule is that the accent is for links and hover states
+  only, and the existing Subscribe button is filled near-black. Matching that makes this read as
+  the same site. The accent is still the hover colour.
+- **`mailto:` is not trusted, and the address is not shown until it is needed.** A `mailto:`
+  often does nothing in the Instagram and TikTok browsers, which would leave a dead button, so
+  tapping Email also reveals the address as selectable text with a Copy button. Nothing is shown
+  before the tap, so the page stays clean; the Copy button is **shipped hidden** on top of that
+  and only revealed once the Clipboard API is confirmed. With JavaScript off the `mailto:` is all
+  there is, which is how it behaves in a real browser anyway.
+- **No pop-up, and this is deliberate.** A subscribe modal on open was considered and rejected:
+  the spec rules out overlays because in-app browsers block or mangle them, and a modal is the
+  surest way to make someone close the page in the five seconds they give it. The box sits in the
+  page instead, where it cannot be blocked.
 - **The business address is `business@yoankrastev.com`**, not the personal iCloud address. iCloud
   catches everything at `@yoankrastev.com`, so it arrives in the same inbox without publishing a
   personal address on an indexed page.

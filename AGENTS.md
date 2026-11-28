@@ -124,7 +124,10 @@ When adding new visible text to a page: add a `## Section` to that page's markdo
 button is one `{ label, href }` block, and splitting the two across a markdown file and a config
 file would mean editing two files to change one button. The file is written to be edited without
 reading code — top-level, commented, one block per button. Don't "fix" this by moving the copy
-into `src/content/pages/`.
+into `src/content/pages/`. The one carve-out inside the carve-out: the signup box's field label,
+placeholder, button word and the note under it are read from `newsletter.md` like every other
+signup, so the five of them cannot contradict each other and a dated line such as "First issue
+goes out in January" is changed once. Only that box's heading and pitch are in `links.ts`.
 
 ## Adding an essay
 
@@ -208,9 +211,9 @@ The signup is `src/components/NewsletterSignup.astro`: a heading, a short pitch 
 - **The key:** `BEEHIIV_API_KEY`, a secret on the Cloudflare Worker (and a local `.env` for `astro dev`). It must never be committed. beehiiv blocks browser-side calls, so this has to happen server-side. The publication ID is not secret and sits in `src/consts.ts`.
 - **It always works, key or no key.** If the key is missing, beehiiv errors, the address looks wrong, or anything throws, the route redirects to the beehiiv signup page with the same UTM tags, which is how the site behaved before. Never replace that fallback with an error page.
 - **Spam:** a hidden "company" field is a honeypot. If it is filled, the route redirects to the thank-you page without subscribing anyone.
-- **Settings sent to beehiiv:** `reactivate_existing: true` (someone filling in the form means it), `send_welcome_email: false`, and no `double_opt_override`, so whatever the publication is set to in beehiiv governs. The link still carries `utm_source=website` and `utm_medium=<placement>` (`home`, `essay`, `about`, `newsletter`).
+- **Settings sent to beehiiv:** `reactivate_existing: true` (someone filling in the form means it), `send_welcome_email: false`, and no `double_opt_override`, so whatever the publication is set to in beehiiv governs. The link still carries `utm_source=website` and `utm_medium=<placement>` (`home`, `essay`, `about`, `newsletter`, `links`).
 - Readers used to be sent to beehiiv to type their address a second time, because beehiiv ignores an `?email=` parameter (checked September 2026). The API route removed that second step (built 2026-11-22).
-- It appears in exactly four places: the homepage, the end of every essay, `/about` and `/newsletter`. Reuse the component; never paste beehiiv's embed code or load its scripts.
+- It appears in exactly five places: the homepage, the end of every essay, `/about`, `/newsletter`, and `/links`. The first four use `NewsletterSignup.astro`; reuse the component and never paste beehiiv's embed code or load its scripts. `/links` posts to the same `/api/subscribe` with its own markup, because it cannot load `global.css` — see *Link in bio* below.
 - A panel on the homepage, under every article and on `/about`; plain on `/newsletter` (`boxed={false}`), where it is just the button and note under the page text. Its layout follows its own width through **container queries** (revised 2026-11-17): in narrow boxes (phones) mark and heading, pitch, then a full-width button with the note under it; from 30rem (the article column) the text is full width and the button and note sit on one row under it; from 44rem (homepage, `/about` on laptops) the text is on the left and the button and note on the right, so the box is neither half-empty nor tall. Its vertical padding is three quarters of other panels'. The mark only appears when a heading is passed; `/newsletter` shows it in its `<h1>` instead.
 - **The mark** is `RiskAppetiteMark.astro`, traced from Yoan's 800×800 logo PNG: the curve and baseline use the text colour, the tail `--color-mark-tail`. Use the component; don't add the PNG.
 - **Keep every other page static.** `astro.config.mjs` sets `output: 'static'` with the Cloudflare adapter, and only `api/subscribe.ts` opts out with `export const prerender = false`. Don't let pages drift into server rendering: it costs speed for no gain.
@@ -220,9 +223,24 @@ The signup is `src/components/NewsletterSignup.astro`: a heading, a short pitch 
 The page the Instagram, TikTok and YouTube bios point at. Its one job is the newsletter.
 Full notes in [docs/links-page.md](docs/links-page.md); the short version:
 
-- **All of it is `src/lib/links.ts`** — name, bio, photo, buttons, icons, business address.
-  Changing a link or a label never means opening `links.astro`. Hide a button with
-  `enabled: false` rather than deleting it.
+- **All of it is `src/lib/links.ts`** — name, bio, photo, buttons and their emoji, icons,
+  business address, and the signup box's heading and pitch. Changing a link or a label never
+  means opening `links.astro`. Hide anything with `enabled: false` rather than deleting it.
+- **The newsletter is a form on the page, not a button to beehiiv** (changed 2026-11-28). It
+  posts to the same `/api/subscribe` as the rest of the site with `placement="links"`, so a
+  reader types an address and never leaves. Its shared wording comes from `newsletter.md`; only
+  the heading and pitch are local. It cannot reuse `NewsletterSignup.astro`, which depends on
+  `global.css` and on container-query sizing this page does not load.
+  **It is only a real improvement once `BEEHIIV_API_KEY` exists on the Worker.** Until then
+  `/api/subscribe` falls back to the beehiiv page, where beehiiv ignores a prefilled address, so
+  the reader types it a second time — worse than the plain button it replaced. See the roadmap.
+- **`newsletter.position`** in `links.ts` moves the box above or below the buttons. Below the
+  buttons its Subscribe lands around 790px down: on screen on a current phone, below the fold on
+  a 375x667 one. Above the bio-adjacent buttons it is always on screen.
+- **The Email button shows nothing until it is tapped.** `mailto:` often does nothing at all in
+  the Instagram and TikTok browsers, so the tap also reveals the address with a Copy button. Note
+  that `[hidden]` alone cannot hide `.email`: the rule sets `display: flex`, which beats the
+  browser's `[hidden] { display: none }`, so there is an explicit `.email[hidden]` rule.
 - **It deliberately does not use `BaseLayout`.** No header or nav, because they compete with the
   only button that matters; its own `<head>` because it needs JSON-LD `Person` with `sameAs`; and
   **one font, not two**, because `BaseHead` preloads both and that alone is the whole page-weight
