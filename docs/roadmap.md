@@ -2,8 +2,9 @@
 
 Status: **live at <https://yoankrastev.com>** since before 2026-11-16, deployed automatically from
 `main` by a Cloudflare Worker. The homepage bio and the whole About page carry Yoan's own copy;
-the first real article went up on 2026-11-23.
-Last reviewed 2026-11-23.
+the first real article went up on 2026-11-23. The link-in-bio page `/links` went up on
+2026-11-28 with a placeholder photo and bio.
+Last reviewed 2026-11-28.
 
 ## Open items
 
@@ -15,6 +16,9 @@ Last reviewed 2026-11-23.
 | beehiiv API key | beehiiv → Settings → Workspace → API | The server-side signup is built and merged but inert until `BEEHIIV_API_KEY` exists as a secret on the Cloudflare Worker. beehiiv needs Stripe Identity Verification on the account before it will issue a key. Until then the form falls back to the beehiiv page, exactly as before. |
 | Artwork for every article | `src/assets/essays/` | Thumbnails are optional, but a mixed archive (some rows with a picture, some without) looks unfinished. Either draw one per article or drop them from `/essays` again. |
 | "a marathon in December" | `src/content/pages/about.md`, `## Row 3` | A dated claim, added 2026-11-23 when December was next month. Reword it once the race has happened. |
+| `/links` photo and bio | `src/lib/links.ts` | Both placeholders. The page is live and indexable. The bio must end up identical to the Instagram, TikTok and YouTube bios; the photo needs a square original of 800px or more, the same one as the social accounts. See [links-page.md](links-page.md). |
+| `/links` preview image | `public/` + `scripts/` | `/links/` shares the site default `og-default.png`. A dedicated 1200x630 with the photo and name is worth making once the real photo exists. See [images.md](images.md). |
+| Click and source tracking | decision, not code | The `/ig`, `/tt`, `/yt` redirects carry utm tags, but Cloudflare Web Analytics logs no query strings and supports no custom events, so neither the platform split nor per-button clicks are measurable today. Two ways out, in the *Analytics* section of [links-page.md](links-page.md). |
 | "First issue goes out in January" | `src/content/pages/newsletter.md`, `## Button note` | A dated claim, shown under the button on every page. Moved from December to January on 2026-11-23. Remove or change it once Risk Appetite is running. While there, check the signup text in `home.md`, `essays.md` and `about.md` still reads right for a live newsletter. |
 
 ## beehiiv: before the first issue
@@ -67,7 +71,9 @@ route.
 
 ## Deliberately not doing
 
-- **Analytics scripts, tracking pixels, embeds, font CDNs.** Host-side page views cover the need
-  without loading anything in the reader's browser. See [decisions.md](decisions.md).
+- **Analytics scripts, tracking pixels, embeds, font CDNs *in the repo*.** Nothing in the source
+  loads a third party at runtime. Note that Cloudflare Web Analytics is switched on at the zone
+  regardless, and its beacon is injected into every page at the edge. See
+  [decisions.md](decisions.md).
 - **Comments.** Nothing on the site invites them; the newsletter is the reply channel.
 - **A wider text column on article pages.** The narrow column is the point.

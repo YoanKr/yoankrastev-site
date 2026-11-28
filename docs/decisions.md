@@ -15,8 +15,10 @@ The site is a reading site: text, a few photos, one outbound button. A static bu
 fastest possible pages on phones, and there is no server to maintain. React, Vue and friends
 would add JavaScript for nothing.
 
-The build ships **zero JavaScript files**. The only script is an inline theme script of
-about half a kilobyte (see *Light and dark theme* below).
+The build ships **zero JavaScript files**. The only script in the source is an inline theme
+script of about half a kilobyte (see *Light and dark theme* below). Readers do load one more that
+the build never sees: Cloudflare injects its analytics beacon at the edge (see *Third-party
+scripts*).
 
 *Would change it:* moving the newsletter signup server-side (see *Newsletter*) needs an SSR
 adapter for one route. Everything else can stay static.
@@ -240,17 +242,30 @@ Drafts render in `astro dev` with a visible label so they can be previewed, and 
 pages, the RSS feed and the sitemap in production. This works because every page and feed lists
 articles through `getPublishedEssays()`. Never call `getCollection('essays')` directly.
 
-## No third-party scripts
+## Third-party scripts
 
-**No analytics, tracking pixels, embeds or font CDNs.** Decided 2026-09-19.
+**No analytics snippets, tracking pixels, embeds or font CDNs in the repo.** Decided 2026-09-19.
 
 Readers arrive from social apps on phones, often on poor connections, and the site's job is to be
-read. Nothing is loaded from a third party at runtime. beehiiv is reached only when a reader
-clicks the button and leaves.
+read. Nothing in the source loads from a third party at runtime. beehiiv is reached only when a
+reader clicks the button and leaves.
 
-*If traffic numbers are ever needed:* most hosts (Cloudflare, Netlify, Vercel) report page views
-server-side, with no script on the page. That is the route to take before adding any analytics
-snippet. Relaxing this is Yoan's call, not an agent's.
+**Cloudflare Web Analytics is on, though, and the page does load its beacon.** Found 2026-11-25.
+The zone has a Web Analytics site, created around late September 2026, using Cloudflare's
+*automatic setup*: the edge injects `static.cloudflareinsights.com/beacon.min.js` into every HTML
+response. It appears nowhere in the repo and never reaches `dist/`, so the build's zero-JS check
+passes while readers still run it. Confirmed in a browser on 2026-11-25: the beacon loads and
+posts to `/cdn-cgi/rum`. This contradicted the paragraph above for two months, which is why the
+check in *Before finishing a change* cannot be trusted on its own.
+
+It is cookieless and Cloudflare states it does not collect visitors' personal data, so it needs no
+consent banner. Two caveats about the numbers: Brave, DuckDuckGo and ad-blockers block the beacon,
+so readers arriving from social apps are undercounted; and the free plan's zone-level Analytics
+tab cannot be blocked but counts requests, not page views per essay.
+
+*To turn it off:* Cloudflare dashboard, Web Analytics, **Manage site**, set the automatic setup to
+**Disable**. Nothing in the repo changes either way. Turning it off or leaving it on is Yoan's
+call, not an agent's.
 
 ## Content
 

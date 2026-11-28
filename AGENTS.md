@@ -19,6 +19,7 @@ The essays will eventually become a book, so the archive has to age well: no tre
 - [docs/roadmap.md](docs/roadmap.md) — what is still placeholder, and upgrades worth doing.
 - [docs/deployment.md](docs/deployment.md) — hosting, going live, the domain checklist.
 - [docs/images.md](docs/images.md) — the social preview image and icons, and how to regenerate them.
+- [docs/links-page.md](docs/links-page.md) — the `/links` page for the social bios: how to change a link, the photo or an icon.
 
 ## Development
 
@@ -50,7 +51,7 @@ scripts/
 public/
   og-default.png            Default social preview image (1200×630), used on every page but /newsletter
   og-newsletter.png         Risk Appetite preview image (1200×630, logo and name), used on /newsletter
-  _redirects                301s from the old /articles/ URLs (see Naming above)
+  _redirects                /ig /tt /yt bio links, and 301s from the old /articles/ URLs
   favicon.svg               Monogram favicon (adapts to dark mode)
   apple-touch-icon.png      Home-screen icon
   robots.txt                Points crawlers at the sitemap
@@ -68,6 +69,7 @@ src/
     essays.ts               getPublishedEssays() (drafts filter + sort), essayUrl(), readingTime()
     pages.ts                getPageCopy(): reads a content/pages file and returns its sections
     photos.ts               Photo slots for the homepage About teaser and /about
+    links.ts                EVERYTHING ON /links: name, bio, photo, buttons, social icons
   layouts/BaseLayout.astro  <html> shell: head, header, main, footer
   components/
     BaseHead.astro          <title>, meta, canonical, Open Graph, Twitter, JSON-LD, fonts, theme script
@@ -85,6 +87,7 @@ src/
     about.astro             Three alternating photo/text rows + the newsletter signup
     newsletter.astro        What the newsletter is, cadence, signup
     404.astro
+    links.astro             The link-in-bio page. Own shell, no header/footer (see Link in bio)
     newsletter/thank-you.astro  Where /api/subscribe sends a reader once beehiiv has them
     api/subscribe.ts        THE ONLY NON-PRERENDERED ROUTE: subscribes via the beehiiv API
     rss.xml.ts              RSS feed at /rss.xml
@@ -115,6 +118,13 @@ How the files work:
 - Page titles in the browser tab come from each page's `## Heading` section. The site name is appended automatically.
 
 When adding new visible text to a page: add a `## Section` to that page's markdown file and read it with `getPageCopy`. Never hard-code copy in `.astro` files. The exceptions are small interface strings tied to code: "min read", "Updated", the draft label, "Skip to content", the "Dark mode" switch label and the footer link names.
+
+**`/links` is the one page outside this system**, and deliberately so. Every word on it is in
+`src/lib/links.ts` instead, because each of its strings is a button label welded to a URL: a
+button is one `{ label, href }` block, and splitting the two across a markdown file and a config
+file would mean editing two files to change one button. The file is written to be edited without
+reading code — top-level, commented, one block per button. Don't "fix" this by moving the copy
+into `src/content/pages/`.
 
 ## Adding an essay
 
@@ -205,6 +215,25 @@ The signup is `src/components/NewsletterSignup.astro`: a heading, a short pitch 
 - **The mark** is `RiskAppetiteMark.astro`, traced from Yoan's 800×800 logo PNG: the curve and baseline use the text colour, the tail `--color-mark-tail`. Use the component; don't add the PNG.
 - **Keep every other page static.** `astro.config.mjs` sets `output: 'static'` with the Cloudflare adapter, and only `api/subscribe.ts` opts out with `export const prerender = false`. Don't let pages drift into server rendering: it costs speed for no gain.
 
+## Link in bio (`/links`)
+
+The page the Instagram, TikTok and YouTube bios point at. Its one job is the newsletter.
+Full notes in [docs/links-page.md](docs/links-page.md); the short version:
+
+- **All of it is `src/lib/links.ts`** — name, bio, photo, buttons, icons, business address.
+  Changing a link or a label never means opening `links.astro`. Hide a button with
+  `enabled: false` rather than deleting it.
+- **It deliberately does not use `BaseLayout`.** No header or nav, because they compete with the
+  only button that matters; its own `<head>` because it needs JSON-LD `Person` with `sameAs`; and
+  **one font, not two**, because `BaseHead` preloads both and that alone is the whole page-weight
+  budget. It still reads `tokens.css`, so the palette and dark mode cannot drift.
+- Because it skips `global.css` it has to set its own `box-sizing: border-box`. Forgetting that
+  made every button half as tall again as intended.
+- The short bio URLs `/ig`, `/tt` and `/yt` are 302s in `public/_redirects`, inert in dev.
+- **Cloudflare Web Analytics cannot measure what this page was specced to measure**: it supports
+  no custom events and logs no query strings, so neither per-button clicks nor the `utm_source`
+  split show up. See the *Analytics* section of [docs/links-page.md](docs/links-page.md).
+
 ## Design constraints
 
 Reading-first. Whitespace does the structural work.
@@ -230,7 +259,7 @@ Reading-first. Whitespace does the structural work.
 ## Technical constraints
 
 - Mobile-first. Most traffic is phones arriving from social apps.
-- Minimal JavaScript: the only script is the small inline theme script in `BaseHead.astro`. `dist/client` ships zero JS files. (`dist/server` is the Worker; it runs on Cloudflare, not in the reader's browser.) Don't add client-side frameworks, analytics, tracking pixels or embeds. The only third party is beehiiv, reached through a plain link.
+- Minimal JavaScript: the only script **in the repo** is the small inline theme script in `BaseHead.astro`. `dist/client` ships zero JS files. (`dist/server` is the Worker; it runs on Cloudflare, not in the reader's browser.) Don't add client-side frameworks, analytics, tracking pixels or embeds. The only third party reached by a click is beehiiv, through a plain link. **One exception, and it is not in the repo:** Cloudflare Web Analytics is switched on for the zone, so the edge injects its `beacon.min.js` into every HTML response. See *Third-party scripts* in [docs/decisions.md](docs/decisions.md).
 - Self-hosted fonts only: no Google Fonts or any font CDN.
 - Every page gets a title, meta description, canonical URL and Open Graph/Twitter tags through `BaseHead.astro`. Essays are `og:type=article`, with published/modified times and JSON-LD `BlogPosting`. Pass a real `description` to every new page.
 - The production URL is set in two places: `site` in `astro.config.mjs` and the `Sitemap:` line in `public/robots.txt`.
@@ -262,6 +291,11 @@ Things that have already cost time here:
 - **`public/_redirects` is the only thing keeping the old `/articles/...` links alive.** It is a Cloudflare
   Workers file, inert under `astro dev`, so a URL change can only be verified on the deployed site.
 - **Fonts and images are the only binary assets.** Don't add an image to `public/` that could live in `src/assets/` and be optimised by Astro.
+- **The zero-JS build check cannot see edge-injected JavaScript.** `find dist/client -name '*.js'`
+  stays at `0` while every reader loads Cloudflare's analytics beacon, because Cloudflare adds it
+  to the response on the way out. `curl` does not show it either: injection is gated on the
+  User-Agent. To see what a reader actually gets, request the page with a browser User-Agent, or
+  open it in a browser and list `document.scripts`.
 
 ## Astro documentation
 

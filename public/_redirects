@@ -1,13 +1,31 @@
-# Old /articles/ URLs, kept working.
+# Cloudflare Workers parses this file and applies it to static assets before the Worker
+# runs (the Worker only serves /api/subscribe). Two rules of the format matter:
+#   - the first matching line wins, so order counts;
+#   - all static rules must come before any wildcard rule.
+# It is inert under `astro dev` and `astro build`, so changes here can only be tested on
+# the deployed site. https://developers.cloudflare.com/workers/static-assets/redirects/
+
+# --- Bio links -------------------------------------------------------------------
+#
+# The short URLs that go in the Instagram, TikTok and YouTube bios. They are short
+# because they are typed and read aloud, and they carry the utm tags so the traffic from
+# each platform can be told apart. 302, not 301: which platform points where will change,
+# and a 301 would be cached in readers' browsers for a long time.
+#
+# NOTE: Cloudflare Web Analytics, which this site uses, does not log query strings, so
+# these utm tags produce no separate numbers there today. They are what any analytics
+# tool added later will read. See docs/links-page.md.
+
+/ig   /links/?utm_source=instagram&utm_medium=bio   302
+/tt   /links/?utm_source=tiktok&utm_medium=bio      302
+/yt   /links/?utm_source=youtube&utm_medium=bio     302
+
+# --- Old /articles/ URLs, kept working --------------------------------------------
 #
 # The section was renamed Articles -> Essays on 2026-11-23 and the URLs moved with it.
 # The first essay was published that same day, so links to /articles/... are already out
 # and cannot be edited after the fact. These rules make them land on the right page.
 # Never delete them.
-#
-# Cloudflare Workers parses this file and applies it to static assets before the Worker
-# runs (the Worker only serves /api/subscribe). Static rules must come before wildcards.
-# https://developers.cloudflare.com/workers/static-assets/redirects/
 
 /articles     /essays/        301
 /articles/    /essays/        301

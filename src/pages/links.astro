@@ -1,0 +1,495 @@
+---
+/*
+  /links — the "link in bio" page.
+
+  Everything on this page comes from src/lib/links.ts. Do not put words or URLs in here.
+
+  Why this page does not use BaseLayout like every other page:
+    - It must not show the site header and footer. Someone arriving from an Instagram bio
+      gets one screen and one thumb; a nav bar competes with the only thing that matters.
+    - It needs JSON-LD `Person` with `sameAs`, so search engines tie the accounts together.
+      BaseHead only emits `WebSite` or `BlogPosting`.
+    - It loads one font, not two. BaseHead preloads Source Serif and Inter, about 100 KB
+      together, which is the entire page-weight budget on its own.
+  It still reads the same tokens.css, so the palette, sizes and dark mode cannot drift
+  from the rest of the site.
+*/
+import { Font, Image } from 'astro:assets';
+import { LINKS } from '../lib/links';
+import '../styles/tokens.css';
+
+const { meta, profile, buttons, socials, businessEmail, latest, footer, ui } = LINKS;
+
+const canonical = new URL('/links/', Astro.site);
+const ogImage = new URL(meta.ogImage, Astro.site);
+
+// A button's final href. The business one is built from `businessEmail` so the address
+// is written in exactly one place.
+const hrefFor = (b: (typeof buttons)[number]) => (b.showEmailFallback ? `mailto:${businessEmail}` : b.href);
+
+const visibleButtons = buttons.filter((b) => b.enabled && (b.href || b.showEmailFallback));
+const visibleSocials = socials.filter((s) => s.enabled);
+
+const isExternal = (href: string) => /^https?:/.test(href) && !href.includes('yoankrastev.com');
+
+// Ties the accounts together for search engines: this Person is all of these profiles.
+const jsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'Person',
+	name: profile.name,
+	url: 'https://yoankrastev.com/',
+	description: profile.bio.join(' '),
+	sameAs: [
+		...visibleSocials.map((s) => s.href),
+		...visibleButtons.map((b) => b.href).filter((h) => isExternal(h) && !h.includes('beehiiv')),
+	],
+};
+
+/*
+  Social glyphs, drawn here rather than pulled from an icon set, so the page stays
+  self-contained and the strokes match the site's weight. 24×24, currentColor.
+  Adding a social in links.ts means adding its name here too.
+*/
+const ICONS: Record<string, string> = {
+	instagram:
+		'<rect x="3" y="3" width="18" height="18" rx="5.2" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor"/>',
+	tiktok:
+		'<path d="M14.2 3v10.6a3.6 3.6 0 1 1-3.6-3.6c.33 0 .65.04.95.13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M14.2 3.2c.45 2.6 2.4 4.3 5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>',
+	youtube:
+		'<rect x="2.6" y="5.4" width="18.8" height="13.2" rx="4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M10.3 9.3l5 2.7-5 2.7z" fill="currentColor"/>',
+	/* Drawn to fill the same 24×24 box as the others, or it reads as half their size. */
+	strava:
+		'<path d="M4 14.1 L10.7 2.1 L17.4 14.1 H13.7 L10.7 7.5 L7.7 14.1 Z" fill="currentColor"/><path d="M11.1 14.1 H17.4 L14.25 20.6 Z" fill="currentColor" opacity="0.55"/>',
+	linkedin:
+		'<rect x="3" y="3" width="18" height="18" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M7.4 10.2v6.2M7.4 7.5v.1M11.2 16.4v-6.2M11.2 12.6c0-1.4 1-2.4 2.3-2.4s2.3 1 2.3 2.4v3.8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
+	medium:
+		'<ellipse cx="7" cy="12" rx="4.1" ry="4.6" fill="none" stroke="currentColor" stroke-width="1.7"/><ellipse cx="15.6" cy="12" rx="1.9" ry="4.6" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M20.6 7.8v8.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
+};
+
+for (const s of visibleSocials) {
+	if (!ICONS[s.icon]) {
+		throw new Error(
+			`links.ts: the "${s.label}" icon is set to "${s.icon}", which has no drawing in src/pages/links.astro. Add one to ICONS, or use one of: ${Object.keys(ICONS).join(', ')}.`,
+		);
+	}
+}
+
+const initials = profile.name
+	.split(' ')
+	.map((w) => w[0])
+	.join('');
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+		<!--
+			Theme, before first paint so there is no flash. A shorter version of the script in
+			BaseHead.astro: this page has no light/dark switch, so it only has to read the
+			reader's saved choice from the rest of the site, falling back to their system
+			setting. With JavaScript off the page stays light, which is perfectly readable.
+		-->
+		<script is:inline>
+			(() => {
+				let saved = null;
+				try {
+					saved = localStorage.getItem('theme');
+				} catch {}
+				document.documentElement.dataset.theme =
+					saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+			})();
+		</script>
+		<title>{meta.title}</title>
+		<meta name="description" content={meta.description} />
+		<link rel="canonical" href={canonical} />
+		<meta name="author" content={profile.name} />
+		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+		<Font cssVariable="--font-inter" preload />
+
+		<meta property="og:type" content="profile" />
+		<meta property="og:site_name" content={profile.name} />
+		<meta property="og:locale" content="en_GB" />
+		<meta property="og:url" content={canonical} />
+		<meta property="og:title" content={meta.title} />
+		<meta property="og:description" content={meta.description} />
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content={meta.ogImageAlt} />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={meta.title} />
+		<meta name="twitter:description" content={meta.description} />
+		<meta name="twitter:image" content={ogImage} />
+		<meta name="twitter:image:alt" content={meta.ogImageAlt} />
+
+		<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+	</head>
+
+	<body>
+		<main class="page">
+			<header class="profile">
+				{
+					profile.photo ? (
+						<Image
+							class="avatar"
+							src={profile.photo}
+							alt={profile.photoAlt}
+							width={360}
+							height={360}
+							densities={[1, 2, 3]}
+						/>
+					) : (
+						/* No photo set yet: a monogram, so the space reads as deliberate. */
+						<div class="avatar avatar--empty" aria-hidden="true">{initials}</div>
+					)
+				}
+				<h1>{profile.name}</h1>
+				<p class="bio">
+					{profile.bio.map((line) => <span>{line}</span>)}
+				</p>
+			</header>
+
+			{
+				latest.enabled && latest.href && (
+					<a class="latest" href={latest.href}>
+						<span class="latest__kicker">{latest.kicker}</span>
+						<span class="latest__title">{latest.title}</span>
+					</a>
+				)
+			}
+
+			<nav aria-label="Yoan Krastev's links">
+				<ul class="buttons">
+					{
+						visibleButtons.map((b) => (
+							<li>
+								<a
+									class:list={['button', b.style === 'primary' && 'button--primary']}
+									href={hrefFor(b)}
+									rel={isExternal(hrefFor(b)) ? 'noopener noreferrer' : undefined}
+								>
+									{b.label}
+								</a>
+								{b.showEmailFallback && (
+									/*
+									  `mailto:` often does nothing inside the Instagram and TikTok browsers,
+									  so the address is also here as plain selectable text. The Copy button
+									  is hidden until the script below confirms the Clipboard API exists,
+									  so nobody is shown a button that cannot work.
+									*/
+									<p class="email">
+										<span class="email__address">{businessEmail}</span>
+										<button
+											class="email__copy"
+											type="button"
+											hidden
+											data-copy-email={businessEmail}
+											data-label={ui.copy}
+											data-label-done={ui.copied}
+											data-label-hint={ui.copyHint}
+										>
+											{ui.copy}
+										</button>
+									</p>
+								)}
+							</li>
+						))
+					}
+				</ul>
+			</nav>
+
+			<ul class="socials">
+				{
+					visibleSocials.map((s) => (
+						<li>
+							<a href={s.href} rel="noopener noreferrer" title={s.label}>
+								<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" set:html={ICONS[s.icon]} />
+								<span class="visually-hidden">{s.label}</span>
+							</a>
+						</li>
+					))
+				}
+			</ul>
+
+			<footer class="foot">
+				<span>{footer.copyright}</span>
+				{footer.privacyUrl && <a href={footer.privacyUrl}>{footer.privacyLabel}</a>}
+			</footer>
+		</main>
+
+		<script is:inline>
+			// The page's only script, and the only thing on it that needs JavaScript.
+			(() => {
+				const btn = document.querySelector('[data-copy-email]');
+				const address = document.querySelector('.email__address');
+				if (!btn || !address || !navigator.clipboard) return;
+				// Only now is the button worth showing: without the API it stays hidden.
+				btn.hidden = false;
+
+				let timer;
+				const flash = (text) => {
+					btn.textContent = text;
+					clearTimeout(timer);
+					timer = setTimeout(() => (btn.textContent = btn.dataset.label), 2000);
+				};
+
+				btn.addEventListener('click', async () => {
+					try {
+						await navigator.clipboard.writeText(btn.dataset.copyEmail);
+						flash(btn.dataset.labelDone);
+					} catch {
+						/*
+						  Several locked-down in-app browsers expose navigator.clipboard and then
+						  refuse to write to it. Falling through silently would leave a button that
+						  does nothing, which is the exact failure this whole block exists to avoid.
+						  Select the address instead, so the native "Copy" menu is one tap away.
+						*/
+						const range = document.createRange();
+						range.selectNodeContents(address);
+						const selection = getSelection();
+						selection.removeAllRanges();
+						selection.addRange(range);
+						flash(btn.dataset.labelHint);
+					}
+				});
+			})();
+		</script>
+	</body>
+</html>
+
+<style>
+	/*
+	  One column, 480px, centred. Everything here reads from tokens.css, so a palette
+	  change on the site reaches this page too. Sans throughout: the page is almost
+	  entirely buttons and labels, which the site already sets in Inter.
+	*/
+	/*
+	  This page does not import global.css, so it has to set this itself. Without it
+	  `min-height` on a button applies to the content box and the padding is added on top,
+	  which made every button half as tall again as it was meant to be.
+	*/
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
+	html {
+		-webkit-text-size-adjust: 100%;
+		text-size-adjust: 100%;
+	}
+	body {
+		margin: 0;
+		background: var(--color-bg);
+		color: var(--color-text);
+		font-family: var(--font-sans);
+		font-size: var(--text-body);
+		line-height: var(--leading-body);
+		-webkit-font-smoothing: antialiased;
+	}
+	::selection {
+		background: var(--color-selection);
+	}
+	:focus-visible {
+		outline: 2px solid var(--color-accent);
+		outline-offset: 3px;
+	}
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+
+	.page {
+		max-width: 480px;
+		/* Safe-area insets so nothing sits under a notch or a home indicator. */
+		margin: 0 auto;
+		padding: calc(2rem + env(safe-area-inset-top)) calc(1.25rem + env(safe-area-inset-right))
+			calc(2.5rem + env(safe-area-inset-bottom)) calc(1.25rem + env(safe-area-inset-left));
+	}
+
+	/* Profile ------------------------------------------------------------------ */
+
+	.profile {
+		text-align: center;
+	}
+	.avatar {
+		width: 112px;
+		height: 112px;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+	.avatar--empty {
+		display: grid;
+		place-items: center;
+		margin-inline: auto;
+		background: var(--color-placeholder);
+		color: var(--color-text-muted);
+		font-size: 2rem;
+		font-weight: 500;
+		letter-spacing: 0.02em;
+	}
+	h1 {
+		margin: 0.875rem 0 0;
+		font-size: 1.5rem;
+		font-weight: 600;
+		line-height: var(--leading-tight);
+		letter-spacing: -0.01em;
+	}
+	.bio {
+		margin: 0.5rem 0 0;
+		color: var(--color-text-muted);
+		font-size: var(--text-nav);
+		line-height: 1.5;
+	}
+	/* Each line of the bio on its own row, matching the social profiles. */
+	.bio span {
+		display: block;
+	}
+
+	/* Optional "Latest" card ---------------------------------------------------- */
+
+	.latest {
+		display: block;
+		margin-top: 1.75rem;
+		padding: 0.875rem 1rem;
+		border-radius: var(--radius-panel);
+		background: var(--color-surface);
+		color: inherit;
+		text-decoration: none;
+	}
+	.latest__kicker {
+		display: block;
+		color: var(--color-text-muted);
+		font-size: var(--text-meta);
+	}
+	.latest__title {
+		display: block;
+		margin-top: 0.125rem;
+		font-weight: 500;
+	}
+
+	/* Buttons ------------------------------------------------------------------- */
+
+	.buttons {
+		margin: 1.75rem 0 0;
+		padding: 0;
+		list-style: none;
+	}
+	.buttons > li + li {
+		margin-top: 0.75rem;
+	}
+	.button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		/* 52px: comfortable for a thumb, and the whole row is the tap target. */
+		min-height: 3.25rem;
+		padding: 0.75rem 1.25rem;
+		border-radius: 2px;
+		background: var(--color-surface);
+		color: var(--color-text);
+		font-size: var(--text-button);
+		font-weight: 500;
+		line-height: 1.2;
+		text-align: center;
+		text-decoration: none;
+	}
+	/*
+	  The one dominant button. Filled in the text colour, exactly like the site's
+	  Subscribe button, which is what makes it read as the same button rather than a
+	  louder one. The accent stays a hover colour, as everywhere else on the site.
+	*/
+	.button--primary {
+		min-height: 3.5rem;
+		background: var(--color-text);
+		color: var(--color-bg);
+		font-weight: 600;
+	}
+	.button:hover {
+		background: var(--color-accent);
+		color: var(--color-bg);
+	}
+	.button:active {
+		transform: translateY(1px);
+	}
+
+	/* Business address, under its button --------------------------------------- */
+
+	.email {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		align-items: center;
+		justify-content: center;
+		margin: 0.5rem 0 0;
+		color: var(--color-text-muted);
+		font-size: var(--text-meta);
+	}
+	.email__address {
+		/* Selectable, so it can be copied by hand when the Copy button is not there. */
+		user-select: all;
+	}
+	.email__copy {
+		min-height: 2rem;
+		padding: 0.25rem 0.625rem;
+		border: 1px solid var(--color-field-border);
+		border-radius: 2px;
+		background: none;
+		color: inherit;
+		font: inherit;
+		cursor: pointer;
+	}
+	.email__copy:hover {
+		color: var(--color-accent);
+	}
+
+	/* Social icons -------------------------------------------------------------- */
+
+	.socials {
+		display: flex;
+		gap: 0.5rem;
+		justify-content: center;
+		margin: 1.5rem 0 0;
+		padding: 0;
+		list-style: none;
+	}
+	.socials a {
+		display: grid;
+		place-items: center;
+		/* 48px tap target, even though the glyph inside is 24px. */
+		width: 48px;
+		height: 48px;
+		color: var(--color-text-muted);
+	}
+	.socials a:hover {
+		color: var(--color-accent);
+	}
+
+	/* Footer -------------------------------------------------------------------- */
+
+	.foot {
+		display: flex;
+		gap: 0.75rem;
+		justify-content: center;
+		margin-top: 2rem;
+		color: var(--color-text-muted);
+		font-size: var(--text-meta);
+	}
+	.foot a {
+		color: inherit;
+	}
+
+	/* Nothing on this page moves, but the press state is a transform. */
+	@media (prefers-reduced-motion: reduce) {
+		.button:active {
+			transform: none;
+		}
+	}
+</style>
